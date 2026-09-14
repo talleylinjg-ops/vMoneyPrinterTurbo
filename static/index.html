@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MoneyPrinterTurbo 免费 AI 短视频生成器 | 主题一键生成文案配音字幕成片</title>
+  <meta name="description" content="MoneyPrinterTurbo 免费在线 AI 短视频生成器：输入一个主题或关键词，自动生成视频文案、Pexels/Pixabay 素材、Edge TTS 配音、字幕与背景音乐，输出竖屏 9:16 / 横屏 16:9 / 方形 1:1 高清成片。无需大模型、无需 API Key，成片持久保存可随时下载。" />
+  <meta name="keywords" content="MoneyPrinterTurbo,AI短视频生成,免费视频生成器,一键生成短视频,文案生成视频,自动配音,自动字幕,竖屏视频,抖音视频生成,YouTube Shorts,Pexels,Pixabay,Edge TTS,开源短视频工具" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="author" content="MoneyPrinterTurbo" />
+  <link rel="canonical" href="https://moneyprinterturbo.pages.dev/" />
+  <meta name="theme-color" content="#0f1419" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="MoneyPrinterTurbo" />
+  <meta property="og:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
+  <meta property="og:description" content="输入一个主题，自动完成文案、素材、配音、字幕、配乐和成片。免费运营，无需大模型，成片持久可下载。" />
+  <meta property="og:url" content="https://moneyprinterturbo.pages.dev/" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
+  <meta name="twitter:description" content="输入主题，一键生成带配音和字幕的高清短视频。免费、无需大模型。" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "MoneyPrinterTurbo",
+    "alternateName": "MoneyPrinterTurbo 免费 AI 短视频生成器",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web",
+    "url": "https://moneyprinterturbo.pages.dev/",
+    "description": "输入视频主题或关键词，自动生成文案、匹配 Pexels/Pixabay 素材、Edge TTS 配音、字幕与背景音乐，并合成竖屏或横屏高清短视频。",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+    "featureList": [
+      "主题一键生成视频文案",
+      "Pexels / Pixabay 免费高清素材",
+      "Edge TTS 免费多音色配音",
+      "自动字幕与背景音乐",
+      "竖屏 9:16 / 横屏 16:9 / 方形 1:1",
+      "成片持久保存与下载",
+      "开放 SaaS API"
+    ],
+    "creator": { "@type": "Organization", "name": "MoneyPrinterTurbo" }
+  }
+  </script>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">MPT</span>
+      <div>
+        <h1>MoneyPrinterTurbo <small>v1.3.7</small></h1>
+        <p>完全免费运营 · 无需大模型 · Pexels / Pixabay + Edge TTS</p>
+      </div>
+    </div>
+    <nav>
+      <a href="#generate">生成视频</a>
+      <a href="#tasks">任务与预览</a>
+      <a href="#saas">SaaS API</a>
+      <a href="/docs" target="_blank">OpenAPI</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="generate">
+      <div>
+        <h2>输入主题，自动生成可下载的高清短视频</h2>
+        <p>成片保存在服务器。刷新页面、稍后下载都不会丢失。会员登录后用 task_id 随时取回预览和下载链接。</p>
+      </div>
+      <div class="chips">
+        <span>免费素材</span>
+        <span>Edge TTS 配音</span>
+        <span>最长 180 秒</span>
+        <span>竖屏 / 横屏 / 方形</span>
+      </div>
+    </section>
+
+    <form id="gen-form" class="grid">
+      <section class="card">
+        <h3>文案设置</h3>
+        <label>视频主题（将根据主题生成视频文案）
+          <input name="video_subject" placeholder="例如：人工智能如何改变日常生活" maxlength="120" />
+        </label>
+        <label>生成视频脚本的语言
+          <select name="language">
+            <option value="zh-CN" selected>简体中文</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <details>
+          <summary>高级脚本设置</summary>
+          <label>视频文案（可选，不填则按主题生成）
+            <textarea name="video_script" rows="6" maxlength="1500" placeholder="自定义旁白。建议 800 字以内，最长 1500 字 / 约 180 秒。"></textarea>
+          </label>
+          <p class="hint" id="char-hint">0 / 1500 字</p>
+          <label>视频关键词（英文，可选）
+            <input name="video_terms" placeholder="artificial intelligence, daily life" />
+          </label>
+        </details>
+      </section>
+
+      <section class="card">
+        <h3>视频设置</h3>
+        <label>视频来源
+          <select name="video_source">
+            <option value="pexels" selected>Pexels</option>
+            <option value="pixabay">Pixabay</option>
+            <option value="auto">自动（Pexels + Pixabay）</option>
+          </select>
+        </label>
+        <label>视频拼接模式
+          <select name="concat_mode">
+            <option value="random" selected>随机拼接（推荐）</option>
+            <option value="sequential">按文案顺序匹配画面</option>
+          </select>
+        </label>
+        <label>视频转场模式
+          <select name="transition">
+            <option value="none" selected>无转场</option>
+          </select>
+        </label>
+        <label>视频比例
+          <select name="aspect">
+            <option value="9:16" selected>竖屏 9:16（抖音视频）</option>
+            <option value="16:9">横屏 16:9（YouTube）</option>
+            <option value="1:1">方形 1:1</option>
+          </select>
+        </label>
+        <label>单个片段最大时长（秒） <span id="clip-val">3</span>
+          <input type="range" name="clip_duration" min="2" max="6" step="0.5" value="3" />
+        </label>
+        <label>片段播放速度 <span id="speed-val">1.00x</span>
+          <input type="range" name="clip_speed" min="0.5" max="2" step="0.05" value="1" />
+        </label>
+        <label>同时生成视频数量
+          <select name="video_count"><option>1</option></select>
+        </label>
+        <label>视频编码器
+          <select name="video_codec">
+            <option value="libx264" selected>默认（推荐）</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="card">
+        <h3>音频设置</h3>
+        <label>配音方式
+          <select><option>配音服务 Azure TTS V1</option></select>
+        </label>
+        <label>配音声音（与文案语言保持一致）
+          <select name="voice_name" id="voice-name"></select>
+        </label>
+        <label>配音音量 <span id="vol-val">100%</span>
+          <input type="range" name="voice_volume" min="20" max="100" value="100" />
+        </label>
+        <label>配音语速 <span id="rate-val">1.0×</span>
+          <input type="range" name="voice_rate" min="0.8" max="1.3" step="0.05" value="1" />
+        </label>
+        <p class="hint">填写视频文案后，可估算并预览完整配音。当前使用免费 Edge TTS，无需 API Key。</p>
+        <label>背景音乐来源
+          <select name="bgm_source"><option value="random">随机背景音乐</option></select>
+        </label>
+        <label>背景音乐音量 <span id="bgm-val">20%</span>
+          <input type="range" name="bgm_volume" min="0" max="60" value="20" />
+        </label>
+      </section>
+
+      <section class="card">
+        <h3>字幕设置</h3>
+        <label class="check"><input type="checkbox" name="subtitle_enabled" checked /> 启用字幕</label>
+        <label>字幕字体
+          <select name="font_name"><option>WenQuanYi Micro Hei</option></select>
+        </label>
+        <label>字幕位置
+          <select name="subtitle_position">
+            <option value="bottom" selected>底部（推荐）</option>
+            <option value="center">居中</option>
+            <option value="top">顶部</option>
+          </select>
+        </label>
+        <div class="row">
+          <label>字幕颜色 <input type="color" name="text_color" value="#FFFFFF" /></label>
+          <label>描边颜色 <input type="color" name="stroke_color" value="#000000" /></label>
+        </div>
+        <label>字幕大小 <span id="fs-val">60</span>
+          <input type="range" name="font_size" min="30" max="80" value="60" />
+        </label>
+        <label>描边粗细 <span id="sw-val">1.50</span>
+          <input type="range" name="stroke_width" min="0" max="4" step="0.1" value="1.5" />
+        </label>
+        <label class="check"><input type="checkbox" name="subtitle_bg" /> 启用字幕背景</label>
+        <label>字幕背景颜色 <input type="color" name="subtitle_bg_color" value="#000000" /></label>
+        <label class="check"><input type="checkbox" name="rounded_subtitle_bg" /> 启用圆角半透明字幕背景</label>
+      </section>
+    </form>
+
+    <div class="actions">
+      <button type="submit" form="gen-form" id="submit-btn">生成视频</button>
+      <p class="limits">限制：1500 字 / 约 180 秒。全新生成流水线（主题或文案 → 素材 → 配音 → 字幕 → 成片），不支持时间轴精修。</p>
+    </div>
+
+    <section class="card status-card" id="status-card" hidden>
+      <h3>生成进度</h3>
+      <div class="bar"><i id="bar"></i></div>
+      <p id="status-text">准备中</p>
+      <pre id="log"></pre>
+    </section>
+
+    <section class="card preview-card" id="preview-card" hidden>
+      <h3>预览成片</h3>
+      <video id="player" controls playsinline></video>
+      <div class="preview-actions">
+        <a id="dl" class="btn" download>下载视频</a>
+        <button type="button" id="copy-link">复制下载链接</button>
+        <p id="meta"></p>
+      </div>
+    </section>
+
+    <section class="card" id="tasks">
+      <h3>任务历史</h3>
+      <p class="hint">已完成的视频持久保存在服务器。刷新后仍可预览和下载。</p>
+      <div id="task-list" class="task-list"></div>
+    </section>
+
+    <section class="card" id="saas">
+      <h3>SaaS 调用参数</h3>
+      <p>你的站点只需 POST 创建任务，再轮询状态。用户不用填写几十个参数，前端给默认值即可。</p>
+      <pre class="code">POST /api/v1/videos
+Content-Type: application/json
+
+{
+  "video_subject": "人工智能如何改变日常生活",
+  "video_script": "",
+  "video_terms": "artificial intelligence, daily life",
+  "language": "zh-CN",
+  "video_source": "pexels",
+  "aspect": "9:16",
+  "clip_duration": 3,
+  "voice_name": "zh-CN-XiaoxiaoNeural",
+  "subtitle_enabled": true
+}
+
+GET /api/v1/videos/{task_id}
+GET /api/v1/videos/{task_id}/preview
+GET /api/v1/videos/{task_id}/download
+GET /api/v1/options
+GET /docs/saas</pre>
+      <ul class="faq">
+        <li>这是视频生成流水线：按主题/文案全新合成，不能在时间轴上精修已有成片。</li>
+        <li>放弃 LLM，运营成本为零。素材 Pexels/Pixabay，配音 Edge TTS。</li>
+        <li>成片落盘后刷新不会丢失。会员用 task_id 即可再次下载。</li>
+        <li>下载走同源直链，支持断点续传，避免 503 / 超时。</li>
+      </ul>
+    </section>
+  </main>
+  <footer>MoneyPrinterTurbo hosted edition · 管理后台即本页任务历史 · 源码风格参考 harry0703/MoneyPrinterTurbo</footer>
+  <script src="/app.js"></script>
+</body>
+</html>

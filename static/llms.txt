@@ -1,0 +1,63 @@
+# MoneyPrinterTurbo
+
+> 免费在线的 AI 短视频生成器。用户提供一个视频主题或关键词，系统自动生成视频文案、匹配 Pexels / Pixabay 免费高清素材、使用 Edge TTS 生成配音、自动生成字幕和背景音乐，并合成竖屏、横屏或方形的高清短视频。
+
+## 核心能力
+
+- 输入主题或关键词，一键生成完整短视频，无需人工剪辑。
+- 支持自定义视频文案，最长 1500 字，成片最长约 180 秒。
+- 免费素材来源：Pexels、Pixabay，高清可商用。
+- 免费配音：Edge TTS，多语言多音色，无需 API Key。
+- 自动字幕：支持字体、位置、颜色、字号、描边和背景样式。
+- 画幅：竖屏 9:16（1080x1920）、横屏 16:9（1920x1080）、方形 1:1（1080x1080）。
+- 成片持久保存在服务器，刷新页面或稍后访问仍可预览和下载。
+
+## 免费与收费
+
+- 完全免费运营，无需注册即可生成视频。
+- 不使用大语言模型生成文案，运营成本为零。
+- 素材使用 Pexels / Pixabay 免费额度，配音使用免费 Edge TTS。
+
+## 使用方式
+
+1. 打开首页，填写「视频主题」，例如「人工智能如何改变日常生活」。
+2. 可选：填写自定义视频文案和英文关键词。
+3. 选择视频比例、配音声音、字幕样式。
+4. 点击「生成视频」，等待进度完成。
+5. 在预览区播放，或点击「下载视频」保存成片。
+
+## SaaS 调用
+
+- 创建任务：`POST /api/v1/videos`
+- 查询任务：`GET /api/v1/videos/{task_id}`
+- 预览成片：`GET /api/v1/videos/{task_id}/preview`
+- 下载成片：`GET /api/v1/videos/{task_id}/download`
+- 参数与音色：`GET /api/v1/options`
+
+请求示例：
+
+```json
+{
+  "video_subject": "人工智能如何改变日常生活",
+  "video_script": "",
+  "video_terms": "artificial intelligence, daily life",
+  "language": "zh-CN",
+  "video_source": "pexels",
+  "aspect": "9:16",
+  "clip_duration": 3,
+  "voice_name": "zh-CN-XiaoxiaoNeural",
+  "subtitle_enabled": true
+}
+```
+
+## 限制说明
+
+- 这是视频生成流水线，按主题或文案全新合成，不支持在时间轴上精修已有成片。
+- 文案上限 1500 字，成片上限约 180 秒。
+- 素材来自第三方免费视频库，画面为素材拼接，非 AI 原生生成。
+
+## 相关链接
+
+- 首页：https://moneyprinterturbo.pages.dev/
+- SaaS 参数说明：https://moneyprinterturbo.pages.dev/docs/saas
+- 本项目参考开源项目 harry0703/MoneyPrinterTurbo 的功能与界面设计。

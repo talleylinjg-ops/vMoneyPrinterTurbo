@@ -1,0 +1,8 @@
+# Copy to config.toml and fill in your own keys, or set the matching
+# environment variables (PEXELS_API_KEY / PIXABAY_API_KEY).
+[app]
+pexels_api_key = "your-pexels-api-key"
+pixabay_api_key = "your-pixabay-api-key"
+max_script_chars = 1500
+max_video_seconds = 180
+font_path = "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc"

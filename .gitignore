@@ -174,3 +174,11 @@
 *.lz
 *.lzma
 *.iso
+
+# Project specific
+config.toml
+.env
+storage/
+output/
+cloudflare/.wrangler/
+**/node_modules/

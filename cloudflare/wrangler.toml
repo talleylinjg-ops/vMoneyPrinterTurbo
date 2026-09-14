@@ -1,0 +1,17 @@
+"$schema" = "node_modules/wrangler/config-schema.json"
+name = "moneyprinterturbo"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# Frontend static assets are served directly from the edge.
+[assets]
+directory = "../static"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/health", "/docs*"]
+
+[vars]
+BACKEND_ORIGIN = "https://8501-fe5e3452b4fb7c4e.monkeycode-ai.online"
+
+[observability]
+enabled = true

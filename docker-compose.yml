@@ -1,0 +1,12 @@
+services:
+  moneyprinterturbo:
+    build: .
+    container_name: moneyprinterturbo
+    ports:
+      - "8501:8501"
+    environment:
+      PEXELS_API_KEY: ${PEXELS_API_KEY:-}
+      PIXABAY_API_KEY: ${PIXABAY_API_KEY:-}
+    volumes:
+      - ./storage:/app/storage
+    restart: unless-stopped
