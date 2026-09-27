@@ -8,7 +8,7 @@
   <meta name="keywords" content="MoneyPrinterTurbo,AI短视频生成,免费视频生成器,一键生成短视频,文案生成视频,自动配音,自动字幕,竖屏视频,抖音视频生成,YouTube Shorts,Pexels,Pixabay,Edge TTS,开源短视频工具" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="author" content="MoneyPrinterTurbo" />
-  <link rel="canonical" href="https://moneyprinterturbo.pages.dev/" />
+  <link rel="canonical" href="__ORIGIN__/" />
   <meta name="theme-color" content="#0f1419" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="/manifest.webmanifest" />
@@ -18,34 +18,66 @@
   <meta property="og:site_name" content="MoneyPrinterTurbo" />
   <meta property="og:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <meta property="og:description" content="输入一个主题，自动完成文案、素材、配音、字幕、配乐和成片。免费运营，无需大模型，成片持久可下载。" />
-  <meta property="og:url" content="https://moneyprinterturbo.pages.dev/" />
+  <meta property="og:url" content="__ORIGIN__/" />
+  <meta property="og:image" content="__ORIGIN__/favicon.svg" />
   <meta property="og:locale" content="zh_CN" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <meta name="twitter:description" content="输入主题，一键生成带配音和字幕的高清短视频。免费、无需大模型。" />
+  <meta name="twitter:image" content="__ORIGIN__/favicon.svg" />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "MoneyPrinterTurbo",
-    "alternateName": "MoneyPrinterTurbo 免费 AI 短视频生成器",
-    "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "Web",
-    "url": "https://moneyprinterturbo.pages.dev/",
-    "description": "输入视频主题或关键词，自动生成文案、匹配 Pexels/Pixabay 素材、Edge TTS 配音、字幕与背景音乐，并合成竖屏或横屏高清短视频。",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
-    "featureList": [
-      "主题一键生成视频文案",
-      "Pexels / Pixabay 免费高清素材",
-      "Edge TTS 免费多音色配音",
-      "自动字幕与背景音乐",
-      "竖屏 9:16 / 横屏 16:9 / 方形 1:1",
-      "成片持久保存与下载",
-      "开放 SaaS API"
-    ],
-    "creator": { "@type": "Organization", "name": "MoneyPrinterTurbo" }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "MoneyPrinterTurbo",
+        "alternateName": "MoneyPrinterTurbo 免费 AI 短视频生成器",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Web",
+        "url": "__ORIGIN__/",
+        "inLanguage": "zh-CN",
+        "description": "输入视频主题或关键词，自动生成文案、匹配 Pexels/Pixabay 素材、Edge TTS 配音、字幕与背景音乐，并合成竖屏或横屏高清短视频。",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "featureList": [
+          "主题一键生成视频文案",
+          "Pexels / Pixabay 免费高清素材",
+          "Edge TTS 免费多音色配音",
+          "自动字幕与背景音乐",
+          "竖屏 9:16 / 横屏 16:9 / 方形 1:1",
+          "成片持久保存与下载",
+          "开放 SaaS API"
+        ],
+        "creator": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "__ORIGIN__/" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "MoneyPrinterTurbo 收费吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "完全免费。素材来自 Pexels / Pixabay，配音使用 Edge TTS，不调用大模型。" }
+          },
+          {
+            "@type": "Question",
+            "name": "如何生成短视频？",
+            "acceptedAnswer": { "@type": "Answer", "text": "在首页填写视频主题或文案，选择画幅后点击生成。系统会自动匹配素材、配音、字幕并合成成片。" }
+          },
+          {
+            "@type": "Question",
+            "name": "SaaS 如何调用？",
+            "acceptedAnswer": { "@type": "Answer", "text": "POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id}，完成后用 /preview 或 /download 取回成片。" }
+          },
+          {
+            "@type": "Question",
+            "name": "有哪些限制？",
+            "acceptedAnswer": { "@type": "Answer", "text": "文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。" }
+          }
+        ]
+      }
+    ]
   }
   </script>
   <link rel="stylesheet" href="/style.css" />
@@ -257,6 +289,18 @@ GET /docs/saas</pre>
         <li>成片落盘后刷新不会丢失。会员用 task_id 即可再次下载。</li>
         <li>下载走同源直链，支持断点续传，避免 503 / 超时。</li>
       </ul>
+    </section>
+
+    <section class="card" id="faq">
+      <h2>常见问题</h2>
+      <h3>MoneyPrinterTurbo 收费吗？</h3>
+      <p>完全免费。素材来自 Pexels / Pixabay，配音使用 Edge TTS，不调用大模型。</p>
+      <h3>如何生成短视频？</h3>
+      <p>在首页填写视频主题或文案，选择画幅后点击生成。系统会自动匹配素材、配音、字幕并合成成片。</p>
+      <h3>SaaS 如何调用？</h3>
+      <p>POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id}，完成后用 /preview 或 /download 取回成片。</p>
+      <h3>有哪些限制？</h3>
+      <p>文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。</p>
     </section>
   </main>
   <footer>MoneyPrinterTurbo hosted edition · 管理后台即本页任务历史 · 源码风格参考 harry0703/MoneyPrinterTurbo</footer>

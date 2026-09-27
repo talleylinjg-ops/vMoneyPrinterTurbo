@@ -1,0 +1,13 @@
+{
+  "name": "MPT API 开放平台",
+  "short_name": "MPT API",
+  "description": "免费短视频生成 API。注册即得 Key，主题一键生成配音字幕成片。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#4f6ef7",
+  "lang": "zh-CN",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

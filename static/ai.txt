@@ -1,0 +1,13 @@
+# AI crawler policy for MoneyPrinterTurbo
+User-Agent: *
+Allow: /
+Disallow: /api/
+
+# Preferred machine-readable sources
+Content: /llms.txt
+Sitemap: /sitemap.xml
+Canonical: /
+Language: zh-CN
+Product: free short-video generator
+Pricing: 0
+LLM: disabled

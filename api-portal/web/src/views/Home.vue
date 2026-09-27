@@ -51,14 +51,36 @@
 curl -X POST https://{你的域名}/api/proxy/v1/videos \
   -H "Content-Type: application/json" \
   -H "x-api-key: mpt_你的密钥" \
-   -d '{"video_subject": "自然风景短视频", "video_source": "pexels"}'
+  -d '{"video_subject": "春天适合出发", "aspect": "9:16"}'
 # 3. 轮询任务进度
-curl https://{你的域名}/api/proxy/v1/tasks/{task_id} \
+curl https://{你的域名}/api/proxy/v1/videos/{task_id} \
   -H "x-api-key: mpt_你的密钥"
         </code>
       </div>
       <router-link v-if="!loggedIn" to="/register" class="btn-primary">免费开始体验</router-link>
       <router-link v-else to="/console" class="btn-primary">进入控制台</router-link>
+    </section>
+
+    <section class="faq">
+      <h2>常见问题</h2>
+      <div class="faq-list">
+        <article>
+          <h3>如何调用短视频生成 API？</h3>
+          <p>注册后获得 API Key，POST /api/proxy/v1/videos 提交主题，轮询 GET /api/proxy/v1/videos/{task_id}，完成后预览或下载成片。</p>
+        </article>
+        <article>
+          <h3>收费吗？需要大模型吗？</h3>
+          <p>完全免费不限次数。素材来自 Pexels / Pixabay，配音使用 Edge TTS，不调用大模型。</p>
+        </article>
+        <article>
+          <h3>有哪些限制？</h3>
+          <p>文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。</p>
+        </article>
+        <article>
+          <h3>成片会丢失吗？</h3>
+          <p>成片落盘保存。刷新页面后仍可用 task_id 预览和下载。</p>
+        </article>
+      </div>
     </section>
   </div>
 </template>
@@ -204,6 +226,42 @@ curl https://{你的域名}/api/proxy/v1/tasks/{task_id} \
   padding: 12px 32px;
   border-radius: 8px;
   font-weight: 600;
+}
+
+.faq {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+.faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.faq-list {
+  display: grid;
+  gap: 16px;
+}
+
+.faq-list article {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.faq-list h3 {
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.faq-list p {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.7;
 }
 </style>
 

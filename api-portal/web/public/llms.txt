@@ -1,0 +1,52 @@
+# MPT API 开放平台
+
+> 免费短视频生成 API。注册后获得 API Key，提交视频主题即可用 Pexels / Pixabay 免费素材、Edge TTS 配音和自动字幕合成短视频。全程无需大模型，完全免费不限次数。
+
+## 核心能力
+
+- 主题或文案一键生成短视频。
+- 免费素材：Pexels、Pixabay。
+- 免费配音：Edge TTS。
+- 画幅：9:16 / 16:9 / 1:1。
+- 成片持久保存，可用 task_id 预览和下载。
+
+## 认证
+
+请求头：`x-api-key: mpt_你的密钥`
+
+## API
+
+- 提交任务：`POST /api/proxy/v1/videos`
+- 查询进度：`GET /api/proxy/v1/videos/{task_id}`
+- 预览：`GET /api/proxy/v1/videos/{task_id}/preview`
+- 下载：`GET /api/proxy/v1/videos/{task_id}/download`
+
+请求示例：
+
+```json
+{
+  "video_subject": "春天适合出发",
+  "aspect": "9:16",
+  "video_source": "pexels"
+}
+```
+
+返回：`{"task_id":"...","state":"queued"}`。完成后 `state` 为 `complete`。
+
+## 常见问题
+
+- 如何调用？注册拿 Key，POST 创建任务，轮询 task_id，再用 preview/download 取回。
+- 收费吗？完全免费，不调用大模型。
+- 限制？文案 1500 字，成片约 180 秒。不支持时间轴精修已有视频。
+
+## 限制
+
+- 文案最多 1500 字，成片约 180 秒。
+- 全新生成流水线，不支持时间轴精修已有视频。
+- 不使用大语言模型。
+
+## 相关链接
+
+- 首页：__ORIGIN__/
+- API 文档：__ORIGIN__/docs
+- 给模型阅读：__ORIGIN__/llms.txt

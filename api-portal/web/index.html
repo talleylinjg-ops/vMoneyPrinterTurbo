@@ -3,7 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MPT API 开放平台</title>
+    <title>MPT API 开放平台 | 免费短视频生成 API</title>
+    <meta name="description" content="MPT API 开放平台：注册即得 API Key，用主题一键生成带配音和字幕的短视频。Pexels / Pixabay 免费素材 + Edge TTS，无需大模型，完全免费不限次数。" />
+    <meta name="keywords" content="MoneyPrinterTurbo API,短视频生成API,免费视频生成,Pexels,Pixabay,Edge TTS,SaaS API,竖屏视频,抖音视频生成" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="MPT API 开放平台" />
+    <meta name="theme-color" content="#4f6ef7" />
+    <link rel="canonical" href="__ORIGIN__/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MPT API 开放平台" />
+    <meta property="og:title" content="MPT API 开放平台 | 免费短视频生成 API" />
+    <meta property="og:description" content="注册即得 API Key。输入主题即可生成带配音和字幕的短视频，完全免费。" />
+    <meta property="og:url" content="__ORIGIN__/" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:image" content="__ORIGIN__/favicon.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="MPT API 开放平台 | 免费短视频生成 API" />
+    <meta name="twitter:description" content="注册即得 API Key。输入主题即可生成带配音和字幕的短视频，完全免费。" />
+    <meta name="twitter:image" content="__ORIGIN__/favicon.svg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "MPT API 开放平台",
+            "url": "__ORIGIN__/",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Web",
+            "inLanguage": "zh-CN",
+            "description": "免费短视频生成 API。注册即得 Key，主题一键生成配音字幕成片。",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "如何调用短视频生成 API？",
+                "acceptedAnswer": { "@type": "Answer", "text": "注册后获得 API Key，POST /api/proxy/v1/videos 提交主题，轮询 GET /api/proxy/v1/videos/{task_id}，完成后预览或下载成片。" }
+              },
+              {
+                "@type": "Question",
+                "name": "收费吗？需要大模型吗？",
+                "acceptedAnswer": { "@type": "Answer", "text": "完全免费不限次数。素材来自 Pexels / Pixabay，配音使用 Edge TTS，不调用大模型。" }
+              },
+              {
+                "@type": "Question",
+                "name": "有哪些限制？",
+                "acceptedAnswer": { "@type": "Answer", "text": "文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。" }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>

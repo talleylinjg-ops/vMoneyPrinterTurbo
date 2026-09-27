@@ -36,5 +36,5 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://moneyprinterturbo.pages.dev/sitemap.xml
-Host: https://moneyprinterturbo.pages.dev
+Sitemap: https://moneyprinterturbo.talley-linjg.workers.dev/sitemap.xml
+Host: https://moneyprinterturbo.talley-linjg.workers.dev

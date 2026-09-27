@@ -1,7 +1,7 @@
 <template>
   <div class="docs">
     <h2>API 接口文档</h2>
-    <p class="sub">使用您的 API Key 调用视频生成服务</p>
+    <p class="sub">使用您的 API Key 调用视频生成服务。门户校验 Key 后转发到引擎。</p>
 
     <div class="doc-section">
       <h3>1. 认证方式</h3>
@@ -15,55 +15,60 @@
 POST /api/proxy/v1/videos
 
 {
-   "video_subject": "自然风景短视频",
-   "video_source": "pexels",
-  "video_aspect": "9:16",
-  "video_concat_mode": "random",
-  "video_clip_duration": 3,
-  "video_count": 1
+  "video_subject": "春天适合出发",
+  "video_script": "可选，不填则按主题生成默认文案",
+  "aspect": "9:16",
+  "video_source": "pexels"
 }
       </code></div>
       <p>返回：</p>
       <div class="code-block"><code>
-{ "status": 200, "data": { "task_id": "xxxxx" } }
+{ "task_id": "xxxxx", "state": "queued" }
       </code></div>
     </div>
 
     <div class="doc-section">
       <h3>3. 查询任务进度</h3>
       <div class="code-block"><code>
-GET /api/proxy/v1/tasks/{task_id}
+GET /api/proxy/v1/videos/{task_id}
       </code></div>
-      <p>当 <code>state</code> 为 <code>1</code> 表示完成，<code>videos</code> 数组中包含视频下载地址。</p>
+      <p>当 <code>state</code> 为 <code>complete</code> 表示完成，可用预览和下载接口取回成片。兼容路径 <code>GET /api/proxy/v1/tasks/{task_id}</code> 同样有效。</p>
     </div>
 
     <div class="doc-section">
-      <h3>4. 完整调用示例</h3>
+      <h3>4. 预览与下载</h3>
+      <div class="code-block"><code>
+GET /api/proxy/v1/videos/{task_id}/preview
+GET /api/proxy/v1/videos/{task_id}/download
+      </code></div>
+      <p>成片落盘后刷新页面仍可取回。浏览器预览也可在 URL 后附加 <code>?api_key=</code>。</p>
+    </div>
+
+    <div class="doc-section">
+      <h3>5. 完整调用示例</h3>
       <div class="code-block"><code>
 curl -X POST https://YOUR_DOMAIN/api/proxy/v1/videos \
   -H "Content-Type: application/json" \
   -H "x-api-key: mpt_你的密钥" \
-   -d '{"video_subject": "自然风景短视频", "video_source": "pexels"}'
+  -d '{"video_subject": "春天适合出发", "aspect": "9:16"}'
 
-curl https://YOUR_DOMAIN/api/proxy/v1/tasks/TASK_ID \
+curl https://YOUR_DOMAIN/api/proxy/v1/videos/TASK_ID \
   -H "x-api-key: mpt_你的密钥"
       </code></div>
     </div>
 
     <div class="doc-section">
-      <h3>5. 常用参数</h3>
+      <h3>6. 常用参数</h3>
       <table>
         <thead>
           <tr><th>参数</th><th>说明</th><th>示例</th></tr>
         </thead>
         <tbody>
-          <tr><td>video_subject</td><td>视频主题</td><td>"自然风景短视频"</td></tr>
-          <tr><td>video_source</td><td>素材来源</td><td>"pexels" 或 "pixabay"</td></tr>
-          <tr><td>video_aspect</td><td>视频比例</td><td>"9:16" 或 "16:9"</td></tr>
-          <tr><td>video_script</td><td>直接指定文案（可选）</td><td>省略则按主题生成本地文案</td></tr>
-          <tr><td>voice_name</td><td>配音音色</td><td>留空用默认</td></tr>
-          <tr><td>video_clip_duration</td><td>单片段时长（秒）</td><td>3</td></tr>
-          <tr><td>video_count</td><td>生成数量</td><td>1</td></tr>
+          <tr><td>video_subject</td><td>视频主题</td><td>"春天适合出发"</td></tr>
+          <tr><td>video_script</td><td>直接指定文案（可选，最多 1500 字）</td><td>省略则按主题生成本地文案</td></tr>
+          <tr><td>video_source</td><td>素材来源</td><td>"pexels" / "pixabay" / "auto"</td></tr>
+          <tr><td>aspect</td><td>视频比例</td><td>"9:16" / "16:9" / "1:1"</td></tr>
+          <tr><td>voice_name</td><td>配音音色</td><td>默认 zh-CN-XiaoxiaoNeural</td></tr>
         </tbody>
       </table>
     </div>

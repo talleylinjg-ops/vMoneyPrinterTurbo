@@ -50,6 +50,15 @@
 }
 ```
 
+完成后 `state` 为 `complete`。失败为 `failed`。
+
+## 常见问题
+
+- 收费吗？完全免费，不调用大模型。
+- 如何调用？POST 创建任务，轮询 task_id，再用 preview/download 取回。
+- 限制？文案 1500 字，成片约 180 秒。不支持时间轴精修已有视频。
+- 素材从哪来？Pexels / Pixabay 免费视频库拼接，非 AI 原生画面。
+
 ## 限制说明
 
 - 这是视频生成流水线，按主题或文案全新合成，不支持在时间轴上精修已有成片。
@@ -58,6 +67,7 @@
 
 ## 相关链接
 
-- 首页：https://moneyprinterturbo.pages.dev/
-- SaaS 参数说明：https://moneyprinterturbo.pages.dev/docs/saas
+- 首页：__ORIGIN__/
+- SaaS 参数说明：__ORIGIN__/docs/saas
+- 给模型阅读：__ORIGIN__/llms.txt
 - 本项目参考开源项目 harry0703/MoneyPrinterTurbo 的功能与界面设计。

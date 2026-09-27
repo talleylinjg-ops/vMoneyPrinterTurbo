@@ -1,0 +1,15 @@
+# AI crawler policy for MPT API portal
+User-Agent: *
+Allow: /
+Disallow: /api/
+Disallow: /console
+Disallow: /membership
+
+Content: /llms.txt
+Sitemap: /sitemap.xml
+Canonical: /
+Language: zh-CN
+Product: free short-video generation API
+Pricing: 0
+LLM: disabled
+Auth: x-api-key

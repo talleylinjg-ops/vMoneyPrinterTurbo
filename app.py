@@ -4,9 +4,11 @@ import uuid
 from pathlib import Path
 from typing import Any, Optional
 
+from urllib.parse import quote
+
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -106,9 +108,123 @@ async def run_job(task_id: str):
         save_task(task)
 
 
+def public_origin(request: Request) -> str:
+    proto = request.headers.get("x-forwarded-proto") or request.url.scheme
+    host = request.headers.get("x-forwarded-host") or request.headers.get("host") or request.url.hostname
+    if not host:
+        return str(request.base_url).rstrip("/")
+    return f"{proto}://{host}".rstrip("/")
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "MoneyPrinterTurbo", "version": "1.3.7"}
+
+
+@app.get("/robots.txt", include_in_schema=False)
+async def robots(request: Request):
+    origin = public_origin(request)
+    return PlainTextResponse(
+        "\n".join(
+            [
+                "User-agent: *",
+                "Allow: /",
+                "Disallow: /api/",
+                "",
+                "User-agent: GPTBot",
+                "Allow: /",
+                "Disallow: /api/",
+                "",
+                "User-agent: OAI-SearchBot",
+                "Allow: /",
+                "",
+                "User-agent: ChatGPT-User",
+                "Allow: /",
+                "",
+                "User-agent: ClaudeBot",
+                "Allow: /",
+                "",
+                "User-agent: Claude-Web",
+                "Allow: /",
+                "",
+                "User-agent: PerplexityBot",
+                "Allow: /",
+                "",
+                "User-agent: Google-Extended",
+                "Allow: /",
+                "",
+                "User-agent: Applebot-Extended",
+                "Allow: /",
+                "",
+                "User-agent: Bytespider",
+                "Allow: /",
+                "",
+                "User-agent: Amazonbot",
+                "Allow: /",
+                "",
+                "User-agent: CCBot",
+                "Allow: /",
+                "",
+                f"Sitemap: {origin}/sitemap.xml",
+                f"Host: {origin}",
+                "",
+                "# AI / GEO",
+                f"# llms.txt: {origin}/llms.txt",
+                f"# ai.txt: {origin}/ai.txt",
+                "",
+            ]
+        )
+    )
+
+
+@app.get("/sitemap.xml", include_in_schema=False)
+async def sitemap(request: Request):
+    origin = public_origin(request)
+    urls = [
+        ("/", "1.0"),
+        ("/llms.txt", "0.8"),
+        ("/docs/saas", "0.7"),
+    ]
+    items = "\n".join(
+        f"  <url><loc>{origin}{path}</loc><changefreq>daily</changefreq><priority>{prio}</priority></url>"
+        for path, prio in urls
+    )
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{items}\n"
+        "</urlset>\n"
+    )
+    return Response(xml, media_type="application/xml")
+
+
+def rewrite_origin(text: str, origin: str) -> str:
+    return (
+        text.replace("__ORIGIN__", origin)
+        .replace("https://moneyprinterturbo.talley-linjg.workers.dev", origin)
+        .replace("https://moneyprinterturbo.pages.dev", origin)
+    )
+
+
+@app.get("/llms.txt", include_in_schema=False)
+async def llms_txt(request: Request):
+    origin = public_origin(request)
+    text = rewrite_origin((STATIC / "llms.txt").read_text(encoding="utf-8"), origin)
+    return PlainTextResponse(text)
+
+
+@app.get("/ai.txt", include_in_schema=False)
+async def ai_txt(request: Request):
+    origin = public_origin(request)
+    text = rewrite_origin((STATIC / "ai.txt").read_text(encoding="utf-8"), origin)
+    return PlainTextResponse(text)
+
+
+@app.get("/", include_in_schema=False)
+async def home(request: Request):
+    origin = public_origin(request)
+    html = rewrite_origin((STATIC / "index.html").read_text(encoding="utf-8"), origin)
+    return HTMLResponse(html)
 
 
 @app.get("/api/v1/options")
@@ -180,14 +296,15 @@ async def preview(task_id: str):
 async def download(task_id: str):
     path = task_file(task_id)
     task = load_task(task_id) or {}
-    subject = (task.get("params") or {}).get("video_subject") or "video"
-    safe = "".join(ch if ch.isalnum() or ch in "-_ " else "_" for ch in subject)[:60].strip() or "video"
+    subject = ((task.get("params") or {}).get("video_subject") or "video").strip()[:60] or "video"
+    ascii_name = "".join(ch if ch.isascii() and (ch.isalnum() or ch in "-_") else "_" for ch in subject).strip("_") or "video"
+    utf_name = quote(f"{subject}.mp4")
     return FileResponse(
         path,
         media_type="video/mp4",
-        filename=f"{safe}.mp4",
+        filename=f"{ascii_name}.mp4",
         headers={
-            "Content-Disposition": f'attachment; filename="{safe}.mp4"',
+            "Content-Disposition": f"attachment; filename=\"{ascii_name}.mp4\"; filename*=UTF-8''{utf_name}",
             "Cache-Control": "public, max-age=86400",
             "Accept-Ranges": "bytes",
         },
