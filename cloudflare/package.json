@@ -5,7 +5,9 @@
   "description": "Cloudflare Worker: serves the MoneyPrinterTurbo static frontend and proxies API traffic to the self-hosted backend.",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "inventory": "node scripts/inventory.mjs",
+    "sync-r2": "node scripts/inventory.mjs && node scripts/sync-r2.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"

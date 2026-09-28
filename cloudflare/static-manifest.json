@@ -1,0 +1,114 @@
+{
+  "generatedAt": "2026-09-28T11:04:02.492Z",
+  "staticDir": "static",
+  "total": 10,
+  "cssUrlCount": 0,
+  "missingRefs": [],
+  "files": [
+    {
+      "key": "ai.txt",
+      "path": "/ai.txt",
+      "bytes": 295,
+      "sha256": "42809211ab88bd746f74c1cf03f8e68efe0b8cd5b104dc3becc876491517daac",
+      "contentType": "text/plain; charset=utf-8",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "app.js",
+      "path": "/app.js",
+      "bytes": 5955,
+      "sha256": "4dacadf099f0ddb8853a95f6e13f2140c3607fdfcecc24a75053755f7fe42ca2",
+      "contentType": "application/javascript; charset=utf-8",
+      "hrefSrc": [
+        "/api/v1/videos/${t.task_id}/preview",
+        "/api/v1/videos/${t.task_id}/download"
+      ],
+      "cssUrls": []
+    },
+    {
+      "key": "favicon.svg",
+      "path": "/favicon.svg",
+      "bytes": 359,
+      "sha256": "ad12db73a28cf90ab8d7b731e7ff539a642941a1647c02c7b0af12d004866b64",
+      "contentType": "image/svg+xml",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "index.html",
+      "path": "/",
+      "bytes": 15189,
+      "sha256": "2eb4077624b1e4d8289454d18ca8484524e11cc20f7c2011c19a99e0d6b884ec",
+      "contentType": "text/html; charset=utf-8",
+      "hrefSrc": [
+        "__ORIGIN__/",
+        "/favicon.svg",
+        "/manifest.webmanifest",
+        "/llms.txt",
+        "/style.css",
+        "/style.css",
+        "#generate",
+        "#tasks",
+        "#saas",
+        "/docs",
+        "/app.js"
+      ],
+      "cssUrls": []
+    },
+    {
+      "key": "llms.txt",
+      "path": "/llms.txt",
+      "bytes": 2908,
+      "sha256": "ac812bc661be07633c73d21bf37f14ceee208157972ebe38cc755b0cc97c0bf4",
+      "contentType": "text/plain; charset=utf-8",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "manifest.webmanifest",
+      "path": "/manifest.webmanifest",
+      "bytes": 448,
+      "sha256": "b66b6ee300a64e73f6945afb2de145238c26de5c63ad06575489d1e97e73de07",
+      "contentType": "application/manifest+json",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "og.png",
+      "path": "/og.png",
+      "bytes": 44138,
+      "sha256": "43dc9cca16055bd44d6052f3f2e48bba59b6b4f965d4938c2891b5a970289ced",
+      "contentType": "image/png",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "robots.txt",
+      "path": "/robots.txt",
+      "bytes": 134,
+      "sha256": "375289e786f304fddfd5b64f9394774d315ceb967a6690ff0cdbf5e28e6ecfa2",
+      "contentType": "text/plain; charset=utf-8",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "sitemap.xml",
+      "path": "/sitemap.xml",
+      "bytes": 453,
+      "sha256": "f356800b123219cff60d5622df6ae77f59c6cfd6ff9bce004a6c76b20964fcb3",
+      "contentType": "application/xml; charset=utf-8",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "style.css",
+      "path": "/style.css",
+      "bytes": 4582,
+      "sha256": "e692a9e4becf1a346c71ca461542b9f962c911216c8b3ae6944328a76a136654",
+      "contentType": "text/css; charset=utf-8",
+      "hrefSrc": [],
+      "cssUrls": []
+    }
+  ]
+}
