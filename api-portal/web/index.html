@@ -19,11 +19,13 @@
     <meta property="og:description" content="注册即得 API Key。输入主题即可生成带配音和字幕的短视频，完全免费。" />
     <meta property="og:url" content="__ORIGIN__/" />
     <meta property="og:locale" content="zh_CN" />
-    <meta property="og:image" content="__ORIGIN__/favicon.svg" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="__ORIGIN__/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="MPT API 开放平台 | 免费短视频生成 API" />
     <meta name="twitter:description" content="注册即得 API Key。输入主题即可生成带配音和字幕的短视频，完全免费。" />
-    <meta name="twitter:image" content="__ORIGIN__/favicon.svg" />
+    <meta name="twitter:image" content="__ORIGIN__/og.png" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -36,7 +38,17 @@
             "operatingSystem": "Web",
             "inLanguage": "zh-CN",
             "description": "免费短视频生成 API。注册即得 Key，主题一键生成配音字幕成片。",
-            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+            "image": "__ORIGIN__/og.png"
+          },
+          {
+            "@type": "HowTo",
+            "name": "调用短视频生成 API",
+            "step": [
+              { "@type": "HowToStep", "name": "注册拿 Key", "text": "免费注册后获得 x-api-key。" },
+              { "@type": "HowToStep", "name": "提交任务", "text": "POST /api/proxy/v1/videos，传入 video_subject 与 aspect。" },
+              { "@type": "HowToStep", "name": "轮询下载", "text": "GET /api/proxy/v1/videos/{task_id}，state=complete 后预览或下载。不支持时间轴精修已有视频。" }
+            ]
           },
           {
             "@type": "FAQPage",

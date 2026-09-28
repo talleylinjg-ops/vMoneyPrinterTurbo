@@ -68,13 +68,13 @@ export function applySeo(path) {
   upsertMeta("property", "og:title", page.title);
   upsertMeta("property", "og:description", page.description);
   upsertMeta("property", "og:url", url);
-  upsertMeta("property", "og:image", origin + "/favicon.svg");
+  upsertMeta("property", "og:image", origin + "/og.png");
   upsertMeta("property", "og:type", "website");
   upsertMeta("property", "og:locale", "zh_CN");
-  upsertMeta("name", "twitter:card", "summary");
+  upsertMeta("name", "twitter:card", "summary_large_image");
   upsertMeta("name", "twitter:title", page.title);
   upsertMeta("name", "twitter:description", page.description);
-  upsertMeta("name", "twitter:image", origin + "/favicon.svg");
+  upsertMeta("name", "twitter:image", origin + "/og.png");
   let canonical = document.head.querySelector('link[rel="canonical"]');
   if (!canonical) {
     canonical = document.createElement("link");

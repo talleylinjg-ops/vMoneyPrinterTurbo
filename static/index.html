@@ -19,13 +19,16 @@
   <meta property="og:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <meta property="og:description" content="输入一个主题，自动完成文案、素材、配音、字幕、配乐和成片。免费运营，无需大模型，成片持久可下载。" />
   <meta property="og:url" content="__ORIGIN__/" />
-  <meta property="og:image" content="__ORIGIN__/favicon.svg" />
+  <meta property="og:image" content="__ORIGIN__/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="zh_CN" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <meta name="twitter:description" content="输入主题，一键生成带配音和字幕的高清短视频。免费、无需大模型。" />
-  <meta name="twitter:image" content="__ORIGIN__/favicon.svg" />
+  <meta name="twitter:image" content="__ORIGIN__/og.png" />
+  <link rel="preload" href="/style.css" as="style" />
 
   <script type="application/ld+json">
   {
@@ -50,7 +53,19 @@
           "成片持久保存与下载",
           "开放 SaaS API"
         ],
-        "creator": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "__ORIGIN__/" }
+        "creator": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "__ORIGIN__/" },
+        "image": "__ORIGIN__/og.png"
+      },
+      {
+        "@type": "HowTo",
+        "name": "用 MoneyPrinterTurbo 生成短视频",
+        "description": "输入主题，自动匹配素材、配音、字幕并合成成片。",
+        "totalTime": "PT3M",
+        "step": [
+          { "@type": "HowToStep", "name": "填写主题", "text": "在首页填写视频主题或自定义文案，选择画幅。" },
+          { "@type": "HowToStep", "name": "生成", "text": "点击生成视频，系统自动检索 Pexels/Pixabay 素材并合成 Edge TTS 配音与字幕。" },
+          { "@type": "HowToStep", "name": "下载", "text": "完成后在预览区播放，或用 task_id 下载成片。刷新页面不会丢失。" }
+        ]
       },
       {
         "@type": "FAQPage",

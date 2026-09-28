@@ -118,6 +118,10 @@ app.use(
     setHeaders(res, filePath) {
       if (filePath.endsWith("index.html")) {
         res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("X-Served-From", "portal-html");
+      } else if (/\.(css|js|png|svg|woff2?)$/.test(filePath)) {
+        res.setHeader("Cache-Control", "public, max-age=86400");
+        res.setHeader("X-Served-From", "portal-static");
       }
     },
   })

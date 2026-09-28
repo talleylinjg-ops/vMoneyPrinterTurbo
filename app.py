@@ -210,21 +210,21 @@ def rewrite_origin(text: str, origin: str) -> str:
 async def llms_txt(request: Request):
     origin = public_origin(request)
     text = rewrite_origin((STATIC / "llms.txt").read_text(encoding="utf-8"), origin)
-    return PlainTextResponse(text)
+    return PlainTextResponse(text, headers={"Cache-Control": "public, max-age=600"})
 
 
 @app.get("/ai.txt", include_in_schema=False)
 async def ai_txt(request: Request):
     origin = public_origin(request)
     text = rewrite_origin((STATIC / "ai.txt").read_text(encoding="utf-8"), origin)
-    return PlainTextResponse(text)
+    return PlainTextResponse(text, headers={"Cache-Control": "public, max-age=600"})
 
 
 @app.get("/", include_in_schema=False)
 async def home(request: Request):
     origin = public_origin(request)
     html = rewrite_origin((STATIC / "index.html").read_text(encoding="utf-8"), origin)
-    return HTMLResponse(html)
+    return HTMLResponse(html, headers={"Cache-Control": "public, max-age=300", "X-Served-From": "origin-html"})
 
 
 @app.get("/api/v1/options")
