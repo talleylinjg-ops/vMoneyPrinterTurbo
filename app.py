@@ -30,7 +30,7 @@ STATIC.mkdir(exist_ok=True)
 
 running: dict[str, asyncio.Task] = {}
 
-app = FastAPI(title="MoneyPrinterTurbo", version="1.3.7")
+app = FastAPI(title="MoneyPrinterTurbo", version="1.3.7", openapi_url="/internal/openapi.json")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -184,6 +184,7 @@ async def sitemap(request: Request):
         ("/", "1.0"),
         ("/llms.txt", "0.8"),
         ("/docs/saas", "0.7"),
+        ("/openapi.json", "0.7"),
     ]
     items = "\n".join(
         f"  <url><loc>{origin}{path}</loc><changefreq>daily</changefreq><priority>{prio}</priority></url>"
@@ -311,12 +312,68 @@ async def download(task_id: str):
     )
 
 
+def engine_openapi(origin: str) -> dict:
+    return {
+        "openapi": "3.0.3",
+        "info": {
+            "title": "MoneyPrinterTurbo Video API",
+            "version": "1.3.7",
+            "description": "免费短视频生成。POST 主题即可异步合成配音字幕成片。不支持时间轴精修。",
+        },
+        "servers": [{"url": origin}],
+        "paths": {
+            "/api/v1/videos": {
+                "post": {
+                    "summary": "提交生成任务",
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/CreateVideo"},
+                                "example": {"video_subject": "春天适合出发", "aspect": "9:16"},
+                            }
+                        },
+                    },
+                    "responses": {"200": {"description": "{task_id,state}"}},
+                }
+            },
+            "/api/v1/videos/{task_id}": {"get": {"summary": "查询进度", "responses": {"200": {"description": "Task"}}}},
+            "/api/v1/videos/{task_id}/preview": {"get": {"summary": "预览 MP4"}},
+            "/api/v1/videos/{task_id}/download": {"get": {"summary": "下载 MP4"}},
+            "/api/v1/options": {"get": {"summary": "音色与画幅"}},
+        },
+        "components": {
+            "schemas": {
+                "CreateVideo": {
+                    "type": "object",
+                    "properties": {
+                        "video_subject": {"type": "string"},
+                        "video_script": {"type": "string"},
+                        "aspect": {"type": "string", "enum": ["9:16", "16:9", "1:1"]},
+                        "video_source": {"type": "string", "enum": ["pexels", "pixabay", "auto"]},
+                        "voice_name": {"type": "string"},
+                        "subtitle_enabled": {"type": "boolean"},
+                    },
+                }
+            }
+        },
+    }
+
+
+@app.get("/openapi.json", include_in_schema=False)
+async def openapi_json(request: Request):
+    return engine_openapi(public_origin(request))
+
+
 @app.get("/docs/saas")
-async def saas_help():
+async def saas_help(request: Request):
+    origin = public_origin(request)
     return {
         "title": "SaaS 调用说明",
+        "origin": origin,
         "base": "/api/v1",
-        "auth": "当前免费开放，无需 API Key",
+        "auth": "引擎直连免费开放；门户调用需 x-api-key",
+        "openapi": f"{origin}/openapi.json",
         "create": {
             "method": "POST",
             "path": "/api/v1/videos",
@@ -333,12 +390,15 @@ async def saas_help():
             },
         },
         "poll": "GET /api/v1/videos/{task_id}",
-        "preview": "GET /api/v1/videos/{task_id}/preview  成片持久保存在服务器，刷新页面不会丢失",
+        "preview": "GET /api/v1/videos/{task_id}/preview",
         "download": "GET /api/v1/videos/{task_id}/download",
+        "complete_state": "complete",
+        "failed_state": "failed",
         "limits": {
             "max_script_chars": MAX_CHARS,
             "max_video_seconds": MAX_SECONDS,
             "llm": False,
+            "edit_existing": False,
             "cost": "完全免费：Pexels/Pixabay 素材 + Edge TTS 配音",
         },
     }

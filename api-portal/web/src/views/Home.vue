@@ -45,17 +45,7 @@
     <section class="quick-start">
       <h2>快速开始</h2>
       <div class="code-block">
-        <code>
-# 1. 注册账号获取 API Key
-# 2. 提交视频生成任务
-curl -X POST https://{你的域名}/api/proxy/v1/videos \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: mpt_你的密钥" \
-  -d '{"video_subject": "春天适合出发", "aspect": "9:16"}'
-# 3. 轮询任务进度
-curl https://{你的域名}/api/proxy/v1/videos/{task_id} \
-  -H "x-api-key: mpt_你的密钥"
-        </code>
+        <code>{{ curlSample }}</code>
       </div>
       <router-link v-if="!loggedIn" to="/register" class="btn-primary">免费开始体验</router-link>
       <router-link v-else to="/console" class="btn-primary">进入控制台</router-link>
@@ -271,4 +261,16 @@ import { useAuthStore } from "../store/auth.js";
 
 const auth = useAuthStore();
 const loggedIn = computed(() => !!auth.token);
+const origin = typeof window !== "undefined" ? window.location.origin : "";
+const curlSample = computed(
+  () => `# 1. 注册拿 Key
+# 2. 提交任务
+curl -X POST ${origin}/api/proxy/v1/videos \\
+  -H "Content-Type: application/json" \\
+  -H "x-api-key: mpt_你的密钥" \\
+  -d '{"video_subject": "春天适合出发", "aspect": "9:16"}'
+# 3. 轮询到 state=complete
+curl ${origin}/api/proxy/v1/videos/{task_id} \\
+  -H "x-api-key: mpt_你的密钥"`
+);
 </script>

@@ -7,8 +7,16 @@ import db from "./db.js";
 import { JWT_SECRET } from "./config.js";
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use(
+  cors({
+    origin: true,
+    credentials: false,
+    allowedHeaders: ["Content-Type", "Authorization", "x-api-key", "Range"],
+    exposedHeaders: ["Content-Disposition", "Content-Range", "Accept-Ranges", "Content-Length"],
+    methods: ["GET", "POST", "PUT", "OPTIONS"],
+  })
+);
+app.use(express.json({ limit: "1mb" }));
 
 function auth(req, res, next) {
   const token = req.headers.authorization?.replace(/^Bearer\s+/i, "");

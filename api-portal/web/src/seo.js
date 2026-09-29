@@ -11,8 +11,8 @@ const PAGES = {
     robots: "index, follow",
   },
   "/docs": {
-    title: "API 文档 | MPT API 开放平台",
-    description: "提交视频生成任务、查询进度、预览和下载成片。使用 x-api-key 鉴权。",
+    title: "SaaS API 文档 | MPT 短视频生成",
+    description: "POST /api/proxy/v1/videos 提交主题，轮询 task_id，完成后预览下载。x-api-key 鉴权。OpenAPI：/openapi.json。",
     robots: "index, follow",
   },
   "/login": {

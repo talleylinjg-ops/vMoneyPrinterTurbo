@@ -116,11 +116,31 @@ function robotsTxt(origin) {
   ].join("\n");
 }
 
+function engineOpenApi(origin) {
+  return {
+    openapi: "3.0.3",
+    info: {
+      title: "MoneyPrinterTurbo Video API",
+      version: "1.3.7",
+      description: "POST 主题即可异步生成配音字幕成片。不支持时间轴精修。",
+    },
+    servers: [{ url: origin }],
+    paths: {
+      "/api/v1/videos": { post: { summary: "提交生成任务" } },
+      "/api/v1/videos/{task_id}": { get: { summary: "查询进度" } },
+      "/api/v1/videos/{task_id}/preview": { get: { summary: "预览 MP4" } },
+      "/api/v1/videos/{task_id}/download": { get: { summary: "下载 MP4" } },
+      "/api/v1/options": { get: { summary: "音色与画幅" } },
+    },
+  };
+}
+
 function sitemapXml(origin) {
   const urls = [
     ["/", "1.0", "daily"],
     ["/llms.txt", "0.8", "weekly"],
     ["/docs/saas", "0.7", "weekly"],
+    ["/openapi.json", "0.7", "weekly"],
   ];
   const body = urls
     .map(
@@ -303,6 +323,12 @@ export default {
       const headers = withEdgeHeaders(new Headers(), "edge-static", url.pathname);
       headers.set("content-type", "application/xml; charset=utf-8");
       return finalize(sitemapXml(origin), 200, headers);
+    }
+
+    if (url.pathname === "/openapi.json") {
+      const headers = withEdgeHeaders(new Headers(), "edge-static", url.pathname);
+      headers.set("content-type", "application/json; charset=utf-8");
+      return finalize(JSON.stringify(engineOpenApi(origin)), 200, headers);
     }
 
     return serveStatic(request, env, url);

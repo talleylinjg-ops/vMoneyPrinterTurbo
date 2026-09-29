@@ -95,12 +95,7 @@
 
       <div class="panel">
         <h3>调用示例</h3>
-        <div class="code-block"><code>
-curl -X POST /api/proxy/v1/videos \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: {{ apiKey }}" \
-  -d '{"video_subject": "春天适合出发", "aspect": "9:16"}'
-        </code></div>
+        <div class="code-block"><code>{{ curlSample }}</code></div>
       </div>
     </template>
   </div>
@@ -113,8 +108,15 @@ import { useAuthStore } from "../store/auth.js";
 
 const auth = useAuthStore();
 const token = computed(() => auth.token);
+const origin = typeof window !== "undefined" ? window.location.origin : "";
 const me = ref(null);
 const apiKey = ref(localStorage.getItem("mpt_api_key") || "");
+const curlSample = computed(
+  () => `curl -X POST ${origin}/api/proxy/v1/videos \\
+  -H "Content-Type: application/json" \\
+  -H "x-api-key: ${apiKey.value || "mpt_你的密钥"}" \\
+  -d '{"video_subject": "春天适合出发", "aspect": "9:16"}'`
+);
 const form = reactive({
   video_subject: "",
   video_script: "",

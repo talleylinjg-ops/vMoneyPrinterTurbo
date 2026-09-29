@@ -4,12 +4,40 @@ import { readFileSync, existsSync } from "fs";
 import { fileURLToPath } from "url";
 import { app } from "./app.js";
 import gateway from "./gateway.js";
+import { saasSpec } from "./openapi.js";
 import { PORT } from "./config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, "../web/dist");
 
 app.use("/api/proxy", gateway);
+
+app.get(["/openapi.json", "/api/openapi.json"], (req, res) => {
+  res.json(saasSpec(publicOrigin(req)));
+});
+
+app.get(["/api/saas", "/docs/saas"], (req, res) => {
+  const origin = publicOrigin(req);
+  res.json({
+    title: "MPT 短视频生成 SaaS",
+    origin,
+    auth: { header: "x-api-key", query: "api_key" },
+    openapi: `${origin}/openapi.json`,
+    create: { method: "POST", path: "/api/proxy/v1/videos" },
+    poll: { method: "GET", path: "/api/proxy/v1/videos/{task_id}" },
+    preview: { method: "GET", path: "/api/proxy/v1/videos/{task_id}/preview" },
+    download: { method: "GET", path: "/api/proxy/v1/videos/{task_id}/download" },
+    options: { method: "GET", path: "/api/proxy/v1/options" },
+    complete_state: "complete",
+    failed_state: "failed",
+    limits: {
+      max_script_chars: 1500,
+      max_video_seconds: 180,
+      llm: false,
+      edit_existing: false,
+    },
+  });
+});
 
 function publicOrigin(req) {
   const proto = req.headers["x-forwarded-proto"] || req.protocol || "https";
@@ -91,6 +119,7 @@ app.get("/sitemap.xml", (req, res) => {
     ["/pricing", "0.8"],
     ["/docs", "0.9"],
     ["/register", "0.7"],
+    ["/openapi.json", "0.8"],
     ["/llms.txt", "0.6"],
   ];
   const body = urls

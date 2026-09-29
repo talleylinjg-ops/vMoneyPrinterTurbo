@@ -49,4 +49,5 @@
 
 - 首页：__ORIGIN__/
 - API 文档：__ORIGIN__/docs
+- OpenAPI：__ORIGIN__/openapi.json
 - 给模型阅读：__ORIGIN__/llms.txt

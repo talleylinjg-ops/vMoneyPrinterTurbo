@@ -1,79 +1,141 @@
 <template>
   <div class="docs">
-    <h2>API 接口文档</h2>
-    <p class="sub">使用您的 API Key 调用视频生成服务。门户校验 Key 后转发到引擎。</p>
+    <h2>SaaS API 文档</h2>
+    <p class="sub">注册拿 Key，提交主题即可生成短视频。机器可读规格：<a :href="origin + '/openapi.json'">/openapi.json</a></p>
 
     <div class="doc-section">
-      <h3>1. 认证方式</h3>
-      <p>所有请求需在请求头携带您的 API Key：</p>
+      <h3>1. 认证</h3>
+      <p>所有接口携带请求头 <code>x-api-key</code>。浏览器预览/下载可用 <code>?api_key=</code>。</p>
       <div class="code-block"><code>x-api-key: mpt_你的密钥</code></div>
+      <p>Base URL：<code>{{ origin }}</code></p>
     </div>
 
     <div class="doc-section">
-      <h3>2. 提交视频生成任务</h3>
-      <div class="code-block"><code>
-POST /api/proxy/v1/videos
-
-{
-  "video_subject": "春天适合出发",
-  "video_script": "可选，不填则按主题生成默认文案",
-  "aspect": "9:16",
-  "video_source": "pexels"
-}
-      </code></div>
-      <p>返回：</p>
-      <div class="code-block"><code>
-{ "task_id": "xxxxx", "state": "queued" }
-      </code></div>
+      <h3>2. 提交生成任务</h3>
+      <p><code>POST {{ origin }}/api/proxy/v1/videos</code></p>
+      <div class="code-block"><code>{{ createBody }}</code></div>
+      <p>返回 <code>{"task_id":"...","state":"queued"}</code>。主题和文案至少填一项。</p>
     </div>
 
     <div class="doc-section">
-      <h3>3. 查询任务进度</h3>
-      <div class="code-block"><code>
-GET /api/proxy/v1/videos/{task_id}
-      </code></div>
-      <p>当 <code>state</code> 为 <code>complete</code> 表示完成，可用预览和下载接口取回成片。兼容路径 <code>GET /api/proxy/v1/tasks/{task_id}</code> 同样有效。</p>
+      <h3>3. 轮询进度</h3>
+      <p><code>GET {{ origin }}/api/proxy/v1/videos/{task_id}</code></p>
+      <p><code>state=complete</code> 可预览下载；<code>failed</code> 看 <code>error</code>。兼容 <code>/api/proxy/v1/tasks/{task_id}</code>。</p>
     </div>
 
     <div class="doc-section">
       <h3>4. 预览与下载</h3>
-      <div class="code-block"><code>
-GET /api/proxy/v1/videos/{task_id}/preview
-GET /api/proxy/v1/videos/{task_id}/download
-      </code></div>
-      <p>成片落盘后刷新页面仍可取回。浏览器预览也可在 URL 后附加 <code>?api_key=</code>。</p>
+      <div class="code-block"><code>GET {{ origin }}/api/proxy/v1/videos/{task_id}/preview
+GET {{ origin }}/api/proxy/v1/videos/{task_id}/download</code></div>
+      <p>成片落盘，刷新后仍可用同一 task_id。这是全新生成，没有时间轴精修接口。</p>
     </div>
 
     <div class="doc-section">
-      <h3>5. 完整调用示例</h3>
-      <div class="code-block"><code>
-curl -X POST https://YOUR_DOMAIN/api/proxy/v1/videos \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: mpt_你的密钥" \
-  -d '{"video_subject": "春天适合出发", "aspect": "9:16"}'
-
-curl https://YOUR_DOMAIN/api/proxy/v1/videos/TASK_ID \
-  -H "x-api-key: mpt_你的密钥"
-      </code></div>
+      <h3>5. curl</h3>
+      <button class="copy" type="button" @click="copy(curlText)">复制</button>
+      <div class="code-block"><code>{{ curlText }}</code></div>
     </div>
 
     <div class="doc-section">
-      <h3>6. 常用参数</h3>
+      <h3>6. Python</h3>
+      <button class="copy" type="button" @click="copy(pyText)">复制</button>
+      <div class="code-block"><code>{{ pyText }}</code></div>
+    </div>
+
+    <div class="doc-section">
+      <h3>7. JavaScript</h3>
+      <button class="copy" type="button" @click="copy(jsText)">复制</button>
+      <div class="code-block"><code>{{ jsText }}</code></div>
+    </div>
+
+    <div class="doc-section">
+      <h3>8. 参数</h3>
       <table>
         <thead>
-          <tr><th>参数</th><th>说明</th><th>示例</th></tr>
+          <tr><th>字段</th><th>说明</th><th>默认</th></tr>
         </thead>
         <tbody>
-          <tr><td>video_subject</td><td>视频主题</td><td>"春天适合出发"</td></tr>
-          <tr><td>video_script</td><td>直接指定文案（可选，最多 1500 字）</td><td>省略则按主题生成本地文案</td></tr>
-          <tr><td>video_source</td><td>素材来源</td><td>"pexels" / "pixabay" / "auto"</td></tr>
-          <tr><td>aspect</td><td>视频比例</td><td>"9:16" / "16:9" / "1:1"</td></tr>
-          <tr><td>voice_name</td><td>配音音色</td><td>默认 zh-CN-XiaoxiaoNeural</td></tr>
+          <tr><td>video_subject</td><td>主题</td><td>必填（或填文案）</td></tr>
+          <tr><td>video_script</td><td>旁白，最多 1500 字</td><td>按主题生成</td></tr>
+          <tr><td>aspect</td><td>9:16 / 16:9 / 1:1</td><td>9:16</td></tr>
+          <tr><td>video_source</td><td>pexels / pixabay / auto</td><td>pexels</td></tr>
+          <tr><td>voice_name</td><td>Edge TTS 音色</td><td>zh-CN-XiaoxiaoNeural</td></tr>
+          <tr><td>subtitle_enabled</td><td>字幕</td><td>true</td></tr>
         </tbody>
       </table>
+      <p>成片约 180 秒。完全免费，不调用大模型。</p>
     </div>
   </div>
 </template>
+
+<script setup>
+import { computed } from "vue";
+
+const origin = typeof window !== "undefined" ? window.location.origin : "";
+const createBody = `{
+  "video_subject": "春天适合出发",
+  "video_script": "",
+  "aspect": "9:16",
+  "video_source": "pexels"
+}`;
+
+const curlText = computed(
+  () => `# 创建
+curl -X POST ${origin}/api/proxy/v1/videos \\
+  -H "Content-Type: application/json" \\
+  -H "x-api-key: mpt_你的密钥" \\
+  -d '{"video_subject":"春天适合出发","aspect":"9:16"}'
+
+# 轮询，直到 state=complete
+curl ${origin}/api/proxy/v1/videos/TASK_ID \\
+  -H "x-api-key: mpt_你的密钥"
+
+# 下载
+curl -L "${origin}/api/proxy/v1/videos/TASK_ID/download?api_key=mpt_你的密钥" -o video.mp4`
+);
+
+const pyText = computed(
+  () => `import time, requests
+BASE = "${origin}"
+KEY = "mpt_你的密钥"
+h = {"x-api-key": KEY, "Content-Type": "application/json"}
+r = requests.post(f"{BASE}/api/proxy/v1/videos", headers=h, json={
+    "video_subject": "春天适合出发", "aspect": "9:16"
+})
+r.raise_for_status()
+task_id = r.json()["task_id"]
+while True:
+    s = requests.get(f"{BASE}/api/proxy/v1/videos/{task_id}", headers=h).json()
+    if s["state"] == "complete":
+        break
+    if s["state"] == "failed":
+        raise RuntimeError(s.get("error"))
+    time.sleep(2)
+open("video.mp4","wb").write(requests.get(
+    f"{BASE}/api/proxy/v1/videos/{task_id}/download", headers=h).content)`
+);
+
+const jsText = computed(
+  () => `const BASE = "${origin}";
+const KEY = "mpt_你的密钥";
+const headers = { "Content-Type": "application/json", "x-api-key": KEY };
+const created = await fetch(BASE + "/api/proxy/v1/videos", {
+  method: "POST", headers, body: JSON.stringify({ video_subject: "春天适合出发", aspect: "9:16" })
+}).then(r => r.json());
+let state = created.state;
+while (state !== "complete") {
+  const s = await fetch(BASE + "/api/proxy/v1/videos/" + created.task_id, { headers }).then(r => r.json());
+  if (s.state === "failed") throw new Error(s.error || "failed");
+  state = s.state;
+  if (state !== "complete") await new Promise(r => setTimeout(r, 2000));
+}
+const blob = await fetch(BASE + "/api/proxy/v1/videos/" + created.task_id + "/download", { headers }).then(r => r.blob());`
+);
+
+async function copy(text) {
+  await navigator.clipboard.writeText(text);
+}
+</script>
 
 <style scoped>
 .docs {
@@ -98,6 +160,7 @@ curl https://YOUR_DOMAIN/api/proxy/v1/videos/TASK_ID \
   padding: 24px;
   margin-bottom: 20px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .doc-section h3 {
@@ -126,6 +189,18 @@ curl https://YOUR_DOMAIN/api/proxy/v1/videos/TASK_ID \
   font-family: "SF Mono", Consolas, monospace;
   line-height: 1.7;
   white-space: pre;
+}
+
+.copy {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  background: #4f6ef7;
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
 }
 
 table {
