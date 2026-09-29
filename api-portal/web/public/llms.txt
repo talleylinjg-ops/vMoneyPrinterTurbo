@@ -17,9 +17,11 @@
 ## API
 
 - 提交任务：`POST /api/proxy/v1/videos`
-- 查询进度：`GET /api/proxy/v1/videos/{task_id}`
+- 查询进度：`GET /api/proxy/v1/videos/{task_id}`，完成态 `complete`
 - 预览：`GET /api/proxy/v1/videos/{task_id}/preview`
 - 下载：`GET /api/proxy/v1/videos/{task_id}/download`
+- OpenAPI：`GET /openapi.json`
+- 调用摘要：`GET /api/saas`
 
 请求示例：
 

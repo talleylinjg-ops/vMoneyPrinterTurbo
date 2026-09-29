@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-28T11:04:02.492Z",
+  "generatedAt": "2026-09-29T23:51:11.947Z",
   "staticDir": "static",
   "total": 10,
   "cssUrlCount": 0,
@@ -38,8 +38,8 @@
     {
       "key": "index.html",
       "path": "/",
-      "bytes": 15189,
-      "sha256": "2eb4077624b1e4d8289454d18ca8484524e11cc20f7c2011c19a99e0d6b884ec",
+      "bytes": 15207,
+      "sha256": "6ebedbcf8d4595286aca82b962852c442fa43b6c4bdfb42269e04d9096643a90",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "__ORIGIN__/",
@@ -59,8 +59,8 @@
     {
       "key": "llms.txt",
       "path": "/llms.txt",
-      "bytes": 2908,
-      "sha256": "ac812bc661be07633c73d21bf37f14ceee208157972ebe38cc755b0cc97c0bf4",
+      "bytes": 3033,
+      "sha256": "353b77c4ca792c75cade735882137b19efeaef79e3c1006a157a43b51fb70dae",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -95,8 +95,8 @@
     {
       "key": "sitemap.xml",
       "path": "/sitemap.xml",
-      "bytes": 453,
-      "sha256": "f356800b123219cff60d5622df6ae77f59c6cfd6ff9bce004a6c76b20964fcb3",
+      "bytes": 574,
+      "sha256": "bfd77cc89af29ad58963a25438a93edbf51076b70a64c3d131e580bb4747dd5b",
       "contentType": "application/xml; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []

@@ -29,10 +29,12 @@
 ## SaaS 调用
 
 - 创建任务：`POST /api/v1/videos`
-- 查询任务：`GET /api/v1/videos/{task_id}`
+- 查询任务：`GET /api/v1/videos/{task_id}`，完成态 `complete`
 - 预览成片：`GET /api/v1/videos/{task_id}/preview`
 - 下载成片：`GET /api/v1/videos/{task_id}/download`
 - 参数与音色：`GET /api/v1/options`
+- OpenAPI：`GET /openapi.json`
+- 调用说明：`GET /docs/saas`
 
 请求示例：
 
@@ -69,5 +71,6 @@
 
 - 首页：__ORIGIN__/
 - SaaS 参数说明：__ORIGIN__/docs/saas
+- OpenAPI：__ORIGIN__/openapi.json
 - 给模型阅读：__ORIGIN__/llms.txt
 - 本项目参考开源项目 harry0703/MoneyPrinterTurbo 的功能与界面设计。

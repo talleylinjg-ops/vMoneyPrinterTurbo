@@ -11,7 +11,7 @@
    - Cache miss → R2 `moneyprinterturbo-static` → `x-served-from: r2-static`
    - R2 miss → Worker Assets → `x-served-from: edge-assets`
    - 静态请求不回源
-2. robots.txt / sitemap.xml → Worker 按访问域名现场生成
+2. robots.txt / sitemap.xml / openapi.json → Worker 按访问域名现场生成
 3. `/api/*` `/docs*` `/health` → 反代 `BACKEND_ORIGIN`（`x-served-from: origin-api`）
 
 源站容器休眠时：首页、样式、脚本、图片、字体全部正常。只有生成/预览/下载暂时不可用。
