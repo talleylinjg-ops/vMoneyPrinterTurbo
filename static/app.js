@@ -28,15 +28,11 @@ const STAGE = {
 function bindRange(name, labelId, fmt) {
   const input = form.elements[name];
   const label = document.getElementById(labelId);
+  if (!input || !label) return;
   const sync = () => { label.textContent = fmt(input.value); };
   input.addEventListener("input", sync);
   sync();
 }
-bindRange("clip_duration", "clip-val", v => v);
-bindRange("clip_speed", "speed-val", v => Number(v).toFixed(2) + "x");
-bindRange("voice_volume", "vol-val", v => v + "%");
-bindRange("voice_rate", "rate-val", v => Number(v).toFixed(1) + "×");
-bindRange("bgm_volume", "bgm-val", v => v + "%");
 bindRange("font_size", "fs-val", v => v);
 bindRange("stroke_width", "sw-val", v => Number(v).toFixed(2));
 
@@ -50,7 +46,7 @@ function formData() {
   const fd = new FormData(form);
   const obj = Object.fromEntries(fd.entries());
   obj.clip_duration = Number(obj.clip_duration);
-  obj.clip_speed = Number(obj.clip_speed);
+  obj.clip_speed = Number(obj.clip_speed || 1);
   obj.voice_volume = Number(obj.voice_volume);
   obj.voice_rate = Number(obj.voice_rate);
   obj.bgm_volume = Number(obj.bgm_volume);
@@ -159,6 +155,37 @@ async function loadTasks() {
     return `<div class="task"><b title="${title}">${title}</b><span class="${cls}">${STAGE[t.state] || t.state} ${t.progress || 0}%</span><span>${t.duration ? t.duration + "s" : "-"}</span><span>${actions}</span></div>`;
   }).join("");
 }
+
+const taskToggle = document.getElementById("task-toggle");
+const settingsBtn = document.getElementById("settings-btn");
+const taskPopover = document.getElementById("task-popover");
+const settingsPopover = document.getElementById("settings-popover");
+taskToggle.addEventListener("click", () => {
+  taskPopover.hidden = !taskPopover.hidden;
+  settingsPopover.hidden = true;
+});
+settingsBtn.addEventListener("click", () => {
+  settingsPopover.hidden = !settingsPopover.hidden;
+  taskPopover.hidden = true;
+});
+document.getElementById("reset-subtitle").addEventListener("click", () => {
+  form.elements.subtitle_enabled.checked = true;
+  form.elements.font_name.selectedIndex = 0;
+  form.elements.subtitle_position.value = "bottom";
+  form.elements.text_color.value = "#FFFFFF";
+  form.elements.stroke_color.value = "#000000";
+  form.elements.font_size.value = 60;
+  form.elements.stroke_width.value = 1.5;
+  form.elements.subtitle_bg.checked = false;
+  form.elements.subtitle_bg_color.value = "#000000";
+  form.elements.rounded_subtitle_bg.checked = false;
+  form.elements.font_size.dispatchEvent(new Event("input"));
+  form.elements.stroke_width.dispatchEvent(new Event("input"));
+});
+const matchScript = document.getElementById("match-script");
+matchScript.addEventListener("change", () => {
+  if (matchScript.checked) form.elements.concat_mode.value = "sequential";
+});
 
 loadVoices();
 loadTasks();

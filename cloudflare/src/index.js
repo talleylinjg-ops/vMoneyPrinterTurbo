@@ -1,6 +1,6 @@
-const PROXY_PREFIXES = ["/api/", "/docs"];
-const PROXY_EXACT = ["/health"];
-const REWRITE_KEYS = new Set(["index.html", "llms.txt", "ai.txt", "manifest.webmanifest"]);
+const PROXY_PREFIXES = ["/api/"];
+const PROXY_EXACT = ["/health", "/docs/saas"];
+const REWRITE_KEYS = new Set(["index.html", "docs.html", "llms.txt", "llms-full.txt", "ai.txt", "manifest.webmanifest"]);
 
 const CONTENT_TYPES = {
   html: "text/html; charset=utf-8",
@@ -57,6 +57,7 @@ function contentTypeFor(key) {
 
 function r2Key(pathname) {
   if (pathname === "/" || pathname === "") return "index.html";
+  if (pathname === "/docs" || pathname === "/docs/") return "docs.html";
   return pathname.replace(/^\/+/, "");
 }
 
@@ -111,6 +112,7 @@ function robotsTxt(origin) {
     `Host: ${origin}`,
     "",
     `# GEO: ${origin}/llms.txt`,
+    `# GEO-full: ${origin}/llms-full.txt`,
     `# AI: ${origin}/ai.txt`,
     "",
   ].join("\n");
@@ -138,9 +140,12 @@ function engineOpenApi(origin) {
 function sitemapXml(origin) {
   const urls = [
     ["/", "1.0", "daily"],
+    ["/docs", "0.8", "weekly"],
     ["/llms.txt", "0.8", "weekly"],
-    ["/docs/saas", "0.7", "weekly"],
+    ["/llms-full.txt", "0.7", "weekly"],
+    ["/docs/saas", "0.6", "weekly"],
     ["/openapi.json", "0.7", "weekly"],
+    ["/ai.txt", "0.5", "weekly"],
   ];
   const body = urls
     .map(
@@ -329,6 +334,11 @@ export default {
       const headers = withEdgeHeaders(new Headers(), "edge-static", url.pathname);
       headers.set("content-type", "application/json; charset=utf-8");
       return finalize(JSON.stringify(engineOpenApi(origin)), 200, headers);
+    }
+
+    if (url.pathname === "/docs" || url.pathname === "/docs/") {
+      const docsUrl = new URL("/docs.html", url);
+      return serveStatic(new Request(docsUrl, request), env, docsUrl);
     }
 
     return serveStatic(request, env, url);

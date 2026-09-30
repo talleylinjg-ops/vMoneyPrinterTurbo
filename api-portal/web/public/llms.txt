@@ -22,6 +22,7 @@
 - 下载：`GET /api/proxy/v1/videos/{task_id}/download`
 - OpenAPI：`GET /openapi.json`
 - 调用摘要：`GET /api/saas`
+- 完整说明：`GET /llms-full.txt`
 
 请求示例：
 
@@ -52,4 +53,6 @@
 - 首页：__ORIGIN__/
 - API 文档：__ORIGIN__/docs
 - OpenAPI：__ORIGIN__/openapi.json
+- 调用摘要：__ORIGIN__/api/saas
 - 给模型阅读：__ORIGIN__/llms.txt
+- 完整说明：__ORIGIN__/llms-full.txt

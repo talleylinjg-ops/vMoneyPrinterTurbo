@@ -30,7 +30,13 @@ STATIC.mkdir(exist_ok=True)
 
 running: dict[str, asyncio.Task] = {}
 
-app = FastAPI(title="MoneyPrinterTurbo", version="1.3.7", openapi_url="/internal/openapi.json")
+app = FastAPI(
+    title="MoneyPrinterTurbo",
+    version="1.3.7",
+    openapi_url="/internal/openapi.json",
+    docs_url=None,
+    redoc_url=None,
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -170,6 +176,7 @@ async def robots(request: Request):
                 "",
                 "# AI / GEO",
                 f"# llms.txt: {origin}/llms.txt",
+                f"# llms-full.txt: {origin}/llms-full.txt",
                 f"# ai.txt: {origin}/ai.txt",
                 "",
             ]
@@ -182,9 +189,12 @@ async def sitemap(request: Request):
     origin = public_origin(request)
     urls = [
         ("/", "1.0"),
+        ("/docs", "0.8"),
         ("/llms.txt", "0.8"),
-        ("/docs/saas", "0.7"),
+        ("/llms-full.txt", "0.7"),
+        ("/docs/saas", "0.6"),
         ("/openapi.json", "0.7"),
+        ("/ai.txt", "0.5"),
     ]
     items = "\n".join(
         f"  <url><loc>{origin}{path}</loc><changefreq>daily</changefreq><priority>{prio}</priority></url>"
@@ -214,6 +224,13 @@ async def llms_txt(request: Request):
     return PlainTextResponse(text, headers={"Cache-Control": "public, max-age=600"})
 
 
+@app.get("/llms-full.txt", include_in_schema=False)
+async def llms_full_txt(request: Request):
+    origin = public_origin(request)
+    text = rewrite_origin((STATIC / "llms-full.txt").read_text(encoding="utf-8"), origin)
+    return PlainTextResponse(text, headers={"Cache-Control": "public, max-age=600"})
+
+
 @app.get("/ai.txt", include_in_schema=False)
 async def ai_txt(request: Request):
     origin = public_origin(request)
@@ -225,6 +242,13 @@ async def ai_txt(request: Request):
 async def home(request: Request):
     origin = public_origin(request)
     html = rewrite_origin((STATIC / "index.html").read_text(encoding="utf-8"), origin)
+    return HTMLResponse(html, headers={"Cache-Control": "public, max-age=300", "X-Served-From": "origin-html"})
+
+
+@app.get("/docs", include_in_schema=False)
+async def docs_html(request: Request):
+    origin = public_origin(request)
+    html = rewrite_origin((STATIC / "docs.html").read_text(encoding="utf-8"), origin)
     return HTMLResponse(html, headers={"Cache-Control": "public, max-age=300", "X-Served-From": "origin-html"})
 
 

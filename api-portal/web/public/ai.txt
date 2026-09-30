@@ -6,6 +6,7 @@ Disallow: /console
 Disallow: /membership
 
 Content: /llms.txt
+Content-Full: /llms-full.txt
 Sitemap: /sitemap.xml
 Canonical: /
 Language: zh-CN
@@ -13,3 +14,6 @@ Product: free short-video generation API
 Pricing: 0
 LLM: disabled
 Auth: x-api-key
+OpenAPI: /openapi.json
+Docs: /docs
+Complete-State: complete

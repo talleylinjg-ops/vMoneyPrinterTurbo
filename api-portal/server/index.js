@@ -106,6 +106,7 @@ app.get("/robots.txt", (req, res) => {
       `Host: ${origin}`,
       "",
       `# GEO: ${origin}/llms.txt`,
+      `# GEO-full: ${origin}/llms-full.txt`,
       `# AI: ${origin}/ai.txt`,
       "",
     ].join("\n")
@@ -120,7 +121,10 @@ app.get("/sitemap.xml", (req, res) => {
     ["/docs", "0.9"],
     ["/register", "0.7"],
     ["/openapi.json", "0.8"],
-    ["/llms.txt", "0.6"],
+    ["/llms.txt", "0.7"],
+    ["/llms-full.txt", "0.6"],
+    ["/ai.txt", "0.5"],
+    ["/api/saas", "0.6"],
   ];
   const body = urls
     .map(([p, pr]) => `  <url><loc>${origin}${p}</loc><changefreq>daily</changefreq><priority>${pr}</priority></url>`)
@@ -132,6 +136,10 @@ app.get("/sitemap.xml", (req, res) => {
 
 app.get("/llms.txt", (req, res) => {
   sendRewritten(req, res, path.join(distDir, "llms.txt"), "text/plain");
+});
+
+app.get("/llms-full.txt", (req, res) => {
+  sendRewritten(req, res, path.join(distDir, "llms-full.txt"), "text/plain");
 });
 
 app.get("/ai.txt", (req, res) => {

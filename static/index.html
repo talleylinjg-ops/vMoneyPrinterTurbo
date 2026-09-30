@@ -9,10 +9,11 @@
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="author" content="MoneyPrinterTurbo" />
   <link rel="canonical" href="__ORIGIN__/" />
-  <meta name="theme-color" content="#0f1419" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+  <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs full" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="MoneyPrinterTurbo" />
@@ -22,12 +23,14 @@
   <meta property="og:image" content="__ORIGIN__/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <meta property="og:locale" content="zh_CN" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <meta name="twitter:description" content="输入主题，一键生成带配音和字幕的高清短视频。免费、无需大模型。" />
   <meta name="twitter:image" content="__ORIGIN__/og.png" />
+  <meta name="twitter:image:alt" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <link rel="preload" href="/style.css" as="style" />
 
   <script type="application/ld+json">
@@ -43,7 +46,7 @@
         "url": "__ORIGIN__/",
         "inLanguage": "zh-CN",
         "description": "输入视频主题或关键词，自动生成文案、匹配 Pexels/Pixabay 素材、Edge TTS 配音、字幕与背景音乐，并合成竖屏或横屏高清短视频。",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY", "availability": "https://schema.org/InStock" },
         "featureList": [
           "主题一键生成视频文案",
           "Pexels / Pixabay 免费高清素材",
@@ -54,7 +57,31 @@
           "开放 SaaS API"
         ],
         "creator": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "__ORIGIN__/" },
-        "image": "__ORIGIN__/og.png"
+        "image": "__ORIGIN__/og.png",
+        "sameAs": ["__ORIGIN__/llms.txt", "__ORIGIN__/docs", "__ORIGIN__/openapi.json"]
+      },
+      {
+        "@type": "Organization",
+        "name": "MoneyPrinterTurbo",
+        "url": "__ORIGIN__/",
+        "logo": "__ORIGIN__/favicon.svg"
+      },
+      {
+        "@type": "WebSite",
+        "name": "MoneyPrinterTurbo",
+        "url": "__ORIGIN__/",
+        "inLanguage": "zh-CN",
+        "potentialAction": {
+          "@type": "Action",
+          "name": "生成短视频",
+          "target": "__ORIGIN__/"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "首页", "item": "__ORIGIN__/" }
+        ]
       },
       {
         "@type": "HowTo",
@@ -83,7 +110,7 @@
           {
             "@type": "Question",
             "name": "SaaS 如何调用？",
-            "acceptedAnswer": { "@type": "Answer", "text": "POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id}，完成后用 /preview 或 /download 取回成片。" }
+            "acceptedAnswer": { "@type": "Answer", "text": "POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id} 直到 state=complete，再用 /preview 或 /download 取回成片。规格见 /openapi.json。" }
           },
           {
             "@type": "Question",
@@ -99,158 +126,211 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
-      <span class="logo">MPT</span>
-      <div>
-        <h1>MoneyPrinterTurbo <small>v1.3.7</small></h1>
-        <p>完全免费运营 · 无需大模型 · Pexels / Pixabay + Edge TTS</p>
-      </div>
+    <h1 class="mpt-brand">
+      <span class="mpt-brand__name">MoneyPrinterTurbo</span>
+      <a class="mpt-brand__version" href="https://github.com/harry0703/MoneyPrinterTurbo" target="_blank" rel="noopener noreferrer">v1.3.7</a>
+    </h1>
+    <div class="top-actions">
+      <button type="button" class="ghost" id="task-toggle">任务管理 ▾</button>
+      <button type="button" class="ghost" id="settings-btn">设置</button>
+      <select class="lang" aria-label="界面语言">
+        <option selected>简体中文</option>
+      </select>
     </div>
-    <nav>
-      <a href="#generate">生成视频</a>
-      <a href="#tasks">任务与预览</a>
-      <a href="#saas">SaaS API</a>
-      <a href="/docs" target="_blank">OpenAPI</a>
-    </nav>
   </header>
 
-  <main>
-    <section class="hero" id="generate">
-      <div>
-        <h2>输入主题，自动生成可下载的高清短视频</h2>
-        <p>成片保存在服务器。刷新页面、稍后下载都不会丢失。会员登录后用 task_id 随时取回预览和下载链接。</p>
-      </div>
-      <div class="chips">
-        <span>免费素材</span>
-        <span>Edge TTS 配音</span>
-        <span>最长 180 秒</span>
-        <span>竖屏 / 横屏 / 方形</span>
-      </div>
-    </section>
+  <div class="popover" id="task-popover" hidden>
+    <h3>任务管理</h3>
+    <div id="task-list" class="task-list"></div>
+  </div>
+  <div class="popover" id="settings-popover" hidden>
+    <h3>设置</h3>
+    <p class="hint">托管版已内置 Pexels / Pixabay 与 Edge TTS，无需填写大模型 API Key。</p>
+    <p class="hint">SaaS 文档：<a href="/docs">/docs</a>　OpenAPI：<a href="/openapi.json">/openapi.json</a></p>
+  </div>
 
-    <form id="gen-form" class="grid">
-      <section class="card">
-        <h3>文案设置</h3>
-        <label>视频主题（将根据主题生成视频文案）
-          <input name="video_subject" placeholder="例如：人工智能如何改变日常生活" maxlength="120" />
-        </label>
-        <label>生成视频脚本的语言
-          <select name="language">
-            <option value="zh-CN" selected>简体中文</option>
-            <option value="en">English</option>
-          </select>
-        </label>
-        <details>
-          <summary>高级脚本设置</summary>
-          <label>视频文案（可选，不填则按主题生成）
-            <textarea name="video_script" rows="6" maxlength="1500" placeholder="自定义旁白。建议 800 字以内，最长 1500 字 / 约 180 秒。"></textarea>
+  <main>
+    <form id="gen-form">
+      <div class="grid">
+        <section class="card">
+          <h3>文案设置</h3>
+          <label>视频主题 <span class="help" title="AI 将根据主题生成视频文案。">?</span>
+            <input name="video_subject" placeholder="例如：人工智能如何改变日常生活" maxlength="120" />
+          </label>
+          <label>生成视频脚本的语言
+            <select name="language">
+              <option value="zh-CN" selected>自动检测</option>
+              <option value="zh-CN">简体中文</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <details>
+            <summary>高级脚本设置</summary>
+            <p class="hint">托管版关闭大模型，按主题生成本地旁白。</p>
+          </details>
+          <button type="button" class="ai-btn" disabled>点击使用AI生成视频文案和关键词</button>
+          <label>视频文案（可选） <span class="help" title="可留空，由主题生成本地旁白。免费成片请控制在 1500 字以内。">?</span>
+            <textarea name="video_script" rows="7" maxlength="1500"></textarea>
           </label>
           <p class="hint" id="char-hint">0 / 1500 字</p>
-          <label>视频关键词（英文，可选）
-            <input name="video_terms" placeholder="artificial intelligence, daily life" />
+          <button type="button" class="ai-btn" disabled>点击使用AI根据文案生成视频关键词</button>
+          <label>视频关键词（英文，可选） <span class="help" title="可留空。多个关键词请使用英文逗号分隔。">?</span>
+            <input name="video_terms" />
           </label>
-        </details>
-      </section>
+        </section>
 
-      <section class="card">
-        <h3>视频设置</h3>
-        <label>视频来源
-          <select name="video_source">
-            <option value="pexels" selected>Pexels</option>
-            <option value="pixabay">Pixabay</option>
-            <option value="auto">自动（Pexels + Pixabay）</option>
-          </select>
-        </label>
-        <label>视频拼接模式
-          <select name="concat_mode">
-            <option value="random" selected>随机拼接（推荐）</option>
-            <option value="sequential">按文案顺序匹配画面</option>
-          </select>
-        </label>
-        <label>视频转场模式
-          <select name="transition">
-            <option value="none" selected>无转场</option>
-          </select>
-        </label>
-        <label>视频比例
-          <select name="aspect">
-            <option value="9:16" selected>竖屏 9:16（抖音视频）</option>
-            <option value="16:9">横屏 16:9（YouTube）</option>
-            <option value="1:1">方形 1:1</option>
-          </select>
-        </label>
-        <label>单个片段最大时长（秒） <span id="clip-val">3</span>
-          <input type="range" name="clip_duration" min="2" max="6" step="0.5" value="3" />
-        </label>
-        <label>片段播放速度 <span id="speed-val">1.00x</span>
-          <input type="range" name="clip_speed" min="0.5" max="2" step="0.05" value="1" />
-        </label>
-        <label>同时生成视频数量
-          <select name="video_count"><option>1</option></select>
-        </label>
-        <label>视频编码器
-          <select name="video_codec">
-            <option value="libx264" selected>默认（推荐）</option>
-          </select>
-        </label>
-      </section>
+        <section class="card">
+          <h3>视频设置</h3>
+          <label>视频来源
+            <select name="video_source">
+              <option value="pexels" selected>Pexels</option>
+              <option value="pixabay">Pixabay</option>
+              <option value="auto">自动（Pexels + Pixabay）</option>
+            </select>
+          </label>
+          <label>视频拼接模式
+            <select name="concat_mode">
+              <option value="random" selected>随机拼接（推荐）</option>
+              <option value="sequential">顺序拼接</option>
+            </select>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="match-script" /> 按文案顺序匹配画面 <span class="help" title="按文案顺序生成关键词并匹配素材。">?</span>
+          </label>
+          <label>视频转场模式
+            <select name="transition">
+              <option value="none" selected>无转场</option>
+              <option value="shuffle">随机转场</option>
+              <option value="fadein">渐入</option>
+              <option value="fadeout">渐出</option>
+              <option value="slidein">滑动入</option>
+              <option value="slideout">滑动出</option>
+              <option value="zoomin">放大</option>
+              <option value="zoomout">缩小</option>
+            </select>
+          </label>
+          <label>视频比例
+            <select name="aspect">
+              <option value="9:16" selected>竖屏 9:16（抖音视频）</option>
+              <option value="16:9">横屏 16:9（西瓜视频）</option>
+              <option value="1:1">方形 1:1</option>
+            </select>
+          </label>
+          <label>单个片段最大时长（秒） <span class="help" title="控制合成时使用的每个视频片段时长，不是视频总时长。">?</span>
+            <select name="clip_duration">
+              <option>2</option>
+              <option selected>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+            </select>
+          </label>
+          <input type="hidden" name="clip_speed" value="1" />
+          <label>同时生成视频数量
+            <select name="video_count"><option selected>1</option></select>
+          </label>
+          <label>视频编码器 <span class="help" title="默认使用稳定的 libx264。">?</span>
+            <select name="video_codec">
+              <option value="libx264" selected>默认（推荐）</option>
+            </select>
+          </label>
+        </section>
 
-      <section class="card">
-        <h3>音频设置</h3>
-        <label>配音方式
-          <select><option>配音服务 Azure TTS V1</option></select>
-        </label>
-        <label>配音声音（与文案语言保持一致）
-          <select name="voice_name" id="voice-name"></select>
-        </label>
-        <label>配音音量 <span id="vol-val">100%</span>
-          <input type="range" name="voice_volume" min="20" max="100" value="100" />
-        </label>
-        <label>配音语速 <span id="rate-val">1.0×</span>
-          <input type="range" name="voice_rate" min="0.8" max="1.3" step="0.05" value="1" />
-        </label>
-        <p class="hint">填写视频文案后，可估算并预览完整配音。当前使用免费 Edge TTS，无需 API Key。</p>
-        <label>背景音乐来源
-          <select name="bgm_source"><option value="random">随机背景音乐</option></select>
-        </label>
-        <label>背景音乐音量 <span id="bgm-val">20%</span>
-          <input type="range" name="bgm_volume" min="0" max="60" value="20" />
-        </label>
-      </section>
+        <section class="card">
+          <h3>音频设置</h3>
+          <label>配音方式
+            <div class="seg" id="voice-mode">
+              <button type="button" class="active" data-mode="tts">自动配音</button>
+              <button type="button" data-mode="upload" disabled>上传音频</button>
+              <button type="button" data-mode="none" disabled>无配音</button>
+            </div>
+          </label>
+          <label>配音服务
+            <select>
+              <option selected>Azure TTS V1</option>
+            </select>
+          </label>
+          <label>配音声音（与文案语言保持一致）
+            <select name="voice_name" id="voice-name"></select>
+          </label>
+          <div class="row">
+            <label>配音音量 <span class="help" title="100% 为原始音量。">?</span>
+              <select name="voice_volume">
+                <option value="80">80%</option>
+                <option value="100" selected>100%</option>
+              </select>
+            </label>
+            <label>配音语速 <span class="help" title="1.0× 为正常语速。">?</span>
+              <select name="voice_rate">
+                <option value="0.9">0.9×</option>
+                <option value="1" selected>1.0×</option>
+                <option value="1.1">1.1×</option>
+              </select>
+            </label>
+          </div>
+          <button type="button" class="secondary" id="preview-voice" disabled>试听配音</button>
+          <label>背景音乐来源
+            <select name="bgm_source">
+              <option value="random" selected>随机背景音乐</option>
+              <option value="none">无背景音乐</option>
+            </select>
+          </label>
+          <label>背景音乐音量
+            <select name="bgm_volume">
+              <option value="10">10%</option>
+              <option value="20" selected>20%</option>
+              <option value="30">30%</option>
+            </select>
+          </label>
+        </section>
 
-      <section class="card">
-        <h3>字幕设置</h3>
-        <label class="check"><input type="checkbox" name="subtitle_enabled" checked /> 启用字幕</label>
-        <label>字幕字体
-          <select name="font_name"><option>WenQuanYi Micro Hei</option></select>
-        </label>
-        <label>字幕位置
-          <select name="subtitle_position">
-            <option value="bottom" selected>底部（推荐）</option>
-            <option value="center">居中</option>
-            <option value="top">顶部</option>
-          </select>
-        </label>
-        <div class="row">
-          <label>字幕颜色 <input type="color" name="text_color" value="#FFFFFF" /></label>
-          <label>描边颜色 <input type="color" name="stroke_color" value="#000000" /></label>
-        </div>
-        <label>字幕大小 <span id="fs-val">60</span>
-          <input type="range" name="font_size" min="30" max="80" value="60" />
-        </label>
-        <label>描边粗细 <span id="sw-val">1.50</span>
-          <input type="range" name="stroke_width" min="0" max="4" step="0.1" value="1.5" />
-        </label>
-        <label class="check"><input type="checkbox" name="subtitle_bg" /> 启用字幕背景</label>
-        <label>字幕背景颜色 <input type="color" name="subtitle_bg_color" value="#000000" /></label>
-        <label class="check"><input type="checkbox" name="rounded_subtitle_bg" /> 启用圆角半透明字幕背景</label>
-      </section>
+        <section class="card">
+          <h3>字幕设置</h3>
+          <label class="check"><input type="checkbox" name="subtitle_enabled" checked /> 启用字幕</label>
+          <label>字幕字体
+            <select name="font_name">
+              <option selected>MicrosoftYaHeiBold.ttc</option>
+              <option>WenQuanYi Micro Hei</option>
+            </select>
+          </label>
+          <label>字幕位置
+            <select name="subtitle_position">
+              <option value="bottom" selected>底部（推荐）</option>
+              <option value="center">中间</option>
+              <option value="top">顶部</option>
+            </select>
+          </label>
+          <div class="row">
+            <label>字幕颜色
+              <input type="color" name="text_color" value="#FFFFFF" />
+            </label>
+            <label>字幕大小 <span class="slider-val" id="fs-val">60</span>
+              <input type="range" name="font_size" min="30" max="80" value="60" />
+            </label>
+          </div>
+          <div class="row">
+            <label>描边颜色
+              <input type="color" name="stroke_color" value="#000000" />
+            </label>
+            <label>描边粗细 <span class="slider-val" id="sw-val">1.50</span>
+              <input type="range" name="stroke_width" min="0" max="4" step="0.1" value="1.5" />
+            </label>
+          </div>
+          <div class="row">
+            <label class="check"><input type="checkbox" name="subtitle_bg" /> 启用字幕背景</label>
+            <label>字幕背景颜色
+              <input type="color" name="subtitle_bg_color" value="#000000" />
+            </label>
+          </div>
+          <label class="check"><input type="checkbox" name="rounded_subtitle_bg" /> 启用圆角半透明字幕背景 <span class="help" title="开启后字幕背景会显示为更贴合文字宽度的圆角半透明样式。">?</span></label>
+          <button type="button" class="secondary" id="reset-subtitle">恢复默认字幕设置</button>
+        </section>
+      </div>
+
+      <div class="actions">
+        <button type="submit" id="submit-btn">生成视频</button>
+      </div>
     </form>
-
-    <div class="actions">
-      <button type="submit" form="gen-form" id="submit-btn">生成视频</button>
-      <p class="limits">限制：1500 字 / 约 180 秒。全新生成流水线（主题或文案 → 素材 → 配音 → 字幕 → 成片），不支持时间轴精修。</p>
-    </div>
 
     <section class="card status-card" id="status-card" hidden>
       <h3>生成进度</h3>
@@ -269,13 +349,7 @@
       </div>
     </section>
 
-    <section class="card" id="tasks">
-      <h3>任务历史</h3>
-      <p class="hint">已完成的视频持久保存在服务器。刷新后仍可预览和下载。</p>
-      <div id="task-list" class="task-list"></div>
-    </section>
-
-    <section class="card" id="saas">
+    <section class="card visually-seo" id="saas">
       <h3>SaaS 调用参数</h3>
       <p>你的站点只需 POST 创建任务，再轮询状态。用户不用填写几十个参数，前端给默认值即可。</p>
       <pre class="code">POST /api/v1/videos
@@ -307,14 +381,14 @@ GET /openapi.json</pre>
       </ul>
     </section>
 
-    <section class="card" id="faq">
+    <section class="card visually-seo" id="faq">
       <h2>常见问题</h2>
       <h3>MoneyPrinterTurbo 收费吗？</h3>
       <p>完全免费。素材来自 Pexels / Pixabay，配音使用 Edge TTS，不调用大模型。</p>
       <h3>如何生成短视频？</h3>
       <p>在首页填写视频主题或文案，选择画幅后点击生成。系统会自动匹配素材、配音、字幕并合成成片。</p>
       <h3>SaaS 如何调用？</h3>
-      <p>POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id}，完成后用 /preview 或 /download 取回成片。</p>
+      <p>POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id} 直到 state=complete，再用 /preview 或 /download 取回成片。规格见 /openapi.json，说明见 /docs。</p>
       <h3>有哪些限制？</h3>
       <p>文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。</p>
     </section>

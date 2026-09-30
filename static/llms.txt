@@ -34,7 +34,8 @@
 - 下载成片：`GET /api/v1/videos/{task_id}/download`
 - 参数与音色：`GET /api/v1/options`
 - OpenAPI：`GET /openapi.json`
-- 调用说明：`GET /docs/saas`
+- 调用说明：`GET /docs` 与 `GET /docs/saas`
+- 完整说明：`GET /llms-full.txt`
 
 请求示例：
 
@@ -70,7 +71,9 @@
 ## 相关链接
 
 - 首页：__ORIGIN__/
-- SaaS 参数说明：__ORIGIN__/docs/saas
+- SaaS 文档：__ORIGIN__/docs
+- SaaS JSON：__ORIGIN__/docs/saas
 - OpenAPI：__ORIGIN__/openapi.json
 - 给模型阅读：__ORIGIN__/llms.txt
+- 完整说明：__ORIGIN__/llms-full.txt
 - 本项目参考开源项目 harry0703/MoneyPrinterTurbo 的功能与界面设计。

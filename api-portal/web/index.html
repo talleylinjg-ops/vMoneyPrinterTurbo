@@ -13,6 +13,7 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+    <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs full" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MPT API 开放平台" />
     <meta property="og:title" content="MPT API 开放平台 | 免费短视频生成 API" />
@@ -22,10 +23,12 @@
     <meta property="og:image" content="__ORIGIN__/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="MPT API 开放平台 免费短视频生成" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="MPT API 开放平台 | 免费短视频生成 API" />
     <meta name="twitter:description" content="注册即得 API Key。输入主题即可生成带配音和字幕的短视频，完全免费。" />
     <meta name="twitter:image" content="__ORIGIN__/og.png" />
+    <meta name="twitter:image:alt" content="MPT API 开放平台 免费短视频生成" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -38,8 +41,27 @@
             "operatingSystem": "Web",
             "inLanguage": "zh-CN",
             "description": "免费短视频生成 API。注册即得 Key，主题一键生成配音字幕成片。",
-            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
-            "image": "__ORIGIN__/og.png"
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY", "availability": "https://schema.org/InStock" },
+            "image": "__ORIGIN__/og.png",
+            "sameAs": ["__ORIGIN__/llms.txt", "__ORIGIN__/docs", "__ORIGIN__/openapi.json"]
+          },
+          {
+            "@type": "Organization",
+            "name": "MPT API 开放平台",
+            "url": "__ORIGIN__/",
+            "logo": "__ORIGIN__/favicon.svg"
+          },
+          {
+            "@type": "WebSite",
+            "name": "MPT API 开放平台",
+            "url": "__ORIGIN__/",
+            "inLanguage": "zh-CN"
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "首页", "item": "__ORIGIN__/" }
+            ]
           },
           {
             "@type": "HowTo",

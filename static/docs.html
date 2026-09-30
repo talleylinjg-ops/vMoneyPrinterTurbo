@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SaaS 调用文档 | MoneyPrinterTurbo 免费短视频生成 API</title>
+  <meta name="description" content="MoneyPrinterTurbo SaaS 文档：POST /api/v1/videos 提交主题，轮询 task_id，完成后预览或下载成片。免费、无需大模型、无需 API Key。文案 1500 字，成片约 180 秒。" />
+  <meta name="keywords" content="MoneyPrinterTurbo API,短视频生成API,OpenAPI,SaaS,免费视频生成,Pexels,Pixabay,Edge TTS" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="author" content="MoneyPrinterTurbo" />
+  <link rel="canonical" href="__ORIGIN__/docs" />
+  <meta name="theme-color" content="#0f1419" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+  <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs full" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="MoneyPrinterTurbo" />
+  <meta property="og:title" content="SaaS 调用文档 | MoneyPrinterTurbo" />
+  <meta property="og:description" content="POST 主题即可异步生成配音字幕成片。完成态 complete。不支持时间轴精修。" />
+  <meta property="og:url" content="__ORIGIN__/docs" />
+  <meta property="og:image" content="__ORIGIN__/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SaaS 调用文档 | MoneyPrinterTurbo" />
+  <meta name="twitter:description" content="POST /api/v1/videos 提交主题，轮询 task_id，完成后下载成片。" />
+  <meta name="twitter:image" content="__ORIGIN__/og.png" />
+  <meta name="twitter:image:alt" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "headline": "MoneyPrinterTurbo SaaS 调用文档",
+        "description": "POST 主题即可异步生成配音字幕成片。完成态 complete。不支持时间轴精修。",
+        "inLanguage": "zh-CN",
+        "url": "__ORIGIN__/docs",
+        "image": "__ORIGIN__/og.png",
+        "author": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "__ORIGIN__/" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "首页", "item": "__ORIGIN__/" },
+          { "@type": "ListItem", "position": 2, "name": "SaaS 文档", "item": "__ORIGIN__/docs" }
+        ]
+      },
+      {
+        "@type": "HowTo",
+        "name": "调用 MoneyPrinterTurbo 生成短视频",
+        "description": "提交主题，轮询任务，下载成片。",
+        "totalTime": "PT3M",
+        "step": [
+          { "@type": "HowToStep", "name": "提交任务", "text": "POST /api/v1/videos，传入 video_subject 或 video_script。" },
+          { "@type": "HowToStep", "name": "轮询进度", "text": "GET /api/v1/videos/{task_id}，等待 state=complete。" },
+          { "@type": "HowToStep", "name": "下载成片", "text": "GET /api/v1/videos/{task_id}/download 取回 MP4。" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "引擎直连需要 API Key 吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不需要。引擎 /api/v1/videos 开放调用。门户 /api/proxy/v1/videos 需要 x-api-key。" }
+          },
+          {
+            "@type": "Question",
+            "name": "完成态是什么？",
+            "acceptedAnswer": { "@type": "Answer", "text": "成功为 complete，失败为 failed。不要用 succeeded 判断。" }
+          },
+          {
+            "@type": "Question",
+            "name": "能精修已有视频吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不能。这是全新生成流水线，没有时间轴精修接口。改内容需重新 POST。" }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .doc-wrap { max-width: 860px; margin: 24px auto 64px; }
+    .doc-wrap h2 { margin: 28px 0 12px; }
+    .doc-wrap p, .doc-wrap li { line-height: 1.7; color: #31333f; }
+    .doc-wrap pre { background: #f0f2f6; border: 1px solid #d5dae3; border-radius: 10px; padding: 16px; overflow-x: auto; }
+    .crumb { color: #8aa0b8; font-size: 13px; margin: 12px 0 20px; }
+    .crumb a { color: #3d8bfd; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1 class="mpt-brand">
+      <span class="mpt-brand__name">MoneyPrinterTurbo</span>
+      <a class="mpt-brand__version" href="/">v1.3.7</a>
+    </h1>
+    <div class="top-actions">
+      <a class="ghost" href="/">返回生成</a>
+      <a class="ghost" href="/openapi.json">OpenAPI</a>
+    </div>
+  </header>
+  <main class="doc-wrap">
+    <p class="crumb"><a href="/">首页</a> / SaaS 文档</p>
+    <h2>认证</h2>
+    <p>引擎直连无需 Key。门户调用带 <code>x-api-key</code>，浏览器预览可用 <code>?api_key=</code>。</p>
+    <h2>提交任务</h2>
+    <p><code>POST __ORIGIN__/api/v1/videos</code></p>
+    <pre>{
+  "video_subject": "春天适合出发",
+  "video_script": "",
+  "aspect": "9:16",
+  "video_source": "pexels"
+}</pre>
+    <p>返回 <code>{"task_id":"...","state":"queued"}</code>。主题和文案至少填一项。</p>
+    <h2>轮询</h2>
+    <p><code>GET __ORIGIN__/api/v1/videos/{task_id}</code></p>
+    <p><code>state=complete</code> 可预览下载；<code>failed</code> 看 <code>error</code>。</p>
+    <h2>预览与下载</h2>
+    <pre>GET __ORIGIN__/api/v1/videos/{task_id}/preview
+GET __ORIGIN__/api/v1/videos/{task_id}/download</pre>
+    <p>成片落盘，刷新后仍可用同一 task_id。没有时间轴精修接口。</p>
+    <h2>curl</h2>
+    <pre>curl -X POST __ORIGIN__/api/v1/videos \
+  -H "Content-Type: application/json" \
+  -d '{"video_subject":"春天适合出发","aspect":"9:16"}'
+
+curl __ORIGIN__/api/v1/videos/TASK_ID
+curl -L __ORIGIN__/api/v1/videos/TASK_ID/download -o video.mp4</pre>
+    <h2>限制</h2>
+    <ul>
+      <li>文案最多 1500 字，成片约 180 秒。</li>
+      <li>完全免费：Pexels / Pixabay + Edge TTS，不调用大模型。</li>
+      <li>全新生成流水线，不支持时间轴精修已有视频。</li>
+    </ul>
+    <section id="faq">
+      <h2>常见问题</h2>
+      <h3>引擎直连需要 API Key 吗？</h3>
+      <p>不需要。引擎 /api/v1/videos 开放调用。门户 /api/proxy/v1/videos 需要 x-api-key。</p>
+      <h3>完成态是什么？</h3>
+      <p>成功为 complete，失败为 failed。不要用 succeeded 判断。</p>
+      <h3>能精修已有视频吗？</h3>
+      <p>不能。这是全新生成流水线，没有时间轴精修接口。改内容需重新 POST。</p>
+    </section>
+  </main>
+</body>
+</html>

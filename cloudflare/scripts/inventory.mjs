@@ -59,6 +59,7 @@ for (const full of files) {
         ".svg": "image/svg+xml",
         ".png": "image/png",
         ".webmanifest": "application/manifest+json",
+        ".json": "application/json; charset=utf-8",
       }[ext] || "application/octet-stream",
   };
   if (TEXT.has(ext)) {
@@ -89,7 +90,8 @@ for (const ref of [...allHref, ...allCssUrl]) {
     ref.startsWith("__ORIGIN__") ||
     ref.includes("${") ||
     ref.startsWith("/api/") ||
-    ref.startsWith("/docs")
+    ref.startsWith("/docs") ||
+    ref.startsWith("/openapi")
   ) {
     continue;
   }

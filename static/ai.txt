@@ -4,6 +4,7 @@ Allow: /
 Disallow: /api/
 
 Content: /llms.txt
+Content-Full: /llms-full.txt
 Sitemap: /sitemap.xml
 Canonical: /
 Language: zh-CN
@@ -12,3 +13,6 @@ Pricing: 0
 LLM: disabled
 Auth: none on engine, x-api-key on portal
 Edit: unsupported (new generation only)
+OpenAPI: /openapi.json
+Docs: /docs
+Complete-State: complete

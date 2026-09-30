@@ -18,7 +18,7 @@
 
 ## 静态清单
 
-本站前台一共 10 个文件，CSS 内 `url()` 为 0（系统字体，无外链字体/背景图）。
+前台静态文件（HTML/CSS/JS/图片/GEO）由 inventory 盘点，CSS 内 `url()` 为 0（系统字体，无外链字体/背景图）。 `/docs` 映射到 `docs.html`。
 
 ```bash
 cd cloudflare
