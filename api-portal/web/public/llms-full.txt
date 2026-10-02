@@ -2,25 +2,28 @@
 
 > 免费短视频生成 API。注册获得 API Key，提交主题即可用 Pexels / Pixabay 素材、Edge TTS 配音和自动字幕合成短视频。不使用大语言模型。
 
-站点：__ORIGIN__/
-文档：__ORIGIN__/docs
-OpenAPI：__ORIGIN__/openapi.json
-摘要：__ORIGIN__/llms.txt
-调用摘要：__ORIGIN__/api/saas
-策略：__ORIGIN__/ai.txt
+- 站点：[__ORIGIN__/](__ORIGIN__/)
+- 文档：[__ORIGIN__/docs](__ORIGIN__/docs)
+- OpenAPI：[__ORIGIN__/openapi.json](__ORIGIN__/openapi.json)
+- 摘要：[__ORIGIN__/llms.txt](__ORIGIN__/llms.txt)
+- 调用摘要：[__ORIGIN__/api/saas](__ORIGIN__/api/saas)
+- 策略：[__ORIGIN__/ai.txt](__ORIGIN__/ai.txt)
+- humans：[__ORIGIN__/humans.txt](__ORIGIN__/humans.txt)
 
 ## 产品事实
 
-- 价格：0，不限次数
-- 认证：请求头 x-api-key，或 ?api_key=
-- LLM：关闭
-- 素材：Pexels、Pixabay
-- 配音：Edge TTS
-- 完成态：complete
-- 失败态：failed
-- 文案上限：1500 字
-- 成片上限：约 180 秒
-- 精修：不支持。改内容必须重新 POST
+| 项 | 值 |
+| --- | --- |
+| 价格 | 0，不限次数 |
+| 认证 | 请求头 x-api-key，或 ?api_key= |
+| LLM | 关闭 |
+| 素材 | Pexels、Pixabay |
+| 配音 | Edge TTS |
+| 完成态 | complete |
+| 失败态 | failed |
+| 文案上限 | 1500 字 |
+| 成片上限 | 约 180 秒 |
+| 精修 | 不支持，改内容必须重新 POST |
 
 ## API
 
@@ -28,22 +31,25 @@ POST __ORIGIN__/api/proxy/v1/videos
 Content-Type: application/json
 x-api-key: mpt_你的密钥
 
+```json
 {
   "video_subject": "春天适合出发",
   "video_script": "",
   "aspect": "9:16",
   "video_source": "pexels"
 }
+```
 
-GET __ORIGIN__/api/proxy/v1/videos/{task_id}
-GET __ORIGIN__/api/proxy/v1/videos/{task_id}/preview
-GET __ORIGIN__/api/proxy/v1/videos/{task_id}/download
-GET __ORIGIN__/api/proxy/v1/options
-GET __ORIGIN__/openapi.json
-GET __ORIGIN__/api/saas
+- GET __ORIGIN__/api/proxy/v1/videos/{task_id}
+- GET __ORIGIN__/api/proxy/v1/videos/{task_id}/preview
+- GET __ORIGIN__/api/proxy/v1/videos/{task_id}/download
+- GET __ORIGIN__/api/proxy/v1/options
+- GET __ORIGIN__/openapi.json
+- GET __ORIGIN__/api/saas
 
-curl 示例：
+curl：
 
+```bash
 curl -X POST __ORIGIN__/api/proxy/v1/videos \
   -H "Content-Type: application/json" \
   -H "x-api-key: mpt_你的密钥" \
@@ -53,6 +59,7 @@ curl __ORIGIN__/api/proxy/v1/videos/TASK_ID \
   -H "x-api-key: mpt_你的密钥"
 
 curl -L "__ORIGIN__/api/proxy/v1/videos/TASK_ID/download?api_key=mpt_你的密钥" -o video.mp4
+```
 
 ## 使用步骤
 
@@ -61,9 +68,13 @@ curl -L "__ORIGIN__/api/proxy/v1/videos/TASK_ID/download?api_key=mpt_你的密�
 3. 轮询直到 state=complete。
 4. preview 或 download 取回成片。刷新后仍可用同一 task_id。
 
+## English
+
+Portal SaaS for MoneyPrinterTurbo. Auth with `x-api-key`. POST `/api/proxy/v1/videos`, poll until `state=complete`. Free stock + Edge TTS. No LLM. Limits: 1500 characters, ~180 seconds. New generation only.
+
 ## 常见问题
 
-如何调用？注册拿 Key，POST 创建任务，轮询 task_id，再用 preview/download 取回。
-收费吗？完全免费，不调用大模型。
-限制？文案 1500 字，成片约 180 秒。不支持时间轴精修已有视频。
-成片会丢失吗？成片落盘保存，可用 task_id 再次下载。
+- 如何调用？注册拿 Key，POST 创建任务，轮询 task_id，再用 preview/download 取回。
+- 收费吗？完全免费，不调用大模型。
+- 限制？文案 1500 字，成片约 180 秒。不支持时间轴精修已有视频。
+- 成片会丢失吗？成片落盘保存，可用 task_id 再次下载。

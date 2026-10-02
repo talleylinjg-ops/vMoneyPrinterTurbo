@@ -65,6 +65,22 @@ GET {{ origin }}/api/proxy/v1/videos/{task_id}/download</code></div>
       </table>
       <p>成片约 180 秒。完全免费，不调用大模型。</p>
     </div>
+
+    <div class="doc-section" id="faq">
+      <h3>9. 常见问题</h3>
+      <article>
+        <h4>引擎直连需要 API Key 吗？</h4>
+        <p>门户 /api/proxy/v1/videos 需要 x-api-key。引擎直连 /api/v1/videos 开放调用。</p>
+      </article>
+      <article>
+        <h4>完成态是什么？</h4>
+        <p>成功为 complete，失败为 failed。不要用 succeeded 判断。</p>
+      </article>
+      <article>
+        <h4>能精修已有视频吗？</h4>
+        <p>不能。这是全新生成流水线，没有时间轴精修接口。改内容需重新 POST。</p>
+      </article>
+    </div>
   </div>
 </template>
 
@@ -219,4 +235,7 @@ td {
 th {
   background: #f8fafc;
 }
+
+#faq article { margin: 12px 0 0; }
+#faq h4 { margin: 0 0 6px; font-size: 15px; color: #2c3e50; }
 </style>

@@ -218,6 +218,13 @@ details[open] summary::before { content: "▾ "; }
   font-size: 13px;
 }
 .task b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.task-preview {
+  background: transparent;
+  border: 0;
+  color: var(--link);
+  cursor: pointer;
+  padding: 0;
+}
 .ok { color: var(--ok); }
 .warn { color: #b54708; }
 .err { color: var(--danger); }
@@ -234,6 +241,9 @@ details[open] summary::before { content: "▾ "; }
   padding: 16px;
   z-index: 30;
 }
+.popover.open { display: block; }
+.popover h3 { margin: 0 0 12px; }
+.ghost[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .visually-seo { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 footer { display: none; }
@@ -245,4 +255,5 @@ footer { display: none; }
   .grid, .row, .task { grid-template-columns: 1fr; }
   .topbar { flex-direction: column; align-items: flex-start; }
   .mpt-brand > span:first-child, .mpt-brand { gap: 0.45rem; }
+  .popover { right: 12px; left: 12px; width: auto; top: 112px; }
 }

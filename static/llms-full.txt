@@ -2,31 +2,36 @@
 
 > 免费在线短视频生成器与开放 API。输入主题或文案，系统匹配 Pexels / Pixabay 素材、Edge TTS 配音、自动字幕，合成 9:16 / 16:9 / 1:1 成片。不使用大语言模型。
 
-站点：__ORIGIN__/
-文档：__ORIGIN__/docs
-OpenAPI：__ORIGIN__/openapi.json
-摘要：__ORIGIN__/llms.txt
-策略：__ORIGIN__/ai.txt
+- 站点：[__ORIGIN__/](__ORIGIN__/)
+- 文档：[__ORIGIN__/docs](__ORIGIN__/docs)
+- OpenAPI：[__ORIGIN__/openapi.json](__ORIGIN__/openapi.json)
+- 摘要：[__ORIGIN__/llms.txt](__ORIGIN__/llms.txt)
+- 策略：[__ORIGIN__/ai.txt](__ORIGIN__/ai.txt)
+- humans：[__ORIGIN__/humans.txt](__ORIGIN__/humans.txt)
 
 ## 产品事实
 
-- 价格：0
-- 注册：引擎直连不需要；门户 SaaS 需要 x-api-key
-- LLM：关闭
-- 素材：Pexels、Pixabay
-- 配音：Edge TTS，失败回退 gTTS
-- 成片落盘：storage/tasks/{task_id}/final-1.mp4
-- 完成态：complete
-- 失败态：failed
-- 文案上限：1500 字
-- 成片上限：约 180 秒
-- 精修：不支持。改内容必须重新 POST
+| 项 | 值 |
+| --- | --- |
+| 价格 | 0 |
+| 注册 | 引擎直连不需要；门户 SaaS 需要 x-api-key |
+| LLM | 关闭 |
+| 素材 | Pexels、Pixabay |
+| 配音 | Edge TTS，失败回退 gTTS |
+| 成片路径 | storage/tasks/{task_id}/final-1.mp4 |
+| 完成态 | complete |
+| 失败态 | failed |
+| 文案上限 | 1500 字 |
+| 成片上限 | 约 180 秒 |
+| 精修 | 不支持，改内容必须重新 POST |
+| 版本 | 1.3.7 |
 
 ## 引擎 API（免 Key）
 
 POST __ORIGIN__/api/v1/videos
 Content-Type: application/json
 
+```json
 {
   "video_subject": "人工智能如何改变日常生活",
   "video_script": "",
@@ -38,28 +43,35 @@ Content-Type: application/json
   "voice_name": "zh-CN-XiaoxiaoNeural",
   "subtitle_enabled": true
 }
+```
 
-GET __ORIGIN__/api/v1/videos/{task_id}
-GET __ORIGIN__/api/v1/videos/{task_id}/preview
-GET __ORIGIN__/api/v1/videos/{task_id}/download
-GET __ORIGIN__/api/v1/options
-GET __ORIGIN__/docs/saas
-GET __ORIGIN__/openapi.json
+- GET __ORIGIN__/api/v1/videos/{task_id}
+- GET __ORIGIN__/api/v1/videos/{task_id}/preview
+- GET __ORIGIN__/api/v1/videos/{task_id}/download
+- GET __ORIGIN__/api/v1/options
+- GET __ORIGIN__/api/v1/voices/preview?voice=zh-CN-XiaoxiaoNeural
+- GET __ORIGIN__/docs/saas
+- GET __ORIGIN__/openapi.json
 
-curl 示例：
+curl：
 
+```bash
 curl -X POST __ORIGIN__/api/v1/videos \
   -H "Content-Type: application/json" \
   -d '{"video_subject":"春天适合出发","aspect":"9:16"}'
 
+curl __ORIGIN__/api/v1/videos/TASK_ID
+curl -L __ORIGIN__/api/v1/videos/TASK_ID/download -o video.mp4
+```
+
 ## 门户 API（x-api-key）
 
-门户是独立站点。路径前缀 /api/proxy。认证头 x-api-key 或查询参数 api_key。
+门户是独立站点。路径前缀 `/api/proxy`。认证头 `x-api-key` 或查询参数 `api_key`。
 
-POST /api/proxy/v1/videos
-GET /api/proxy/v1/videos/{task_id}
-GET /api/proxy/v1/videos/{task_id}/preview
-GET /api/proxy/v1/videos/{task_id}/download
+- POST /api/proxy/v1/videos
+- GET /api/proxy/v1/videos/{task_id}
+- GET /api/proxy/v1/videos/{task_id}/preview
+- GET /api/proxy/v1/videos/{task_id}/download
 
 ## 使用步骤
 
@@ -68,10 +80,14 @@ GET /api/proxy/v1/videos/{task_id}/download
 3. 点击生成，等待 state=complete。
 4. 预览或下载。刷新后仍可用同一 task_id。
 
+## English
+
+Hosted MoneyPrinterTurbo generates short videos from a topic. Free stock from Pexels/Pixabay, Edge TTS, burned-in subtitles. No LLM. Limits: 1500 characters, ~180 seconds. Completion state is `complete`. Engine endpoints need no key; portal SaaS uses `x-api-key`. Timeline editing of existing videos is unsupported.
+
 ## 常见问题
 
-收费吗？完全免费，不调用大模型。
-如何调用？POST 创建任务，轮询 task_id，再用 preview/download 取回。
-限制？文案 1500 字，成片约 180 秒。不支持时间轴精修已有视频。
-素材从哪来？Pexels / Pixabay 免费视频库拼接，非 AI 原生画面。
-需要 Key 吗？引擎直连不需要。给外部 SaaS 用门户 Key。
+- 收费吗？完全免费，不调用大模型。
+- 如何调用？POST 创建任务，轮询 task_id，再用 preview/download 取回。
+- 限制？文案 1500 字，成片约 180 秒。不支持时间轴精修已有视频。
+- 素材从哪来？Pexels / Pixabay 免费视频库拼接，非 AI 原生画面。
+- 需要 Key 吗？引擎直连不需要。给外部 SaaS 用门户 Key。

@@ -2,27 +2,29 @@
 
 > 免费短视频生成 API。注册后获得 API Key，提交视频主题即可用 Pexels / Pixabay 免费素材、Edge TTS 配音和自动字幕合成短视频。全程无需大模型，完全免费不限次数。
 
+MPT API 开放平台基于 MoneyPrinterTurbo hosted edition。成片落盘保存，刷新后仍可用 task_id 预览和下载。全新生成流水线，不支持时间轴精修已有视频。
+
 ## 核心能力
 
-- 主题或文案一键生成短视频。
-- 免费素材：Pexels、Pixabay。
-- 免费配音：Edge TTS。
-- 画幅：9:16 / 16:9 / 1:1。
-- 成片持久保存，可用 task_id 预览和下载。
+- 主题或文案一键生成短视频
+- 免费素材：Pexels、Pixabay
+- 免费配音：Edge TTS
+- 画幅：9:16 / 16:9 / 1:1
+- 成片持久保存，可用 task_id 预览和下载
 
 ## 认证
 
-请求头：`x-api-key: mpt_你的密钥`
+请求头：`x-api-key: mpt_你的密钥`。浏览器预览可用 `?api_key=`。
 
 ## API
 
 - 提交任务：`POST /api/proxy/v1/videos`
-- 查询进度：`GET /api/proxy/v1/videos/{task_id}`，完成态 `complete`
+- 查询进度：`GET /api/proxy/v1/videos/{task_id}`，完成态 `complete`，失败态 `failed`
 - 预览：`GET /api/proxy/v1/videos/{task_id}/preview`
 - 下载：`GET /api/proxy/v1/videos/{task_id}/download`
-- OpenAPI：`GET /openapi.json`
+- [OpenAPI](__ORIGIN__/openapi.json)
 - 调用摘要：`GET /api/saas`
-- 完整说明：`GET /llms-full.txt`
+- [完整说明](__ORIGIN__/llms-full.txt)
 
 请求示例：
 
@@ -36,23 +38,24 @@
 
 返回：`{"task_id":"...","state":"queued"}`。完成后 `state` 为 `complete`。
 
-## 常见问题
-
-- 如何调用？注册拿 Key，POST 创建任务，轮询 task_id，再用 preview/download 取回。
-- 收费吗？完全免费，不调用大模型。
-- 限制？文案 1500 字，成片约 180 秒。不支持时间轴精修已有视频。
-
 ## 限制
 
 - 文案最多 1500 字，成片约 180 秒。
 - 全新生成流水线，不支持时间轴精修已有视频。
-- 不使用大语言模型。
+- 不使用大语言模型。价格为 0，不限次数。
+
+## English
+
+Free short-video generation API. Register for an `x-api-key`, POST a topic to `/api/proxy/v1/videos`, poll until `state=complete`. Pexels/Pixabay + Edge TTS. No LLM. Script <= 1500 characters, video <= 180 seconds. Timeline editing unsupported.
 
 ## 相关链接
 
-- 首页：__ORIGIN__/
-- API 文档：__ORIGIN__/docs
-- OpenAPI：__ORIGIN__/openapi.json
-- 调用摘要：__ORIGIN__/api/saas
-- 给模型阅读：__ORIGIN__/llms.txt
-- 完整说明：__ORIGIN__/llms-full.txt
+- [首页](__ORIGIN__/)
+- [套餐定价](__ORIGIN__/pricing)
+- [API 文档](__ORIGIN__/docs)
+- [免费注册](__ORIGIN__/register)
+- [OpenAPI](__ORIGIN__/openapi.json)
+- [调用摘要](__ORIGIN__/api/saas)
+- [llms.txt](__ORIGIN__/llms.txt)
+- [llms-full.txt](__ORIGIN__/llms-full.txt)
+- [ai.txt](__ORIGIN__/ai.txt)

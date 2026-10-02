@@ -1,12 +1,23 @@
 const PROXY_PREFIXES = ["/api/"];
 const PROXY_EXACT = ["/health", "/docs/saas"];
-const REWRITE_KEYS = new Set(["index.html", "docs.html", "llms.txt", "llms-full.txt", "ai.txt", "manifest.webmanifest"]);
+const REWRITE_KEYS = new Set([
+  "index.html",
+  "docs.html",
+  "llms.txt",
+  "llms-full.txt",
+  "llms.md",
+  "ai.txt",
+  "humans.txt",
+  "security.txt",
+  "manifest.webmanifest",
+]);
 
 const CONTENT_TYPES = {
   html: "text/html; charset=utf-8",
   css: "text/css; charset=utf-8",
   js: "application/javascript; charset=utf-8",
   txt: "text/plain; charset=utf-8",
+  md: "text/markdown; charset=utf-8",
   xml: "application/xml; charset=utf-8",
   svg: "image/svg+xml",
   png: "image/png",
@@ -32,6 +43,7 @@ function cacheControl(pathname) {
     pathname === "/" ||
     pathname.endsWith(".html") ||
     pathname.endsWith(".txt") ||
+    pathname.endsWith(".md") ||
     pathname.endsWith(".xml") ||
     pathname.endsWith(".webmanifest")
   ) {
@@ -58,6 +70,9 @@ function contentTypeFor(key) {
 function r2Key(pathname) {
   if (pathname === "/" || pathname === "") return "index.html";
   if (pathname === "/docs" || pathname === "/docs/") return "docs.html";
+  if (pathname === "/.well-known/security.txt" || pathname === "/security.txt") return "security.txt";
+  if (pathname === "/.well-known/llms.txt") return "llms.txt";
+  if (pathname === "/.well-known/ai.txt") return "ai.txt";
   return pathname.replace(/^\/+/, "");
 }
 
@@ -72,6 +87,15 @@ function robotsTxt(origin) {
   return [
     "User-agent: *",
     "Allow: /",
+    "Allow: /llms.txt",
+    "Allow: /llms-full.txt",
+    "Allow: /llms.md",
+    "Allow: /ai.txt",
+    "Allow: /docs",
+    "Allow: /openapi.json",
+    "Allow: /.well-known/llms.txt",
+    "Allow: /.well-known/ai.txt",
+    "Allow: /.well-known/security.txt",
     "Disallow: /api/",
     "",
     "User-agent: GPTBot",
@@ -88,6 +112,9 @@ function robotsTxt(origin) {
     "Allow: /",
     "",
     "User-agent: Claude-Web",
+    "Allow: /",
+    "",
+    "User-agent: anthropic-ai",
     "Allow: /",
     "",
     "User-agent: PerplexityBot",
@@ -108,12 +135,38 @@ function robotsTxt(origin) {
     "User-agent: CCBot",
     "Allow: /",
     "",
+    "User-agent: Googlebot",
+    "Allow: /",
+    "",
+    "User-agent: Bingbot",
+    "Allow: /",
+    "",
+    "User-agent: DuckDuckBot",
+    "Allow: /",
+    "",
+    "User-agent: YandexBot",
+    "Allow: /",
+    "",
+    "User-agent: Baiduspider",
+    "Allow: /",
+    "",
+    "User-agent: FacebookBot",
+    "Allow: /",
+    "",
+    "User-agent: meta-externalagent",
+    "Allow: /",
+    "",
+    "User-agent: LinkedInBot",
+    "Allow: /",
+    "",
     `Sitemap: ${origin}/sitemap.xml`,
     `Host: ${origin}`,
     "",
     `# GEO: ${origin}/llms.txt`,
     `# GEO-full: ${origin}/llms-full.txt`,
+    `# GEO-md: ${origin}/llms.md`,
     `# AI: ${origin}/ai.txt`,
+    `# Humans: ${origin}/humans.txt`,
     "",
   ].join("\n");
 }
@@ -133,24 +186,30 @@ function engineOpenApi(origin) {
       "/api/v1/videos/{task_id}/preview": { get: { summary: "预览 MP4" } },
       "/api/v1/videos/{task_id}/download": { get: { summary: "下载 MP4" } },
       "/api/v1/options": { get: { summary: "音色与画幅" } },
+      "/api/v1/voices/preview": { get: { summary: "试听配音" } },
     },
   };
 }
 
 function sitemapXml(origin) {
+  const lastmod = new Date().toISOString().slice(0, 10);
   const urls = [
     ["/", "1.0", "daily"],
     ["/docs", "0.8", "weekly"],
     ["/llms.txt", "0.8", "weekly"],
     ["/llms-full.txt", "0.7", "weekly"],
+    ["/llms.md", "0.6", "weekly"],
     ["/docs/saas", "0.6", "weekly"],
     ["/openapi.json", "0.7", "weekly"],
     ["/ai.txt", "0.5", "weekly"],
+    ["/humans.txt", "0.3", "monthly"],
+    ["/.well-known/security.txt", "0.3", "monthly"],
+    ["/.well-known/llms.txt", "0.6", "weekly"],
   ];
   const body = urls
     .map(
       ([p, pr, freq]) =>
-        `  <url><loc>${origin}${p}</loc><changefreq>${freq}</changefreq><priority>${pr}</priority></url>`
+        `  <url><loc>${origin}${p}</loc><lastmod>${lastmod}</lastmod><changefreq>${freq}</changefreq><priority>${pr}</priority></url>`
     )
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
@@ -164,9 +223,9 @@ function originDownPage(origin) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>生成服务暂时不可用 | MoneyPrinterTurbo</title>
   <style>
-    body { font-family: sans-serif; background:#0f1419; color:#e8eef5; display:grid; place-items:center; min-height:100vh; margin:0; }
+    body { font-family: "Source Sans Pro", "Noto Sans CJK SC", sans-serif; background:#ffffff; color:#262730; display:grid; place-items:center; min-height:100vh; margin:0; }
     main { max-width: 520px; padding: 32px; }
-    a { color:#3d8bfd; }
+    a { color:#0068c9; }
   </style>
 </head>
 <body>
@@ -183,6 +242,8 @@ function withEdgeHeaders(headers, servedFrom, pathname) {
   headers.set("x-served-from", servedFrom);
   headers.set("x-content-type-options", "nosniff");
   headers.set("referrer-policy", "strict-origin-when-cross-origin");
+  headers.set("x-frame-options", "SAMEORIGIN");
+  headers.set("permissions-policy", "camera=(), microphone=(), geolocation=()");
   headers.set("cache-control", cacheControl(pathname));
   headers.set("x-cache", servedFrom === "cf-cache" ? "HIT" : "MISS");
   return headers;
@@ -261,7 +322,7 @@ async function fromAssets(env, request, url, origin) {
   if (!asset.ok) return null;
   const type = asset.headers.get("content-type") || contentTypeFor(r2Key(url.pathname));
   const key = r2Key(url.pathname);
-  if (REWRITE_KEYS.has(key) || key.endsWith(".html") || key.endsWith(".txt") || key.endsWith(".xml") || key.endsWith(".webmanifest")) {
+  if (REWRITE_KEYS.has(key) || key.endsWith(".html") || key.endsWith(".txt") || key.endsWith(".md") || key.endsWith(".xml") || key.endsWith(".webmanifest")) {
     return { body: rewrite(await asset.text(), origin), contentType: type };
   }
   return { body: asset.body, contentType: type };
@@ -339,6 +400,21 @@ export default {
     if (url.pathname === "/docs" || url.pathname === "/docs/") {
       const docsUrl = new URL("/docs.html", url);
       return serveStatic(new Request(docsUrl, request), env, docsUrl);
+    }
+
+    if (url.pathname === "/.well-known/security.txt" || url.pathname === "/security.txt") {
+      const secUrl = new URL("/security.txt", url);
+      return serveStatic(new Request(secUrl, request), env, secUrl);
+    }
+
+    if (url.pathname === "/.well-known/llms.txt") {
+      const llmsUrl = new URL("/llms.txt", url);
+      return serveStatic(new Request(llmsUrl, request), env, llmsUrl);
+    }
+
+    if (url.pathname === "/.well-known/ai.txt") {
+      const aiUrl = new URL("/ai.txt", url);
+      return serveStatic(new Request(aiUrl, request), env, aiUrl);
     }
 
     return serveStatic(request, env, url);

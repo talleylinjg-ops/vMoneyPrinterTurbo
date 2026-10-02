@@ -1,0 +1,14 @@
+/* TEAM */
+Site: MoneyPrinterTurbo hosted edition
+From: Internet
+Contact: https://github.com/talleylinjg-ops/vMoneyPrinterTurbo/issues
+
+/* SITE */
+Last update: 2026-10-01
+Language: zh-CN
+Doctype: HTML5
+Standards: HTML5, CSS3, JSON-LD, OpenAPI 3.0
+Components: FastAPI, Cloudflare Workers, R2, Edge TTS, Pexels, Pixabay
+Software: MoneyPrinterTurbo v1.3.7
+llms.txt: __ORIGIN__/llms.txt
+Docs: __ORIGIN__/docs

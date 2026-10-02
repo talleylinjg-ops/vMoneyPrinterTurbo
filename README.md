@@ -69,7 +69,16 @@ curl -X POST https://YOUR_ENGINE/api/v1/videos \
 ## Cloudflare 边缘
 
 静态 HTML/CSS/JS/图片走 Cache → R2 `moneyprinterturbo-static` → Worker Assets，浏览不碰原站。
-只有 `/api/*` `/docs*` `/health` 回源做生成和下载。
+只有 `/api/*` `/health` `/docs/saas` 回源做生成和下载。`/docs` 走边缘 `docs.html`。
+
+## SEO / GEO
+
+引擎与门户均提供：
+
+- `/llms.txt` `/llms-full.txt` `/llms.md`：给大模型阅读
+- `/ai.txt` `/humans.txt` `/.well-known/security.txt`
+- 动态 `/robots.txt` `/sitemap.xml`（按访问域名改写，含 lastmod）
+- JSON-LD：WebApplication / HowTo / FAQ / Breadcrumb
 
 ```bash
 cd cloudflare

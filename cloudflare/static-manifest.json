@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-09-30T13:33:40.914Z",
+  "generatedAt": "2026-10-02T09:52:09.318Z",
   "staticDir": "static",
-  "total": 12,
+  "total": 15,
   "cssUrlCount": 0,
   "missingRefs": [],
   "files": [
     {
       "key": "ai.txt",
       "path": "/ai.txt",
-      "bytes": 384,
-      "sha256": "c8be8de8a255b2c052e33d9e91c5c6bd3c182fb68178d2ad72f0ebe24951495e",
+      "bytes": 640,
+      "sha256": "795b269aea16a6e66b0c00f841b05ca0dcc3c5fbbf0ab87e5d89d649f2d1c307",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -17,11 +17,10 @@
     {
       "key": "app.js",
       "path": "/app.js",
-      "bytes": 7071,
-      "sha256": "f3d8e34683e4b4f1ca5aef638f0843d9eed32f057b79e6a5fd8d9e760c246ad7",
+      "bytes": 10063,
+      "sha256": "8bd0f647a579cbee9fc622fa98803a9264bc353e6a5a5fd087615c8634e320ee",
       "contentType": "application/javascript; charset=utf-8",
       "hrefSrc": [
-        "/api/v1/videos/${t.task_id}/preview",
         "/api/v1/videos/${t.task_id}/download"
       ],
       "cssUrls": []
@@ -29,8 +28,8 @@
     {
       "key": "docs.html",
       "path": "/docs.html",
-      "bytes": 7374,
-      "sha256": "546a23b875d73d511eaa8c87ac840d2c54173948b3e33f4d222b662113f9bf5e",
+      "bytes": 7784,
+      "sha256": "3ccae1258f82ef43ababaa4fac32b29b857ac6cce8c8db7ec33c521f9350745a",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "__ORIGIN__/docs",
@@ -38,6 +37,9 @@
         "/manifest.webmanifest",
         "/llms.txt",
         "/llms-full.txt",
+        "/llms.md",
+        "__ORIGIN__/docs",
+        "__ORIGIN__/docs",
         "/style.css",
         "/",
         "/",
@@ -56,10 +58,19 @@
       "cssUrls": []
     },
     {
+      "key": "humans.txt",
+      "path": "/humans.txt",
+      "bytes": 405,
+      "sha256": "9cc78e4fc3b19353a99f01e29633889fff4aee8208390a7c783818d40ff35945",
+      "contentType": "text/plain; charset=utf-8",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
       "key": "index.html",
       "path": "/",
-      "bytes": 18909,
-      "sha256": "315468f291ba8b404b9451cf9747147d5105324c18247394c4438788e0972802",
+      "bytes": 19614,
+      "sha256": "62200d204ff1334dfd884aec7bd07f9853790b77bcbd582d2b96c772fef3e628",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "__ORIGIN__/",
@@ -67,11 +78,16 @@
         "/manifest.webmanifest",
         "/llms.txt",
         "/llms-full.txt",
+        "/llms.md",
+        "__ORIGIN__/",
+        "__ORIGIN__/",
         "/style.css",
         "/style.css",
         "https://github.com/harry0703/MoneyPrinterTurbo",
         "/docs",
         "/openapi.json",
+        "/docs",
+        "/llms.txt",
         "/app.js"
       ],
       "cssUrls": []
@@ -79,17 +95,26 @@
     {
       "key": "llms-full.txt",
       "path": "/llms-full.txt",
-      "bytes": 2411,
-      "sha256": "2c4157898b864e4d44683895eb177b6346bd1bc0878442d67e2befd2c878ffc8",
+      "bytes": 3203,
+      "sha256": "beee4c5531fabc16979f7e908da98c2616bd7aa69a03b43a0bffca3338290a52",
       "contentType": "text/plain; charset=utf-8",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "llms.md",
+      "path": "/llms.md",
+      "bytes": 698,
+      "sha256": "d1e01a60ca267e4213ab25eaba32c121b08d288c54838dc63c432755f93b856f",
+      "contentType": "text/markdown; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
     },
     {
       "key": "llms.txt",
       "path": "/llms.txt",
-      "bytes": 3153,
-      "sha256": "00d730f53ed99627b6d50085a4d82dc4b7ee9c678c1d9b115d0b59dfa9eb5ed6",
+      "bytes": 2936,
+      "sha256": "fae565fa8ef76ea371f40ce3f016866d1cc2214d3eb1552304e841e888142ce1",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -98,7 +123,7 @@
       "key": "manifest.webmanifest",
       "path": "/manifest.webmanifest",
       "bytes": 448,
-      "sha256": "b66b6ee300a64e73f6945afb2de145238c26de5c63ad06575489d1e97e73de07",
+      "sha256": "fa55d715dfb18e21363e6e11226d1436f7bfcdf1361c51835841f4b2a7b8ca21",
       "contentType": "application/manifest+json",
       "hrefSrc": [],
       "cssUrls": []
@@ -115,8 +140,17 @@
     {
       "key": "robots.txt",
       "path": "/robots.txt",
-      "bytes": 567,
-      "sha256": "984b4a80cbb0ecd46f66b0e819ed739d63bf064c6366184e629cf02d7b37ad06",
+      "bytes": 1126,
+      "sha256": "be56ba941509316cd6bbe2824f08dab782c924a14167019a0a3c475237f6f69a",
+      "contentType": "text/plain; charset=utf-8",
+      "hrefSrc": [],
+      "cssUrls": []
+    },
+    {
+      "key": "security.txt",
+      "path": "/security.txt",
+      "bytes": 206,
+      "sha256": "dafb45fde577ebe79eb8cab91558eb2834b14c9a49666d9832db1575013e9be3",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -124,8 +158,8 @@
     {
       "key": "sitemap.xml",
       "path": "/sitemap.xml",
-      "bytes": 924,
-      "sha256": "0471716aacd7f8512bc78cf8ccd0629ed74343bccb938b12d0848df80d04c073",
+      "bytes": 1797,
+      "sha256": "776abd942961077441710c12e5d050d652dbd90b61afc14a832e7c394d637bae",
       "contentType": "application/xml; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -133,8 +167,8 @@
     {
       "key": "style.css",
       "path": "/style.css",
-      "bytes": 6277,
-      "sha256": "1e166ac46a0d5f3acb85a39816e11e0fa73afafc90af1e00c007ad9f253ed584",
+      "bytes": 6607,
+      "sha256": "24b2f343ecb11fa828f6e1c3117dd5b72011aa622f8b006be2791fac07ed8447",
       "contentType": "text/css; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []

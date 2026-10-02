@@ -5,7 +5,7 @@ compatibility_date = "2026-09-01"
 workers_dev = true
 
 # HTML/CSS/JS/图片走 Cache → R2 → Assets，源站休眠时前台仍可浏览。
-# 仅 /api/* /docs* /health 回源（生成、预览、下载）。
+# 仅 /api/* /health /docs/saas 回源（生成、预览、下载）。 /docs 走边缘 docs.html。
 [assets]
 directory = "../static"
 binding = "ASSETS"

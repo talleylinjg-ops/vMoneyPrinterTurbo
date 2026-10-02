@@ -155,4 +155,9 @@ async function buy(plan) {
   font-size: 14px;
   z-index: 999;
 }
+
+@media (max-width: 700px) {
+  .pricing { padding: 32px 16px 48px; }
+  .pricing h2 { font-size: 26px; }
+}
 </style>

@@ -6,7 +6,7 @@ from typing import Any, Optional
 
 from urllib.parse import quote
 
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Query, Request
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -14,14 +14,17 @@ from pydantic import BaseModel, Field
 
 from pipeline import (
     ASPECTS,
+    CACHE,
     MAX_CHARS,
     MAX_SECONDS,
     TASKS,
     VOICES,
+    ensure_dirs,
     generate_video,
     list_tasks,
     load_task,
     save_task,
+    synthesize_tts,
 )
 
 ROOT = Path(__file__).resolve().parent
@@ -43,6 +46,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+    response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    return response
 
 
 class VideoParams(BaseModel):
@@ -135,6 +148,15 @@ async def robots(request: Request):
             [
                 "User-agent: *",
                 "Allow: /",
+                "Allow: /llms.txt",
+                "Allow: /llms-full.txt",
+                "Allow: /llms.md",
+                "Allow: /ai.txt",
+                "Allow: /docs",
+                "Allow: /openapi.json",
+                "Allow: /.well-known/llms.txt",
+                "Allow: /.well-known/ai.txt",
+                "Allow: /.well-known/security.txt",
                 "Disallow: /api/",
                 "",
                 "User-agent: GPTBot",
@@ -151,6 +173,9 @@ async def robots(request: Request):
                 "Allow: /",
                 "",
                 "User-agent: Claude-Web",
+                "Allow: /",
+                "",
+                "User-agent: anthropic-ai",
                 "Allow: /",
                 "",
                 "User-agent: PerplexityBot",
@@ -171,13 +196,39 @@ async def robots(request: Request):
                 "User-agent: CCBot",
                 "Allow: /",
                 "",
+                "User-agent: Googlebot",
+                "Allow: /",
+                "",
+                "User-agent: Bingbot",
+                "Allow: /",
+                "",
+                "User-agent: DuckDuckBot",
+                "Allow: /",
+                "",
+                "User-agent: YandexBot",
+                "Allow: /",
+                "",
+                "User-agent: Baiduspider",
+                "Allow: /",
+                "",
+                "User-agent: FacebookBot",
+                "Allow: /",
+                "",
+                "User-agent: meta-externalagent",
+                "Allow: /",
+                "",
+                "User-agent: LinkedInBot",
+                "Allow: /",
+                "",
                 f"Sitemap: {origin}/sitemap.xml",
                 f"Host: {origin}",
                 "",
                 "# AI / GEO",
                 f"# llms.txt: {origin}/llms.txt",
                 f"# llms-full.txt: {origin}/llms-full.txt",
+                f"# llms.md: {origin}/llms.md",
                 f"# ai.txt: {origin}/ai.txt",
+                f"# humans.txt: {origin}/humans.txt",
                 "",
             ]
         )
@@ -187,18 +238,23 @@ async def robots(request: Request):
 @app.get("/sitemap.xml", include_in_schema=False)
 async def sitemap(request: Request):
     origin = public_origin(request)
+    lastmod = time.strftime("%Y-%m-%d", time.gmtime())
     urls = [
-        ("/", "1.0"),
-        ("/docs", "0.8"),
-        ("/llms.txt", "0.8"),
-        ("/llms-full.txt", "0.7"),
-        ("/docs/saas", "0.6"),
-        ("/openapi.json", "0.7"),
-        ("/ai.txt", "0.5"),
+        ("/", "1.0", "daily"),
+        ("/docs", "0.8", "weekly"),
+        ("/llms.txt", "0.8", "weekly"),
+        ("/llms-full.txt", "0.7", "weekly"),
+        ("/llms.md", "0.6", "weekly"),
+        ("/docs/saas", "0.6", "weekly"),
+        ("/openapi.json", "0.7", "weekly"),
+        ("/ai.txt", "0.5", "weekly"),
+        ("/humans.txt", "0.3", "monthly"),
+        ("/.well-known/security.txt", "0.3", "monthly"),
+        ("/.well-known/llms.txt", "0.6", "weekly"),
     ]
     items = "\n".join(
-        f"  <url><loc>{origin}{path}</loc><changefreq>daily</changefreq><priority>{prio}</priority></url>"
-        for path, prio in urls
+        f"  <url><loc>{origin}{path}</loc><lastmod>{lastmod}</lastmod><changefreq>{freq}</changefreq><priority>{prio}</priority></url>"
+        for path, prio, freq in urls
     )
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -238,6 +294,38 @@ async def ai_txt(request: Request):
     return PlainTextResponse(text, headers={"Cache-Control": "public, max-age=600"})
 
 
+@app.get("/llms.md", include_in_schema=False)
+async def llms_md(request: Request):
+    origin = public_origin(request)
+    text = rewrite_origin((STATIC / "llms.md").read_text(encoding="utf-8"), origin)
+    return Response(text, media_type="text/markdown; charset=utf-8", headers={"Cache-Control": "public, max-age=600"})
+
+
+@app.get("/humans.txt", include_in_schema=False)
+async def humans_txt(request: Request):
+    origin = public_origin(request)
+    text = rewrite_origin((STATIC / "humans.txt").read_text(encoding="utf-8"), origin)
+    return PlainTextResponse(text, headers={"Cache-Control": "public, max-age=600"})
+
+
+@app.get("/.well-known/security.txt", include_in_schema=False)
+@app.get("/security.txt", include_in_schema=False)
+async def security_txt(request: Request):
+    origin = public_origin(request)
+    text = rewrite_origin((STATIC / "security.txt").read_text(encoding="utf-8"), origin)
+    return PlainTextResponse(text, headers={"Cache-Control": "public, max-age=86400"})
+
+
+@app.get("/.well-known/llms.txt", include_in_schema=False)
+async def well_known_llms(request: Request):
+    return await llms_txt(request)
+
+
+@app.get("/.well-known/ai.txt", include_in_schema=False)
+async def well_known_ai(request: Request):
+    return await ai_txt(request)
+
+
 @app.get("/", include_in_schema=False)
 async def home(request: Request):
     origin = public_origin(request)
@@ -265,6 +353,19 @@ async def options():
         "llm_enabled": False,
         "note": "放弃 LLM，完全免费运营。填写主题或文案即可生成；素材来自 Pexels / Pixabay，配音使用 Edge TTS。",
     }
+
+
+@app.get("/api/v1/voices/preview")
+async def voice_preview(voice: str = Query("zh-CN-XiaoxiaoNeural")):
+    allowed = {v["id"] for v in VOICES}
+    if voice not in allowed:
+        raise HTTPException(400, "unknown voice")
+    ensure_dirs()
+    safe = "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in voice)
+    path = CACHE / f"voice-preview-{safe}.mp3"
+    if not path.exists() or path.stat().st_size < 500:
+        await synthesize_tts("MoneyPrinterTurbo 免费配音试听。", voice, path)
+    return FileResponse(path, media_type="audio/mpeg", headers={"Cache-Control": "public, max-age=3600"})
 
 
 @app.post("/api/v1/videos")
@@ -365,6 +466,7 @@ def engine_openapi(origin: str) -> dict:
             "/api/v1/videos/{task_id}/preview": {"get": {"summary": "预览 MP4"}},
             "/api/v1/videos/{task_id}/download": {"get": {"summary": "下载 MP4"}},
             "/api/v1/options": {"get": {"summary": "音色与画幅"}},
+            "/api/v1/voices/preview": {"get": {"summary": "试听配音"}},
         },
         "components": {
             "schemas": {

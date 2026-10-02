@@ -179,6 +179,7 @@
 config.toml
 .env
 storage/
+api-portal/server/data/portal.db
 output/
 cloudflare/.wrangler/
 **/node_modules/

@@ -8,7 +8,7 @@ const root = join(fileURLToPath(new URL(".", import.meta.url)), "../..");
 const staticDir = join(root, "static");
 const outFile = join(root, "cloudflare", "static-manifest.json");
 
-const TEXT = new Set([".html", ".css", ".js", ".txt", ".xml", ".svg", ".webmanifest", ".json"]);
+const TEXT = new Set([".html", ".css", ".js", ".txt", ".md", ".xml", ".svg", ".webmanifest", ".json"]);
 
 function walk(dir) {
   const out = [];
@@ -55,6 +55,7 @@ for (const full of files) {
         ".css": "text/css; charset=utf-8",
         ".js": "application/javascript; charset=utf-8",
         ".txt": "text/plain; charset=utf-8",
+        ".md": "text/markdown; charset=utf-8",
         ".xml": "application/xml; charset=utf-8",
         ".svg": "image/svg+xml",
         ".png": "image/png",

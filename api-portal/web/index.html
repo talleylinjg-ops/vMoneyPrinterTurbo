@@ -14,6 +14,9 @@
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
     <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs full" />
+    <link rel="alternate" type="text/markdown" href="/llms.md" title="LLMs markdown" />
+    <link rel="alternate" hreflang="zh-CN" href="__ORIGIN__/" />
+    <link rel="alternate" hreflang="x-default" href="__ORIGIN__/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MPT API 开放平台" />
     <meta property="og:title" content="MPT API 开放平台 | 免费短视频生成 API" />
@@ -43,7 +46,9 @@
             "description": "免费短视频生成 API。注册即得 Key，主题一键生成配音字幕成片。",
             "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY", "availability": "https://schema.org/InStock" },
             "image": "__ORIGIN__/og.png",
-            "sameAs": ["__ORIGIN__/llms.txt", "__ORIGIN__/docs", "__ORIGIN__/openapi.json"]
+            "sameAs": ["__ORIGIN__/llms.txt", "__ORIGIN__/llms-full.txt", "__ORIGIN__/docs", "__ORIGIN__/openapi.json"],
+            "isAccessibleForFree": true,
+            "availableLanguage": ["zh-CN", "en"]
           },
           {
             "@type": "Organization",
@@ -97,6 +102,9 @@
     </script>
   </head>
   <body>
+    <noscript>
+      <p>MPT API 开放平台：免费短视频生成 API。注册拿 Key，POST /api/proxy/v1/videos 提交主题。文档 <a href="/docs">/docs</a>，模型阅读 <a href="/llms.txt">/llms.txt</a>。</p>
+    </noscript>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>

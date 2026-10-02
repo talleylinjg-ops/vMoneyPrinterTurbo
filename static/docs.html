@@ -9,11 +9,14 @@
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="author" content="MoneyPrinterTurbo" />
   <link rel="canonical" href="__ORIGIN__/docs" />
-  <meta name="theme-color" content="#0f1419" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
   <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs full" />
+  <link rel="alternate" type="text/markdown" href="/llms.md" title="LLMs markdown" />
+  <link rel="alternate" hreflang="zh-CN" href="__ORIGIN__/docs" />
+  <link rel="alternate" hreflang="x-default" href="__ORIGIN__/docs" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="MoneyPrinterTurbo" />
   <meta property="og:title" content="SaaS 调用文档 | MoneyPrinterTurbo" />
@@ -90,7 +93,8 @@
     .doc-wrap p, .doc-wrap li { line-height: 1.7; color: #31333f; }
     .doc-wrap pre { background: #f0f2f6; border: 1px solid #d5dae3; border-radius: 10px; padding: 16px; overflow-x: auto; }
     .crumb { color: #8aa0b8; font-size: 13px; margin: 12px 0 20px; }
-    .crumb a { color: #3d8bfd; }
+    .crumb a { color: #0068c9; }
+    .doc-wrap a.ghost { display: inline-flex; align-items: center; }
   </style>
 </head>
 <body>
@@ -102,6 +106,9 @@
     <div class="top-actions">
       <a class="ghost" href="/">返回生成</a>
       <a class="ghost" href="/openapi.json">OpenAPI</a>
+      <select class="lang" aria-label="界面语言">
+        <option selected>简体中文</option>
+      </select>
     </div>
   </header>
   <main class="doc-wrap">

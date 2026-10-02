@@ -1,19 +1,31 @@
 # AI crawler policy for MPT API portal
+# https://llmstxt.org / GEO
+
 User-Agent: *
 Allow: /
 Disallow: /api/
 Disallow: /console
 Disallow: /membership
+Disallow: /login
 
 Content: /llms.txt
 Content-Full: /llms-full.txt
+Content-Markdown: /llms.md
 Sitemap: /sitemap.xml
 Canonical: /
 Language: zh-CN
+Alternate-Language: en
 Product: free short-video generation API
 Pricing: 0
 LLM: disabled
 Auth: x-api-key
+Edit: unsupported (new generation only)
 OpenAPI: /openapi.json
 Docs: /docs
+Humans: /humans.txt
+Security: /.well-known/security.txt
+Well-Known-LLMs: /.well-known/llms.txt
 Complete-State: complete
+Failed-State: failed
+Max-Script-Chars: 1500
+Max-Video-Seconds: 180

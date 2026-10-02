@@ -348,9 +348,8 @@ th {
 }
 
 @media (max-width: 720px) {
-  .settings-grid {
-    grid-template-columns: 1fr;
-  }
+  .membership { padding: 28px 16px 48px; }
+  .member-overview, .settings-grid { grid-template-columns: 1fr; }
 }
 
 .settings-card {

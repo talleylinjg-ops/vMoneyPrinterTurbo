@@ -1,0 +1,13 @@
+/* TEAM */
+Site: MPT API 开放平台
+From: Internet
+Contact: https://github.com/talleylinjg-ops/vMoneyPrinterTurbo/issues
+
+/* SITE */
+Last update: 2026-10-01
+Language: zh-CN
+Doctype: HTML5
+Standards: HTML5, Vue 3, JSON-LD, OpenAPI 3.0
+Components: Express, Vite, MoneyPrinterTurbo engine
+llms.txt: __ORIGIN__/llms.txt
+Docs: __ORIGIN__/docs

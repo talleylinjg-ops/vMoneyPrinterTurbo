@@ -253,6 +253,17 @@
   font-size: 14px;
   line-height: 1.7;
 }
+
+@media (max-width: 700px) {
+  .hero { padding: 48px 16px 40px; }
+  .hero h1 { font-size: 28px; }
+  .hero-actions, .hero-stats {
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+  .hero-actions a { width: min(280px, 100%); text-align: center; }
+}
 </style>
 
 <script setup>

@@ -430,4 +430,11 @@ async function refreshMe() {
   line-height: 1.7;
   white-space: pre;
 }
+
+@media (max-width: 700px) {
+  .console { padding: 28px 16px 48px; }
+  .row { grid-template-columns: 1fr; }
+  .preview-box { max-width: 100%; }
+  .api-key { min-width: 0; }
+}
 </style>

@@ -108,19 +108,24 @@ form.addEventListener("submit", async (e) => {
   bar.style.width = "2%";
   statusText.textContent = "正在生成视频，请稍候...";
   const payload = formData();
-  const res = await fetch("/api/v1/videos", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    statusText.textContent = data.detail || "提交失败";
+  try {
+    const res = await fetch("/api/v1/videos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      statusText.textContent = data.detail || data.error || "提交失败";
+      submitBtn.disabled = false;
+      return;
+    }
+    log("任务已创建: " + data.task_id);
+    poll(data.task_id);
+  } catch {
+    statusText.textContent = "后端暂时不可用，浏览页仍可打开。请稍后重试生成。";
     submitBtn.disabled = false;
-    return;
   }
-  log("任务已创建: " + data.task_id);
-  poll(data.task_id);
 });
 
 document.getElementById("copy-link").addEventListener("click", async () => {
@@ -131,42 +136,120 @@ document.getElementById("copy-link").addEventListener("click", async () => {
 });
 
 async function loadVoices() {
-  const res = await fetch("/api/v1/options");
-  const data = await res.json();
-  voicesEl.innerHTML = (data.voices || []).map(v =>
-    `<option value="${v.id}">${v.label}</option>`
-  ).join("");
+  try {
+    const res = await fetch("/api/v1/options");
+    if (!res.ok) throw new Error("options unavailable");
+    const data = await res.json();
+    voicesEl.innerHTML = (data.voices || []).map(v =>
+      `<option value="${v.id}">${v.label}</option>`
+    ).join("");
+  } catch {
+    voicesEl.innerHTML = `<option value="zh-CN-XiaoxiaoNeural">zh-CN-Xiaoxiao-女性</option>`;
+  }
 }
 
 async function loadTasks() {
-  const res = await fetch("/api/v1/videos");
-  const data = await res.json();
   const box = document.getElementById("task-list");
-  if (!data.items.length) {
-    box.innerHTML = "<p class='hint'>还没有任务。填写主题后点击生成视频。</p>";
-    return;
+  try {
+    const res = await fetch("/api/v1/videos");
+    if (!res.ok) throw new Error("tasks unavailable");
+    const data = await res.json();
+    if (!data.items.length) {
+      box.innerHTML = "<p class='hint'>还没有任务。填写主题后点击生成视频。</p>";
+      return;
+    }
+    box.innerHTML = data.items.map(t => {
+      const title = (t.params && (t.params.video_subject || t.params.video_script)) || t.task_id;
+      const cls = t.state === "complete" ? "ok" : t.state === "failed" ? "err" : "warn";
+      const actions = t.state === "complete"
+        ? `<button type="button" class="task-preview" data-id="${t.task_id}">预览</button> <a href="/api/v1/videos/${t.task_id}/download">下载</a>`
+        : "";
+      return `<div class="task"><b title="${title}">${title}</b><span class="${cls}">${STAGE[t.state] || t.state} ${t.progress || 0}%</span><span>${t.duration ? t.duration + "s" : "-"}</span><span>${actions}</span></div>`;
+    }).join("");
+    box.querySelectorAll(".task-preview").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        showPreview({ task_id: id });
+        closePopovers();
+        previewCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  } catch {
+    box.innerHTML = "<p class='hint'>任务列表需后端在线。浏览页已在边缘托管，生成/预览/下载时再回源。</p>";
   }
-  box.innerHTML = data.items.map(t => {
-    const title = (t.params && (t.params.video_subject || t.params.video_script)) || t.task_id;
-    const cls = t.state === "complete" ? "ok" : t.state === "failed" ? "err" : "warn";
-    const actions = t.state === "complete"
-      ? `<a href="/api/v1/videos/${t.task_id}/preview" target="_blank">预览</a> <a href="/api/v1/videos/${t.task_id}/download">下载</a>`
-      : "";
-    return `<div class="task"><b title="${title}">${title}</b><span class="${cls}">${STAGE[t.state] || t.state} ${t.progress || 0}%</span><span>${t.duration ? t.duration + "s" : "-"}</span><span>${actions}</span></div>`;
-  }).join("");
 }
 
 const taskToggle = document.getElementById("task-toggle");
 const settingsBtn = document.getElementById("settings-btn");
 const taskPopover = document.getElementById("task-popover");
 const settingsPopover = document.getElementById("settings-popover");
-taskToggle.addEventListener("click", () => {
-  taskPopover.hidden = !taskPopover.hidden;
-  settingsPopover.hidden = true;
+const previewVoiceBtn = document.getElementById("preview-voice");
+let previewAudio = null;
+
+function setOpen(el, open) {
+  el.hidden = !open;
+  el.classList.toggle("open", open);
+}
+
+function closePopovers() {
+  setOpen(taskPopover, false);
+  setOpen(settingsPopover, false);
+  taskToggle.setAttribute("aria-expanded", "false");
+  settingsBtn.setAttribute("aria-expanded", "false");
+}
+
+taskToggle.setAttribute("aria-expanded", "false");
+settingsBtn.setAttribute("aria-expanded", "false");
+taskToggle.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const open = taskPopover.hidden;
+  setOpen(settingsPopover, false);
+  settingsBtn.setAttribute("aria-expanded", "false");
+  setOpen(taskPopover, open);
+  taskToggle.setAttribute("aria-expanded", String(open));
+  if (open) loadTasks();
 });
-settingsBtn.addEventListener("click", () => {
-  settingsPopover.hidden = !settingsPopover.hidden;
-  taskPopover.hidden = true;
+settingsBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const open = settingsPopover.hidden;
+  setOpen(taskPopover, false);
+  taskToggle.setAttribute("aria-expanded", "false");
+  setOpen(settingsPopover, open);
+  settingsBtn.setAttribute("aria-expanded", String(open));
+});
+document.addEventListener("click", (e) => {
+  if (taskPopover.contains(e.target) || settingsPopover.contains(e.target)) return;
+  if (e.target === taskToggle || e.target === settingsBtn) return;
+  closePopovers();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closePopovers();
+});
+
+previewVoiceBtn.addEventListener("click", async () => {
+  const voice = voicesEl.value;
+  if (!voice) return;
+  previewVoiceBtn.disabled = true;
+  previewVoiceBtn.textContent = "试听中...";
+  try {
+    if (previewAudio) {
+      previewAudio.pause();
+      previewAudio = null;
+    }
+    const url = `/api/v1/voices/preview?voice=${encodeURIComponent(voice)}`;
+    previewAudio = new Audio(url);
+    await previewAudio.play();
+    previewAudio.addEventListener("ended", () => {
+      previewVoiceBtn.textContent = "试听配音";
+      previewVoiceBtn.disabled = false;
+    }, { once: true });
+  } catch (err) {
+    previewVoiceBtn.textContent = "试听失败";
+    setTimeout(() => { previewVoiceBtn.textContent = "试听配音"; previewVoiceBtn.disabled = false; }, 1600);
+    return;
+  }
+  previewVoiceBtn.textContent = "播放中";
+  previewVoiceBtn.disabled = false;
 });
 document.getElementById("reset-subtitle").addEventListener("click", () => {
   form.elements.subtitle_enabled.checked = true;

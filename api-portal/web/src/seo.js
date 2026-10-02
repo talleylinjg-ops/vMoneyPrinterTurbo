@@ -69,6 +69,19 @@ const PAGES = {
   },
 };
 
+function upsertLink(rel, type, href, title) {
+  const sel = `link[rel="${rel}"][href="${href}"]`;
+  let el = document.head.querySelector(sel);
+  if (!el) {
+    el = document.createElement("link");
+    el.setAttribute("rel", rel);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("href", href);
+  if (type) el.setAttribute("type", type);
+  if (title) el.setAttribute("title", title);
+}
+
 function upsertMeta(attr, key, content) {
   let el = document.head.querySelector(`meta[${attr}="${key}"]`);
   if (!el) {
@@ -115,6 +128,19 @@ export function applySeo(path) {
   upsertMeta("name", "twitter:description", page.description);
   upsertMeta("name", "twitter:image", origin + "/og.png");
   upsertMeta("name", "twitter:image:alt", page.title);
+  upsertLink("alternate", "text/plain", origin + "/llms.txt", "LLMs.txt");
+  upsertLink("alternate", "text/plain", origin + "/llms-full.txt", "LLMs full");
+  upsertLink("alternate", "text/markdown", origin + "/llms.md", "LLMs markdown");
+  const zh = document.head.querySelector('link[rel="alternate"][hreflang="zh-CN"]') || document.createElement("link");
+  zh.setAttribute("rel", "alternate");
+  zh.setAttribute("hreflang", "zh-CN");
+  zh.setAttribute("href", url);
+  if (!zh.parentNode) document.head.appendChild(zh);
+  const xd = document.head.querySelector('link[rel="alternate"][hreflang="x-default"]') || document.createElement("link");
+  xd.setAttribute("rel", "alternate");
+  xd.setAttribute("hreflang", "x-default");
+  xd.setAttribute("href", url);
+  if (!xd.parentNode) document.head.appendChild(xd);
   let canonical = document.head.querySelector('link[rel="canonical"]');
   if (!canonical) {
     canonical = document.createElement("link");
@@ -134,6 +160,8 @@ export function applySeo(path) {
     description: page.description,
     offers: { "@type": "Offer", "price": "0", "priceCurrency": "CNY", "availability": "https://schema.org/InStock" },
     image: origin + "/og.png",
+    isAccessibleForFree: true,
+    sameAs: [origin + "/llms.txt", origin + "/docs", origin + "/openapi.json"],
   });
 
   upsertJsonLd("ld-crumb", {
@@ -210,7 +238,29 @@ export function applySeo(path) {
       url,
       inLanguage: "zh-CN",
     });
+    upsertJsonLd("ld-docs-faq", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "引擎直连需要 API Key 吗？",
+          acceptedAnswer: { "@type": "Answer", text: "门户 /api/proxy/v1/videos 需要 x-api-key。引擎直连 /api/v1/videos 开放调用。" },
+        },
+        {
+          "@type": "Question",
+          name: "完成态是什么？",
+          acceptedAnswer: { "@type": "Answer", text: "成功为 complete，失败为 failed。不要用 succeeded 判断。" },
+        },
+        {
+          "@type": "Question",
+          name: "能精修已有视频吗？",
+          acceptedAnswer: { "@type": "Answer", text: "不能。这是全新生成流水线，没有时间轴精修接口。改内容需重新 POST。" },
+        },
+      ],
+    });
   } else {
     removeJsonLd("ld-article");
+    removeJsonLd("ld-docs-faq");
   }
 }

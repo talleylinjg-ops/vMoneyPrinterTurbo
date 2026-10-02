@@ -1,5 +1,14 @@
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /llms.md
+Allow: /ai.txt
+Allow: /docs
+Allow: /openapi.json
+Allow: /.well-known/llms.txt
+Allow: /.well-known/ai.txt
+Allow: /.well-known/security.txt
 Disallow: /api/
 
 User-agent: GPTBot
@@ -16,6 +25,9 @@ User-agent: ClaudeBot
 Allow: /
 
 User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
 Allow: /
 
 User-agent: PerplexityBot
@@ -36,10 +48,35 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
 Sitemap: __ORIGIN__/sitemap.xml
 Host: __ORIGIN__
 
 # GEO: __ORIGIN__/llms.txt
 # GEO-full: __ORIGIN__/llms-full.txt
+# GEO-md: __ORIGIN__/llms.md
 # AI: __ORIGIN__/ai.txt
-
+# Humans: __ORIGIN__/humans.txt
