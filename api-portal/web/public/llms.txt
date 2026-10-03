@@ -1,61 +1,34 @@
 # MPT API 开放平台
 
-> 免费短视频生成 API。注册后获得 API Key，提交视频主题即可用 Pexels / Pixabay 免费素材、Edge TTS 配音和自动字幕合成短视频。全程无需大模型，完全免费不限次数。
+> MPT API 开放平台：免费短视频生成 API。注册后获得 API Key，提交视频主题即可用 Pexels / Pixabay 免费素材、Edge TTS 配音和自动字幕合成短视频。全程无需大模型，完全免费不限次数。
 
-MPT API 开放平台基于 MoneyPrinterTurbo hosted edition。成片落盘保存，刷新后仍可用 task_id 预览和下载。全新生成流水线，不支持时间轴精修已有视频。
+Updated: 2026-10-02. Based on MoneyPrinterTurbo hosted edition v1.3.7. Script <= 1500 characters. Video <= 180 seconds. Completion state is `complete`. New generation only.
 
-## 核心能力
+## Core pages
 
-- 主题或文案一键生成短视频
-- 免费素材：Pexels、Pixabay
-- 免费配音：Edge TTS
-- 画幅：9:16 / 16:9 / 1:1
-- 成片持久保存，可用 task_id 预览和下载
+- [首页](__ORIGIN__/): 产品介绍与快速开始
+- [套餐定价](__ORIGIN__/pricing): 价格为 0，不限次数
+- [API 文档](__ORIGIN__/docs): x-api-key 认证、提交、轮询、下载
+- [免费注册](__ORIGIN__/register): 注册即得 API Key
+- [OpenAPI](__ORIGIN__/openapi.json): 机器可读规格
+- [调用摘要](__ORIGIN__/api/saas): JSON 能力清单
+- [完整说明](__ORIGIN__/llms-full.txt): 产品事实与 curl
+- [Markdown 摘要](__ORIGIN__/llms.md): 给模型的短摘要
+- [AI 爬虫策略](__ORIGIN__/ai.txt): 允许公开页，禁止控制台与 /api/
+- [humans.txt](__ORIGIN__/humans.txt): 站点维护信息
+- [security.txt](__ORIGIN__/.well-known/security.txt): 安全联系
 
-## 认证
+## Facts
 
-请求头：`x-api-key: mpt_你的密钥`。浏览器预览可用 `?api_key=`。
+- Price: 0, unlimited. LLM: disabled. Auth: x-api-key or ?api_key=
+- Sources: Pexels, Pixabay. Voice: Edge TTS.
+- Aspects: 9:16, 16:9, 1:1. Complete state: complete. Failed state: failed.
+- Edit existing video: unsupported.
 
 ## API
 
-- 提交任务：`POST /api/proxy/v1/videos`
-- 查询进度：`GET /api/proxy/v1/videos/{task_id}`，完成态 `complete`，失败态 `failed`
-- 预览：`GET /api/proxy/v1/videos/{task_id}/preview`
-- 下载：`GET /api/proxy/v1/videos/{task_id}/download`
-- [OpenAPI](__ORIGIN__/openapi.json)
-- 调用摘要：`GET /api/saas`
-- [完整说明](__ORIGIN__/llms-full.txt)
-
-请求示例：
-
-```json
-{
-  "video_subject": "春天适合出发",
-  "aspect": "9:16",
-  "video_source": "pexels"
-}
-```
-
-返回：`{"task_id":"...","state":"queued"}`。完成后 `state` 为 `complete`。
-
-## 限制
-
-- 文案最多 1500 字，成片约 180 秒。
-- 全新生成流水线，不支持时间轴精修已有视频。
-- 不使用大语言模型。价格为 0，不限次数。
+POST __ORIGIN__/api/proxy/v1/videos with header `x-api-key`. Poll GET __ORIGIN__/api/proxy/v1/videos/{task_id} until `state=complete`.
 
 ## English
 
 Free short-video generation API. Register for an `x-api-key`, POST a topic to `/api/proxy/v1/videos`, poll until `state=complete`. Pexels/Pixabay + Edge TTS. No LLM. Script <= 1500 characters, video <= 180 seconds. Timeline editing unsupported.
-
-## 相关链接
-
-- [首页](__ORIGIN__/)
-- [套餐定价](__ORIGIN__/pricing)
-- [API 文档](__ORIGIN__/docs)
-- [免费注册](__ORIGIN__/register)
-- [OpenAPI](__ORIGIN__/openapi.json)
-- [调用摘要](__ORIGIN__/api/saas)
-- [llms.txt](__ORIGIN__/llms.txt)
-- [llms-full.txt](__ORIGIN__/llms-full.txt)
-- [ai.txt](__ORIGIN__/ai.txt)

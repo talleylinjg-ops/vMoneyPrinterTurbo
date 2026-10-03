@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T09:52:09.318Z",
+  "generatedAt": "2026-10-03T03:25:42.754Z",
   "staticDir": "static",
   "total": 15,
   "cssUrlCount": 0,
@@ -8,8 +8,8 @@
     {
       "key": "ai.txt",
       "path": "/ai.txt",
-      "bytes": 640,
-      "sha256": "795b269aea16a6e66b0c00f841b05ca0dcc3c5fbbf0ab87e5d89d649f2d1c307",
+      "bytes": 720,
+      "sha256": "7f08b2beeefc6e164e2870071ec2b83b6a5dd317aa43714af1ea5f624a043f02",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -17,8 +17,8 @@
     {
       "key": "app.js",
       "path": "/app.js",
-      "bytes": 10063,
-      "sha256": "8bd0f647a579cbee9fc622fa98803a9264bc353e6a5a5fd087615c8634e320ee",
+      "bytes": 13642,
+      "sha256": "d6e64545d5728d5ff3f286d1ec30591005e0119a8f83b9499e82c2315224f97a",
       "contentType": "application/javascript; charset=utf-8",
       "hrefSrc": [
         "/api/v1/videos/${t.task_id}/download"
@@ -28,8 +28,8 @@
     {
       "key": "docs.html",
       "path": "/docs.html",
-      "bytes": 7784,
-      "sha256": "3ccae1258f82ef43ababaa4fac32b29b857ac6cce8c8db7ec33c521f9350745a",
+      "bytes": 8740,
+      "sha256": "331dd8476a0408fa6abc1c446460234e4b6bd8905954363970215ac7c5824025",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "__ORIGIN__/docs",
@@ -38,13 +38,19 @@
         "/llms.txt",
         "/llms-full.txt",
         "/llms.md",
+        "/.well-known/llms.txt",
+        "__ORIGIN__/docs",
         "__ORIGIN__/docs",
         "__ORIGIN__/docs",
         "/style.css",
         "/",
         "/",
         "/openapi.json",
-        "/"
+        "/",
+        "/",
+        "/llms.txt",
+        "/openapi.json",
+        "/llms.txt"
       ],
       "cssUrls": []
     },
@@ -61,7 +67,7 @@
       "key": "humans.txt",
       "path": "/humans.txt",
       "bytes": 405,
-      "sha256": "9cc78e4fc3b19353a99f01e29633889fff4aee8208390a7c783818d40ff35945",
+      "sha256": "0c3a9eff551926567d5b0f2c8bddf9e2922d531a7725ce519a5c6aa8214a4991",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -69,8 +75,8 @@
     {
       "key": "index.html",
       "path": "/",
-      "bytes": 19614,
-      "sha256": "62200d204ff1334dfd884aec7bd07f9853790b77bcbd582d2b96c772fef3e628",
+      "bytes": 25791,
+      "sha256": "a3395e6f07831dd5f850b2b94e862cdb07af5a5b073c7e07c9f6a80687dd969c",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "__ORIGIN__/",
@@ -79,6 +85,8 @@
         "/llms.txt",
         "/llms-full.txt",
         "/llms.md",
+        "/.well-known/llms.txt",
+        "__ORIGIN__/",
         "__ORIGIN__/",
         "__ORIGIN__/",
         "/style.css",
@@ -86,6 +94,13 @@
         "https://github.com/harry0703/MoneyPrinterTurbo",
         "/docs",
         "/openapi.json",
+        "/docs",
+        "/openapi.json",
+        "/llms.txt",
+        "/docs",
+        "/llms.txt",
+        "/openapi.json",
+        "https://github.com/talleylinjg-ops/vMoneyPrinterTurbo",
         "/docs",
         "/llms.txt",
         "/app.js"
@@ -95,8 +110,8 @@
     {
       "key": "llms-full.txt",
       "path": "/llms-full.txt",
-      "bytes": 3203,
-      "sha256": "beee4c5531fabc16979f7e908da98c2616bd7aa69a03b43a0bffca3338290a52",
+      "bytes": 3791,
+      "sha256": "1b5c1cf9290ab1c040e1eef6a3fa3265ee350dc5ff5bc9b368f7fd24a1f1a978",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -104,8 +119,8 @@
     {
       "key": "llms.md",
       "path": "/llms.md",
-      "bytes": 698,
-      "sha256": "d1e01a60ca267e4213ab25eaba32c121b08d288c54838dc63c432755f93b856f",
+      "bytes": 780,
+      "sha256": "6dc8eaa1ea16736c2ab0161e56c86fc2f1200c17e5616605a16136287ef1c849",
       "contentType": "text/markdown; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -113,8 +128,8 @@
     {
       "key": "llms.txt",
       "path": "/llms.txt",
-      "bytes": 2936,
-      "sha256": "fae565fa8ef76ea371f40ce3f016866d1cc2214d3eb1552304e841e888142ce1",
+      "bytes": 1942,
+      "sha256": "c10cad0e778ba470fc4c2d01c6c571f416934f7cedd4315a710ffef044255bf3",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -158,8 +173,8 @@
     {
       "key": "sitemap.xml",
       "path": "/sitemap.xml",
-      "bytes": 1797,
-      "sha256": "776abd942961077441710c12e5d050d652dbd90b61afc14a832e7c394d637bae",
+      "bytes": 1958,
+      "sha256": "086b26ca587ea55519f0e013054822f7b6eb0df9cb0c7c7889c0e0942f4c74c1",
       "contentType": "application/xml; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -167,8 +182,8 @@
     {
       "key": "style.css",
       "path": "/style.css",
-      "bytes": 6607,
-      "sha256": "24b2f343ecb11fa828f6e1c3117dd5b72011aa622f8b006be2791fac07ed8447",
+      "bytes": 9875,
+      "sha256": "4eee842bc99f9fa1bdb9ba8e865a70ef6601b72627b6937c173e4af114523572",
       "contentType": "text/css; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []

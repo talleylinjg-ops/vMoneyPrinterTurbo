@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from pipeline import (
     ASPECTS,
@@ -19,6 +19,7 @@ from pipeline import (
     MAX_SECONDS,
     TASKS,
     VOICES,
+    build_script,
     ensure_dirs,
     generate_video,
     list_tasks,
@@ -26,6 +27,7 @@ from pipeline import (
     save_task,
     synthesize_tts,
 )
+from keywords import subject_to_terms
 
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
@@ -56,6 +58,13 @@ async def security_headers(request: Request, call_next):
     response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
     response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
     return response
+
+
+class ScriptDraft(BaseModel):
+    video_subject: str = ""
+    video_script: str = ""
+    video_terms: str = ""
+    language: str = "zh-CN"
 
 
 class VideoParams(BaseModel):
@@ -251,6 +260,7 @@ async def sitemap(request: Request):
         ("/humans.txt", "0.3", "monthly"),
         ("/.well-known/security.txt", "0.3", "monthly"),
         ("/.well-known/llms.txt", "0.6", "weekly"),
+        ("/.well-known/ai.txt", "0.5", "weekly"),
     ]
     items = "\n".join(
         f"  <url><loc>{origin}{path}</loc><lastmod>{lastmod}</lastmod><changefreq>{freq}</changefreq><priority>{prio}</priority></url>"
@@ -353,6 +363,28 @@ async def options():
         "llm_enabled": False,
         "note": "放弃 LLM，完全免费运营。填写主题或文案即可生成；素材来自 Pexels / Pixabay，配音使用 Edge TTS。",
     }
+
+
+@app.post("/api/v1/script")
+async def local_script(payload: ScriptDraft):
+    subject = (payload.video_subject or "").strip()
+    language = (payload.language or "zh-CN") or "zh-CN"
+    custom = (payload.video_script or "").strip()
+    if not subject and not custom:
+        raise HTTPException(400, "请先填写视频主题")
+    script = build_script(subject, custom, language)
+    terms = subject_to_terms(subject or script, payload.video_terms or "")
+    return {"script": script, "terms": ", ".join(terms), "llm": False}
+
+
+@app.post("/api/v1/terms")
+async def local_terms(payload: ScriptDraft):
+    script = (payload.video_script or "").strip()
+    subject = (payload.video_subject or "").strip()
+    if not script and not subject:
+        raise HTTPException(400, "请先填写视频文案")
+    terms = subject_to_terms(subject or script, payload.video_terms or "")
+    return {"terms": ", ".join(terms), "llm": False}
 
 
 @app.get("/api/v1/voices/preview")
@@ -467,6 +499,8 @@ def engine_openapi(origin: str) -> dict:
             "/api/v1/videos/{task_id}/download": {"get": {"summary": "下载 MP4"}},
             "/api/v1/options": {"get": {"summary": "音色与画幅"}},
             "/api/v1/voices/preview": {"get": {"summary": "试听配音"}},
+            "/api/v1/script": {"post": {"summary": "本地生成文案"}},
+            "/api/v1/terms": {"post": {"summary": "本地生成关键词"}},
         },
         "components": {
             "schemas": {

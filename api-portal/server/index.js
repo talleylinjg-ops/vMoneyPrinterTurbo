@@ -171,6 +171,7 @@ app.get("/sitemap.xml", (req, res) => {
     ["/humans.txt", "0.3", "monthly"],
     ["/.well-known/security.txt", "0.3", "monthly"],
     ["/.well-known/llms.txt", "0.6", "weekly"],
+    ["/.well-known/ai.txt", "0.5", "weekly"],
   ];
   const body = urls
     .map(([p, pr, freq]) => `  <url><loc>${origin}${p}</loc><lastmod>${lastmod}</lastmod><changefreq>${freq}</changefreq><priority>${pr}</priority></url>`)

@@ -15,7 +15,9 @@
   <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
   <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs full" />
   <link rel="alternate" type="text/markdown" href="/llms.md" title="LLMs markdown" />
+  <link rel="alternate" type="text/plain" href="/.well-known/llms.txt" title="Well-known LLMs.txt" />
   <link rel="alternate" hreflang="zh-CN" href="__ORIGIN__/" />
+  <link rel="alternate" hreflang="en" href="__ORIGIN__/" />
   <link rel="alternate" hreflang="x-default" href="__ORIGIN__/" />
 
   <meta property="og:type" content="website" />
@@ -61,7 +63,7 @@
         ],
         "creator": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "__ORIGIN__/" },
         "image": "__ORIGIN__/og.png",
-        "sameAs": ["__ORIGIN__/llms.txt", "__ORIGIN__/llms-full.txt", "__ORIGIN__/docs", "__ORIGIN__/openapi.json"],
+        "sameAs": ["__ORIGIN__/llms.txt", "__ORIGIN__/llms-full.txt", "__ORIGIN__/docs", "__ORIGIN__/openapi.json", "https://github.com/talleylinjg-ops/vMoneyPrinterTurbo"],
         "softwareVersion": "1.3.7",
         "isAccessibleForFree": true,
         "availableLanguage": ["zh-CN", "en"]
@@ -123,6 +125,16 @@
             "@type": "Question",
             "name": "有哪些限制？",
             "acceptedAnswer": { "@type": "Answer", "text": "文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。" }
+          },
+          {
+            "@type": "Question",
+            "name": "成片会丢失吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "成片落盘保存。刷新页面后仍可用 task_id 预览和下载。" }
+          },
+          {
+            "@type": "Question",
+            "name": "需要配置大模型吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不需要。托管版关闭 LLM，文案和关键词在本地生成，素材来自 Pexels / Pixabay，配音使用 Edge TTS。" }
           }
         ]
       }
@@ -134,13 +146,18 @@
 <body>
   <header class="topbar">
     <h1 class="mpt-brand">
-      <span class="mpt-brand__name">MoneyPrinterTurbo</span>
-      <a class="mpt-brand__version" href="https://github.com/harry0703/MoneyPrinterTurbo" target="_blank" rel="noopener noreferrer">v1.3.7</a>
+      <span>
+        <span class="mpt-brand__name">MoneyPrinterTurbo</span>
+        <a class="mpt-brand__version" href="https://github.com/harry0703/MoneyPrinterTurbo" target="_blank" rel="noopener noreferrer" aria-label="Open MoneyPrinterTurbo on GitHub" title="Open project on GitHub">v1.3.7</a>
+      </span>
     </h1>
     <div class="top-actions">
-      <button type="button" class="ghost" id="task-toggle">任务管理 ▾</button>
-      <button type="button" class="ghost" id="settings-btn">设置</button>
-      <select class="lang" aria-label="界面语言">
+      <button type="button" class="ghost" id="task-toggle" aria-expanded="false">任务管理 <span class="chev" aria-hidden="true"></span></button>
+      <button type="button" class="ghost icon-btn" id="settings-btn" aria-expanded="false">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.1 7.1 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.8 8.48a.5.5 0 0 0 .12.64L4.95 10.7c-.04.31-.06.63-.06.94s.02.63.06.94L2.92 14.16a.5.5 0 0 0-.12.64l1.92 3.32c.13.23.4.32.64.22l2.39-.96c.5.39 1.04.7 1.63.94l.36 2.54c.05.24.26.42.5.42h3.8c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.55 1.63-.94l2.39.96c.24.1.51 0 .64-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg>
+        设置
+      </button>
+      <select class="lang" aria-label="Language / 语言">
         <option selected>简体中文</option>
       </select>
     </div>
@@ -152,7 +169,7 @@
   </div>
   <div class="popover" id="settings-popover" hidden>
     <h3>设置</h3>
-    <p class="hint">托管版已内置 Pexels / Pixabay 与 Edge TTS，无需填写大模型 API Key。</p>
+    <p class="hint">托管版已内置 Pexels / Pixabay 与 Edge TTS，无需填写大模型 API Key。「配置大模型」入口与原站一致，本页不启用 LLM。</p>
     <p class="hint">SaaS 文档：<a href="/docs">/docs</a>　OpenAPI：<a href="/openapi.json">/openapi.json</a></p>
   </div>
 
@@ -161,28 +178,55 @@
       <div class="grid">
         <section class="card">
           <h3>文案设置</h3>
-          <label>视频主题 <span class="help" title="AI 将根据主题生成视频文案。">?</span>
-            <input name="video_subject" placeholder="例如：人工智能如何改变日常生活" maxlength="120" />
-          </label>
+          <div class="field">
+            <div class="field-label-row">
+              <span>视频主题</span>
+              <span class="help-inline">(AI 将根据主题生成视频文案)</span>
+              <button type="button" class="linkish" id="open-llm">配置大模型</button>
+            </div>
+            <textarea name="video_subject" rows="3" maxlength="200" placeholder="例如：人工智能如何改变日常生活"></textarea>
+          </div>
           <label>生成视频脚本的语言
             <select name="language">
-              <option value="zh-CN" selected>自动检测</option>
-              <option value="zh-CN">简体中文</option>
-              <option value="en">English</option>
+              <option value="" selected>自动检测</option>
+              <option value="zh-CN">zh-CN</option>
+              <option value="zh-HK">zh-HK</option>
+              <option value="zh-TW">zh-TW</option>
+              <option value="de-DE">de-DE</option>
+              <option value="en-US">en-US</option>
+              <option value="es-ES">es-ES</option>
+              <option value="fr-FR">fr-FR</option>
+              <option value="it-IT">it-IT</option>
+              <option value="ru-RU">ru-RU</option>
+              <option value="vi-VN">vi-VN</option>
+              <option value="th-TH">th-TH</option>
+              <option value="tr-TR">tr-TR</option>
             </select>
           </label>
-          <details>
+          <details class="advanced" id="advanced-script">
             <summary>高级脚本设置</summary>
-            <p class="hint">托管版关闭大模型，按主题生成本地旁白。</p>
+            <label>文案段落数量 <span class="slider-val" id="pn-val">1</span>
+              <input type="range" name="paragraph_number" min="1" max="5" value="1" />
+            </label>
+            <label>自定义文案要求
+              <textarea name="video_script_prompt" rows="3" maxlength="500" placeholder="例如：语气更轻松，适合小红书风格，面向年轻用户，开头更有悬念"></textarea>
+            </label>
+            <p class="hint">托管版关闭大模型，按主题生成本地旁白。段落与自定义要求仅作界面对齐。</p>
           </details>
-          <button type="button" class="ai-btn" disabled>点击使用AI生成视频文案和关键词</button>
-          <label>视频文案（可选） <span class="help" title="可留空，由主题生成本地旁白。免费成片请控制在 1500 字以内。">?</span>
-            <textarea name="video_script" rows="7" maxlength="1500"></textarea>
+          <button type="button" class="ai-btn" id="gen-script">
+            <svg class="ico spark" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l1.2 6.3L19 9l-5.8 2.7L12 18l-1.2-6.3L5 9l5.8-.7z"/></svg>
+            点击使用AI生成视频文案和关键词
+          </button>
+          <label>视频文案（可选） <span class="help" title="可留空，由主题生成本地旁白。免费成片请控制在 1500 字以内（约 6 分钟）。合理使用标点断句有助于生成字幕。">?</span>
+            <textarea name="video_script" rows="8" maxlength="1500"></textarea>
           </label>
           <p class="hint" id="char-hint">0 / 1500 字</p>
-          <button type="button" class="ai-btn" disabled>点击使用AI根据文案生成视频关键词</button>
-          <label>视频关键词（英文，可选） <span class="help" title="可留空。多个关键词请使用英文逗号分隔。">?</span>
-            <input name="video_terms" />
+          <button type="button" class="ai-btn" id="gen-terms">
+            <svg class="ico spark" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l1.2 6.3L19 9l-5.8 2.7L12 18l-1.2-6.3L5 9l5.8-.7z"/></svg>
+            点击使用AI根据文案生成视频关键词
+          </button>
+          <label>视频关键词（英文，可选） <span class="help" title="可留空，由主题或文案生成。多个关键词请使用英文逗号分隔。">?</span>
+            <textarea name="video_terms" rows="3"></textarea>
           </label>
         </section>
 
@@ -190,8 +234,10 @@
           <h3>视频设置</h3>
           <label>视频来源
             <select name="video_source">
-              <option value="pexels" selected>Pexels</option>
-              <option value="pixabay">Pixabay</option>
+              <optgroup label="库存视频">
+                <option value="pexels" selected>Pexels</option>
+                <option value="pixabay">Pixabay</option>
+              </optgroup>
               <option value="auto">自动（Pexels + Pixabay）</option>
             </select>
           </label>
@@ -202,7 +248,7 @@
             </select>
           </label>
           <label class="check">
-            <input type="checkbox" id="match-script" /> 按文案顺序匹配画面 <span class="help" title="按文案顺序生成关键词并匹配素材。">?</span>
+            <input type="checkbox" id="match-script" /> 按文案顺序匹配画面 <span class="help" title="按文案顺序生成关键词并匹配素材，使画面更贴近当前旁白。">?</span>
           </label>
           <label>视频转场模式
             <select name="transition">
@@ -220,7 +266,6 @@
             <select name="aspect">
               <option value="9:16" selected>竖屏 9:16（抖音视频）</option>
               <option value="16:9">横屏 16:9（西瓜视频）</option>
-              <option value="1:1">方形 1:1</option>
             </select>
           </label>
           <label>单个片段最大时长（秒） <span class="help" title="控制合成时使用的每个视频片段时长，不是视频总时长。">?</span>
@@ -230,6 +275,10 @@
               <option>4</option>
               <option>5</option>
               <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
             </select>
           </label>
           <input type="hidden" name="clip_speed" value="1" />
@@ -248,8 +297,8 @@
           <label>配音方式
             <div class="seg" id="voice-mode">
               <button type="button" class="active" data-mode="tts">自动配音</button>
-              <button type="button" data-mode="upload" disabled>上传音频</button>
-              <button type="button" data-mode="none" disabled>无配音</button>
+              <button type="button" data-mode="upload">上传音频</button>
+              <button type="button" data-mode="none">无配音</button>
             </div>
           </label>
           <label>配音服务
@@ -261,21 +310,32 @@
             <select name="voice_name" id="voice-name"></select>
           </label>
           <div class="row">
-            <label>配音音量 <span class="help" title="100% 为原始音量。">?</span>
+            <label>配音音量 <span class="help" title="调整自动配音的音量，100% 为原始音量。">?</span>
               <select name="voice_volume">
+                <option value="60">60%</option>
                 <option value="80">80%</option>
                 <option value="100" selected>100%</option>
+                <option value="120">120%</option>
+                <option value="150">150%</option>
+                <option value="200">200%</option>
               </select>
             </label>
-            <label>配音语速 <span class="help" title="1.0× 为正常语速。">?</span>
+            <label>配音语速 <span class="help" title="仅对自动配音生效，1.0× 为正常语速。">?</span>
               <select name="voice_rate">
+                <option value="0.8">0.8×</option>
                 <option value="0.9">0.9×</option>
                 <option value="1" selected>1.0×</option>
                 <option value="1.1">1.1×</option>
+                <option value="1.2">1.2×</option>
+                <option value="1.5">1.5×</option>
+                <option value="2">2.0×</option>
               </select>
             </label>
           </div>
-          <button type="button" class="secondary" id="preview-voice">试听配音</button>
+          <button type="button" class="secondary icon-btn" id="preview-voice">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06c3.39.49 6 3.39 6 6.71s-2.61 6.22-6 6.71v2.06c4.5-.51 8-4.31 8-8.77s-3.5-8.26-8-8.77z"/></svg>
+            试听配音
+          </button>
           <label>背景音乐来源
             <select name="bgm_source">
               <option value="random" selected>随机背景音乐</option>
@@ -284,9 +344,15 @@
           </label>
           <label>背景音乐音量
             <select name="bgm_volume">
+              <option value="0">0%</option>
               <option value="10">10%</option>
               <option value="20" selected>20%</option>
               <option value="30">30%</option>
+              <option value="40">40%</option>
+              <option value="50">50%</option>
+              <option value="60">60%</option>
+              <option value="80">80%</option>
+              <option value="100">100%</option>
             </select>
           </label>
         </section>
@@ -302,17 +368,21 @@
           </label>
           <label>字幕位置
             <select name="subtitle_position">
-              <option value="bottom" selected>底部（推荐）</option>
-              <option value="center">中间</option>
               <option value="top">顶部</option>
+              <option value="center">中间</option>
+              <option value="bottom" selected>底部（推荐）</option>
+              <option value="custom">自定义位置（70，表示离顶部70%的位置）</option>
             </select>
+          </label>
+          <label id="custom-pos-wrap" hidden>自定义位置（距顶部百分比）
+            <input type="number" name="custom_position" min="0" max="100" value="70" />
           </label>
           <div class="row">
             <label>字幕颜色
               <input type="color" name="text_color" value="#FFFFFF" />
             </label>
             <label>字幕大小 <span class="slider-val" id="fs-val">60</span>
-              <input type="range" name="font_size" min="30" max="80" value="60" />
+              <input type="range" name="font_size" min="30" max="100" value="60" />
             </label>
           </div>
           <div class="row">
@@ -320,17 +390,20 @@
               <input type="color" name="stroke_color" value="#000000" />
             </label>
             <label>描边粗细 <span class="slider-val" id="sw-val">1.50</span>
-              <input type="range" name="stroke_width" min="0" max="4" step="0.1" value="1.5" />
+              <input type="range" name="stroke_width" min="0" max="10" step="0.1" value="1.5" />
             </label>
           </div>
-          <div class="row">
+          <div class="row bg-row">
             <label class="check"><input type="checkbox" name="subtitle_bg" /> 启用字幕背景</label>
             <label>字幕背景颜色
               <input type="color" name="subtitle_bg_color" value="#000000" />
             </label>
           </div>
-          <label class="check"><input type="checkbox" name="rounded_subtitle_bg" /> 启用圆角半透明字幕背景 <span class="help" title="开启后字幕背景会显示为更贴合文字宽度的圆角半透明样式。">?</span></label>
-          <button type="button" class="secondary" id="reset-subtitle">恢复默认字幕设置</button>
+          <label class="check"><input type="checkbox" name="rounded_subtitle_bg" /> 启用圆角半透明字幕背景 <span class="help" title="默认关闭。开启后字幕背景会显示为更贴合文字宽度的圆角半透明样式。">?</span></label>
+          <button type="button" class="secondary icon-btn" id="reset-subtitle">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6a6 6 0 0 1-10.65 3.76L6.0 18.09A8 8 0 1 0 12 5z"/></svg>
+            恢复默认字幕设置
+          </button>
         </section>
       </div>
 
@@ -338,6 +411,7 @@
         <button type="submit" id="submit-btn">生成视频</button>
       </div>
     </form>
+    <div id="toast" class="toast" hidden></div>
 
     <section class="card status-card" id="status-card" hidden>
       <h3>生成进度</h3>
@@ -356,9 +430,20 @@
       </div>
     </section>
 
-    <section class="card visually-seo" id="saas">
-      <h3>SaaS 调用参数</h3>
-      <p>你的站点只需 POST 创建任务，再轮询状态。用户不用填写几十个参数，前端给默认值即可。</p>
+    <section class="card seo-block" id="about">
+      <h2>产品事实</h2>
+      <div class="seo-facts">
+        <div><strong>0 元</strong><span>引擎直连无需 Key，不调用大模型</span></div>
+        <div><strong>1500 字</strong><span>文案上限，成片约 180 秒</span></div>
+        <div><strong>9:16 / 16:9</strong><span>竖屏与横屏，另支持 1:1</span></div>
+        <div><strong>complete</strong><span>完成态，失败为 failed</span></div>
+      </div>
+      <p>MoneyPrinterTurbo 托管版输入主题或文案，匹配 Pexels / Pixabay 素材、Edge TTS 配音和自动字幕，输出可下载 MP4。成片落盘，刷新后仍可用 task_id 预览下载。全新生成流水线，不支持时间轴精修已有视频。</p>
+    </section>
+
+    <section class="card seo-block" id="saas">
+      <h2>SaaS 调用</h2>
+      <p>站点只需 POST 创建任务，再轮询状态。完整说明见 <a href="/docs">/docs</a>，机器规格见 <a href="/openapi.json">/openapi.json</a>，模型导览见 <a href="/llms.txt">/llms.txt</a>。</p>
       <pre class="code">POST /api/v1/videos
 Content-Type: application/json
 
@@ -378,17 +463,11 @@ GET /api/v1/videos/{task_id}
 GET /api/v1/videos/{task_id}/preview
 GET /api/v1/videos/{task_id}/download
 GET /api/v1/options
-GET /docs/saas
+GET /docs
 GET /openapi.json</pre>
-      <ul class="faq">
-        <li>这是视频生成流水线：按主题/文案全新合成，不能在时间轴上精修已有成片。</li>
-        <li>放弃 LLM，运营成本为零。素材 Pexels/Pixabay，配音 Edge TTS。</li>
-        <li>成片落盘后刷新不会丢失。会员用 task_id 即可再次下载。</li>
-        <li>下载走同源直链，支持断点续传，避免 503 / 超时。</li>
-      </ul>
     </section>
 
-    <section class="card visually-seo" id="faq">
+    <section class="card seo-block" id="faq">
       <h2>常见问题</h2>
       <h3>MoneyPrinterTurbo 收费吗？</h3>
       <p>完全免费。素材来自 Pexels / Pixabay，配音使用 Edge TTS，不调用大模型。</p>
@@ -398,9 +477,19 @@ GET /openapi.json</pre>
       <p>POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id} 直到 state=complete，再用 /preview 或 /download 取回成片。规格见 /openapi.json，说明见 /docs。</p>
       <h3>有哪些限制？</h3>
       <p>文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。</p>
+      <h3>成片会丢失吗？</h3>
+      <p>成片落盘保存。刷新页面后仍可用 task_id 预览和下载。</p>
+      <h3>需要配置大模型吗？</h3>
+      <p>不需要。托管版关闭 LLM，文案和关键词在本地生成，素材来自 Pexels / Pixabay，配音使用 Edge TTS。</p>
     </section>
   </main>
-  <footer>MoneyPrinterTurbo hosted edition · 管理后台即本页任务历史 · 源码风格参考 harry0703/MoneyPrinterTurbo</footer>
+  <footer>
+    <span>MoneyPrinterTurbo hosted edition v1.3.7</span>
+    <a href="/docs">SaaS 文档</a>
+    <a href="/llms.txt">llms.txt</a>
+    <a href="/openapi.json">OpenAPI</a>
+    <a href="https://github.com/talleylinjg-ops/vMoneyPrinterTurbo">GitHub</a>
+  </footer>
   <noscript>
     <p>MoneyPrinterTurbo 免费短视频生成器。填写主题即可匹配 Pexels / Pixabay 素材、Edge TTS 配音和字幕。文档：<a href="/docs">/docs</a>，模型阅读：<a href="/llms.txt">/llms.txt</a>。</p>
   </noscript>

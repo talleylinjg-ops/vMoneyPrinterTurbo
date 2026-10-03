@@ -131,6 +131,7 @@ export function applySeo(path) {
   upsertLink("alternate", "text/plain", origin + "/llms.txt", "LLMs.txt");
   upsertLink("alternate", "text/plain", origin + "/llms-full.txt", "LLMs full");
   upsertLink("alternate", "text/markdown", origin + "/llms.md", "LLMs markdown");
+  upsertLink("alternate", "text/plain", origin + "/.well-known/llms.txt", "Well-known LLMs.txt");
   const zh = document.head.querySelector('link[rel="alternate"][hreflang="zh-CN"]') || document.createElement("link");
   zh.setAttribute("rel", "alternate");
   zh.setAttribute("hreflang", "zh-CN");
@@ -161,7 +162,7 @@ export function applySeo(path) {
     offers: { "@type": "Offer", "price": "0", "priceCurrency": "CNY", "availability": "https://schema.org/InStock" },
     image: origin + "/og.png",
     isAccessibleForFree: true,
-    sameAs: [origin + "/llms.txt", origin + "/docs", origin + "/openapi.json"],
+    sameAs: [origin + "/llms.txt", origin + "/docs", origin + "/openapi.json", "https://github.com/talleylinjg-ops/vMoneyPrinterTurbo"],
   });
 
   upsertJsonLd("ld-crumb", {

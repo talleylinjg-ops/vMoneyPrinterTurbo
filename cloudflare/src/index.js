@@ -187,6 +187,8 @@ function engineOpenApi(origin) {
       "/api/v1/videos/{task_id}/download": { get: { summary: "下载 MP4" } },
       "/api/v1/options": { get: { summary: "音色与画幅" } },
       "/api/v1/voices/preview": { get: { summary: "试听配音" } },
+      "/api/v1/script": { post: { summary: "本地生成文案" } },
+      "/api/v1/terms": { post: { summary: "本地生成关键词" } },
     },
   };
 }
@@ -205,6 +207,7 @@ function sitemapXml(origin) {
     ["/humans.txt", "0.3", "monthly"],
     ["/.well-known/security.txt", "0.3", "monthly"],
     ["/.well-known/llms.txt", "0.6", "weekly"],
+    ["/.well-known/ai.txt", "0.5", "weekly"],
   ];
   const body = urls
     .map(

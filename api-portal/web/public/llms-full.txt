@@ -2,6 +2,8 @@
 
 > 免费短视频生成 API。注册获得 API Key，提交主题即可用 Pexels / Pixabay 素材、Edge TTS 配音和自动字幕合成短视频。不使用大语言模型。
 
+Updated: 2026-10-02. Version 1.3.7.
+
 - 站点：[__ORIGIN__/](__ORIGIN__/)
 - 文档：[__ORIGIN__/docs](__ORIGIN__/docs)
 - OpenAPI：[__ORIGIN__/openapi.json](__ORIGIN__/openapi.json)

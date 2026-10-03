@@ -77,8 +77,10 @@ curl -X POST https://YOUR_ENGINE/api/v1/videos \
 
 - `/llms.txt` `/llms-full.txt` `/llms.md`：给大模型阅读
 - `/ai.txt` `/humans.txt` `/.well-known/security.txt`
+- `/.well-known/llms.txt` `/.well-known/ai.txt`
 - 动态 `/robots.txt` `/sitemap.xml`（按访问域名改写，含 lastmod）
 - JSON-LD：WebApplication / HowTo / FAQ / Breadcrumb
+- 首页可见 FAQ 与产品事实，noscript 含文档与 llms.txt 入口
 
 ```bash
 cd cloudflare

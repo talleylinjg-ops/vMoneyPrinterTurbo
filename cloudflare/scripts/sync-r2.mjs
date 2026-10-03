@@ -22,10 +22,29 @@ function wrangler(args) {
   return r;
 }
 
+function combinedText(r) {
+  return `${r.stdout || ""}${r.stderr || ""}`;
+}
+
+function wranglerRetry(args, { attempts = 4, delayMs = 2000 } = {}) {
+  let last;
+  for (let i = 1; i <= attempts; i++) {
+    last = wrangler(args);
+    if (last.status === 0) return last;
+    const text = combinedText(last);
+    const retryable = /fetch failed|connectivity|ECONNRESET|ETIMEDOUT|socket hang up|network/i.test(text);
+    if (!retryable || i === attempts) return last;
+    const wait = delayMs * i;
+    console.error(`retry ${i}/${attempts - 1} after ${wait}ms: ${args.join(" ")}`);
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, wait);
+  }
+  return last;
+}
+
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 const ensure = wrangler(["r2", "bucket", "create", BUCKET]);
-const combined = `${ensure.stdout}${ensure.stderr}`;
-if (ensure.status !== 0 && !/already exists/i.test(combined)) {
+const combined = combinedText(ensure);
+if (ensure.status !== 0 && !/already exists|10004/i.test(combined)) {
   console.error("R2 bucket create failed. Set a valid CLOUDFLARE_API_TOKEN and retry.");
   process.exit(ensure.status || 1);
 }
@@ -33,7 +52,7 @@ if (ensure.status !== 0 && !/already exists/i.test(combined)) {
 let ok = 0;
 for (const file of manifest.files) {
   const local = join(staticDir, file.key);
-  const put = wrangler([
+  const put = wranglerRetry([
     "r2",
     "object",
     "put",

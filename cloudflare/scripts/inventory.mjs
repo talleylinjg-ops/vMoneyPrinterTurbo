@@ -92,7 +92,8 @@ for (const ref of [...allHref, ...allCssUrl]) {
     ref.includes("${") ||
     ref.startsWith("/api/") ||
     ref.startsWith("/docs") ||
-    ref.startsWith("/openapi")
+    ref.startsWith("/openapi") ||
+    ref.startsWith("/.well-known/")
   ) {
     continue;
   }

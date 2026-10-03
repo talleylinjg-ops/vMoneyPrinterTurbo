@@ -15,7 +15,9 @@
   <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
   <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs full" />
   <link rel="alternate" type="text/markdown" href="/llms.md" title="LLMs markdown" />
+  <link rel="alternate" type="text/plain" href="/.well-known/llms.txt" title="Well-known LLMs.txt" />
   <link rel="alternate" hreflang="zh-CN" href="__ORIGIN__/docs" />
+  <link rel="alternate" hreflang="en" href="__ORIGIN__/docs" />
   <link rel="alternate" hreflang="x-default" href="__ORIGIN__/docs" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="MoneyPrinterTurbo" />
@@ -80,6 +82,11 @@
             "@type": "Question",
             "name": "能精修已有视频吗？",
             "acceptedAnswer": { "@type": "Answer", "text": "不能。这是全新生成流水线，没有时间轴精修接口。改内容需重新 POST。" }
+          },
+          {
+            "@type": "Question",
+            "name": "需要配置大模型吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不需要。托管版关闭 LLM，文案和关键词在本地生成。" }
           }
         ]
       }
@@ -100,8 +107,10 @@
 <body>
   <header class="topbar">
     <h1 class="mpt-brand">
-      <span class="mpt-brand__name">MoneyPrinterTurbo</span>
-      <a class="mpt-brand__version" href="/">v1.3.7</a>
+      <span>
+        <span class="mpt-brand__name">MoneyPrinterTurbo</span>
+        <a class="mpt-brand__version" href="/" aria-label="Open MoneyPrinterTurbo on GitHub" title="Open project on GitHub">v1.3.7</a>
+      </span>
     </h1>
     <div class="top-actions">
       <a class="ghost" href="/">返回生成</a>
@@ -152,7 +161,17 @@ curl -L __ORIGIN__/api/v1/videos/TASK_ID/download -o video.mp4</pre>
       <p>成功为 complete，失败为 failed。不要用 succeeded 判断。</p>
       <h3>能精修已有视频吗？</h3>
       <p>不能。这是全新生成流水线，没有时间轴精修接口。改内容需重新 POST。</p>
+      <h3>需要配置大模型吗？</h3>
+      <p>不需要。托管版关闭 LLM，文案和关键词在本地生成。</p>
     </section>
   </main>
+  <footer>
+    <a href="/">首页</a>
+    <a href="/llms.txt">llms.txt</a>
+    <a href="/openapi.json">OpenAPI</a>
+  </footer>
+  <noscript>
+    <p>MoneyPrinterTurbo SaaS 文档。POST /api/v1/videos 提交主题，轮询直到 state=complete。模型阅读 <a href="/llms.txt">/llms.txt</a>。</p>
+  </noscript>
 </body>
 </html>

@@ -1,12 +1,13 @@
 # MoneyPrinterTurbo
 
-免费短视频生成器。输入主题，匹配 Pexels / Pixabay 素材、Edge TTS 配音、自动字幕，输出 9:16 / 16:9 / 1:1 MP4。不使用大模型。
+免费短视频生成器。输入主题，匹配 Pexels / Pixabay 素材、Edge TTS 配音、自动字幕，输出 9:16 / 16:9 / 1:1 MP4。不使用大模型。引擎直连无需 API Key。
 
 - 价格：0
 - 文案：<= 1500 字
 - 成片：<= 180 秒
 - 完成态：`complete`
 - 精修：不支持
+- 更新：2026-10-02
 
 ## 链接
 
@@ -15,6 +16,7 @@
 - OpenAPI：<__ORIGIN__/openapi.json>
 - llms.txt：<__ORIGIN__/llms.txt>
 - llms-full.txt：<__ORIGIN__/llms-full.txt>
+- ai.txt：<__ORIGIN__/ai.txt>
 
 ## API
 

@@ -35,6 +35,7 @@ function bindRange(name, labelId, fmt) {
 }
 bindRange("font_size", "fs-val", v => v);
 bindRange("stroke_width", "sw-val", v => Number(v).toFixed(2));
+bindRange("paragraph_number", "pn-val", v => v);
 
 form.elements.video_script.addEventListener("input", () => {
   const n = form.elements.video_script.value.length;
@@ -42,9 +43,20 @@ form.elements.video_script.addEventListener("input", () => {
   charHint.style.color = n > 1500 ? "#f31260" : "";
 });
 
+function toast(msg) {
+  const el = document.getElementById("toast");
+  if (!el) return;
+  el.textContent = msg;
+  el.hidden = false;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { el.hidden = true; }, 2200);
+}
+
 function formData() {
   const fd = new FormData(form);
   const obj = Object.fromEntries(fd.entries());
+  obj.language = obj.language || "zh-CN";
+  if (concatMode && concatMode.disabled) obj.concat_mode = "sequential";
   obj.clip_duration = Number(obj.clip_duration);
   obj.clip_speed = Number(obj.clip_speed || 1);
   obj.voice_volume = Number(obj.voice_volume);
@@ -226,11 +238,18 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closePopovers();
 });
 
+function setPreviewVoiceLabel(text) {
+  const icon = previewVoiceBtn.querySelector("svg");
+  previewVoiceBtn.textContent = "";
+  if (icon) previewVoiceBtn.appendChild(icon);
+  previewVoiceBtn.append(" " + text);
+}
+
 previewVoiceBtn.addEventListener("click", async () => {
   const voice = voicesEl.value;
   if (!voice) return;
   previewVoiceBtn.disabled = true;
-  previewVoiceBtn.textContent = "试听中...";
+  setPreviewVoiceLabel("试听中...");
   try {
     if (previewAudio) {
       previewAudio.pause();
@@ -240,21 +259,25 @@ previewVoiceBtn.addEventListener("click", async () => {
     previewAudio = new Audio(url);
     await previewAudio.play();
     previewAudio.addEventListener("ended", () => {
-      previewVoiceBtn.textContent = "试听配音";
+      setPreviewVoiceLabel("试听配音");
       previewVoiceBtn.disabled = false;
     }, { once: true });
   } catch (err) {
-    previewVoiceBtn.textContent = "试听失败";
-    setTimeout(() => { previewVoiceBtn.textContent = "试听配音"; previewVoiceBtn.disabled = false; }, 1600);
+    setPreviewVoiceLabel("试听失败");
+    setTimeout(() => { setPreviewVoiceLabel("试听配音"); previewVoiceBtn.disabled = false; }, 1600);
     return;
   }
-  previewVoiceBtn.textContent = "播放中";
+  setPreviewVoiceLabel("播放中");
   previewVoiceBtn.disabled = false;
+});
+form.elements.subtitle_position.addEventListener("change", () => {
+  document.getElementById("custom-pos-wrap").hidden = form.elements.subtitle_position.value !== "custom";
 });
 document.getElementById("reset-subtitle").addEventListener("click", () => {
   form.elements.subtitle_enabled.checked = true;
   form.elements.font_name.selectedIndex = 0;
   form.elements.subtitle_position.value = "bottom";
+  document.getElementById("custom-pos-wrap").hidden = true;
   form.elements.text_color.value = "#FFFFFF";
   form.elements.stroke_color.value = "#000000";
   form.elements.font_size.value = 60;
@@ -266,8 +289,95 @@ document.getElementById("reset-subtitle").addEventListener("click", () => {
   form.elements.stroke_width.dispatchEvent(new Event("input"));
 });
 const matchScript = document.getElementById("match-script");
+const concatMode = form.elements.concat_mode;
+let concatBeforeMatch = concatMode.value;
 matchScript.addEventListener("change", () => {
-  if (matchScript.checked) form.elements.concat_mode.value = "sequential";
+  if (matchScript.checked) {
+    concatBeforeMatch = concatMode.value;
+    concatMode.value = "sequential";
+    concatMode.disabled = true;
+  } else {
+    concatMode.disabled = false;
+    concatMode.value = concatBeforeMatch || "random";
+  }
+});
+
+document.getElementById("open-llm").addEventListener("click", (e) => {
+  e.preventDefault();
+  setOpen(taskPopover, false);
+  setOpen(settingsPopover, true);
+  settingsBtn.setAttribute("aria-expanded", "true");
+  taskToggle.setAttribute("aria-expanded", "false");
+});
+
+async function postJson(url, body) {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.detail || data.error || data.message || "请求失败");
+  return data;
+}
+
+document.getElementById("gen-script").addEventListener("click", async () => {
+  const subject = form.elements.video_subject.value.trim();
+  if (!subject) {
+    toast("请先填写视频主题");
+    return;
+  }
+  const btn = document.getElementById("gen-script");
+  btn.disabled = true;
+  try {
+    const data = await postJson("/api/v1/script", {
+      video_subject: subject,
+      language: form.elements.language.value || "zh-CN",
+      video_script: form.elements.video_script.value,
+      video_terms: form.elements.video_terms.value,
+    });
+    form.elements.video_script.value = data.script || "";
+    form.elements.video_terms.value = data.terms || "";
+    form.elements.video_script.dispatchEvent(new Event("input"));
+    toast("已生成本地文案和关键词");
+  } catch (err) {
+    toast(err.message || "生成失败");
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById("gen-terms").addEventListener("click", async () => {
+  const script = form.elements.video_script.value.trim();
+  const subject = form.elements.video_subject.value.trim();
+  if (!script) {
+    toast("请先填写视频文案");
+    return;
+  }
+  const btn = document.getElementById("gen-terms");
+  btn.disabled = true;
+  try {
+    const data = await postJson("/api/v1/terms", {
+      video_subject: subject,
+      video_script: script,
+    });
+    form.elements.video_terms.value = data.terms || "";
+    toast("已生成本地关键词");
+  } catch (err) {
+    toast(err.message || "生成失败");
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById("voice-mode").addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  if (btn.dataset.mode !== "tts") {
+    toast("托管版仅支持自动配音（Edge TTS）");
+    return;
+  }
+  document.querySelectorAll("#voice-mode button").forEach((b) => b.classList.toggle("active", b === btn));
 });
 
 loadVoices();

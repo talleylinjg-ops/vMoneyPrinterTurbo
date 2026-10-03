@@ -7,6 +7,7 @@
 - 成片：<= 180 秒
 - 完成态：`complete`
 - 精修：不支持
+- 更新：2026-10-02
 
 ## 链接
 
@@ -15,6 +16,7 @@
 - OpenAPI：<__ORIGIN__/openapi.json>
 - llms.txt：<__ORIGIN__/llms.txt>
 - llms-full.txt：<__ORIGIN__/llms-full.txt>
+- ai.txt：<__ORIGIN__/ai.txt>
 
 ## API
 
