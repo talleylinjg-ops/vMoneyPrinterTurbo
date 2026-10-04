@@ -87,6 +87,7 @@ function bindRange(name, labelId, fmt) {
 bindRange("font_size", "fs-val", v => v);
 bindRange("stroke_width", "sw-val", v => Number(v).toFixed(2));
 bindRange("paragraph_number", "pn-val", v => v);
+bindRange("clip_speed", "cs-val", v => Number(v).toFixed(2) + "x");
 
 form.elements.video_script.addEventListener("input", () => {
   const n = form.elements.video_script.value.length;
@@ -115,7 +116,7 @@ function formData() {
   obj.bgm_volume = Number(obj.bgm_volume);
   obj.font_size = Number(obj.font_size);
   obj.stroke_width = Number(obj.stroke_width);
-  obj.video_count = 1;
+  obj.video_count = Number(obj.video_count || 1);
   obj.subtitle_enabled = form.elements.subtitle_enabled.checked;
   obj.subtitle_bg = form.elements.subtitle_bg.checked;
   obj.rounded_subtitle_bg = form.elements.rounded_subtitle_bg.checked;
@@ -621,13 +622,37 @@ matchScript.addEventListener("change", () => {
   }
 });
 
-document.getElementById("open-llm").addEventListener("click", (e) => {
-  e.preventDefault();
+function openSettings() {
   setOpen(taskPopover, false);
   setOpen(settingsPopover, true);
   settingsBtn.setAttribute("aria-expanded", "true");
   taskToggle.setAttribute("aria-expanded", "false");
+}
+
+document.getElementById("open-llm").addEventListener("click", (e) => {
+  e.preventDefault();
+  openSettings();
 });
+document.getElementById("open-material").addEventListener("click", (e) => {
+  e.preventDefault();
+  openSettings();
+});
+document.getElementById("restore-prompt").addEventListener("click", () => {
+  form.elements.custom_system_prompt.value = "";
+  toast("已恢复默认系统提示词");
+});
+document.getElementById("preview-prompt").addEventListener("click", () => {
+  const subject = form.elements.video_subject.value.trim() || "视频主题";
+  const extra = form.elements.video_script_prompt.value.trim();
+  toast("静态版不调用大模型，提示词仅作界面对齐");
+  log("主题: " + subject + (extra ? "\n要求: " + extra : ""));
+});
+const uiLang = document.getElementById("ui-lang");
+if (uiLang) {
+  uiLang.addEventListener("change", () => {
+    if (uiLang.value !== "zh") toast("界面文案为简体中文，语言列表与官方一致");
+  });
+}
 
 document.getElementById("gen-script").addEventListener("click", () => {
   const subject = form.elements.video_subject.value.trim();

@@ -156,8 +156,19 @@
         <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.1 7.1 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.8 8.48a.5.5 0 0 0 .12.64L4.95 10.7c-.04.31-.06.63-.06.94s.02.63.06.94L2.92 14.16a.5.5 0 0 0-.12.64l1.92 3.32c.13.23.4.32.64.22l2.39-.96c.5.39 1.04.7 1.63.94l.36 2.54c.05.24.26.42.5.42h3.8c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.55 1.63-.94l2.39.96c.24.1.51 0 .64-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg>
         设置
       </button>
-      <select class="lang" aria-label="Language / 语言">
-        <option selected>简体中文</option>
+      <select class="lang" id="ui-lang" aria-label="Language / 语言">
+        <option value="zh" selected>简体中文</option>
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="it">Italiano</option>
+        <option value="ru">Русский</option>
+        <option value="ko">한국어</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="tr">Türkçe</option>
+        <option value="pt">Português</option>
+        <option value="id">Bahasa Indonesia</option>
       </select>
     </div>
   </header>
@@ -169,6 +180,7 @@
   <div class="popover" id="settings-popover" hidden>
     <h3>设置</h3>
     <p class="hint">本站是 Cloudflare 纯静态页。文案、关键词、字幕成片和试听都在浏览器完成，无需 API Key，无回源后端。</p>
+    <p class="hint">配置大模型 / 配置素材来源在静态版中打开本说明。官方 Streamlit 原版仍保留在仓库 MoneyPrinterTurbo/。</p>
     <p class="hint">说明：<a href="/docs">/docs</a>　GEO：<a href="/llms.txt">/llms.txt</a></p>
   </div>
 
@@ -180,7 +192,7 @@
           <div class="field">
             <div class="field-label-row">
               <span>视频主题</span>
-              <span class="help-inline">(AI 将根据主题生成视频文案)</span>
+              <span class="help-inline" title="AI 将根据主题生成视频文案。">(AI 将根据主题生成视频文案)</span>
               <button type="button" class="linkish" id="open-llm">配置大模型</button>
             </div>
             <textarea name="video_subject" rows="3" maxlength="200" placeholder="例如：人工智能如何改变日常生活"></textarea>
@@ -204,13 +216,32 @@
           </label>
           <details class="advanced" id="advanced-script">
             <summary>高级脚本设置</summary>
+            <label>文案生成方式 <span class="help" title="当前大模型使用“设置”中的 Provider；胜算云批量生成会在确认报价后付费生成多个候选。">?</span>
+              <select name="script_backend">
+                <option value="local" selected>当前大模型 Provider</option>
+                <option value="loomloom">胜算云批量生成（付费）</option>
+              </select>
+            </label>
             <label>文案段落数量 <span class="slider-val" id="pn-val">1</span>
               <input type="range" name="paragraph_number" min="1" max="5" value="1" />
             </label>
             <label>自定义文案要求
               <textarea name="video_script_prompt" rows="3" maxlength="500" placeholder="例如：语气更轻松，适合小红书风格，面向年轻用户，开头更有悬念"></textarea>
             </label>
-            <p class="hint">托管版关闭大模型，按主题生成本地旁白。段落与自定义要求仅作界面对齐。</p>
+            <label>系统提示词
+              <textarea name="custom_system_prompt" rows="6" maxlength="4000" placeholder="仅界面保留。静态版不调用大模型。"></textarea>
+            </label>
+            <div class="row">
+              <button type="button" class="secondary icon-btn" id="restore-prompt">
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6a6 6 0 0 1-10.65 3.76L6.0 18.09A8 8 0 1 0 12 5z"/></svg>
+                恢复默认提示词
+              </button>
+              <button type="button" class="secondary icon-btn" id="preview-prompt">
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+                预览最终提示词
+              </button>
+            </div>
+            <p class="hint">静态版关闭大模型，按主题生成本地旁白。高级脚本控件仅作官方界面对齐。</p>
           </details>
           <button type="button" class="ai-btn" id="gen-script">
             <svg class="ico spark" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l1.2 6.3L19 9l-5.8 2.7L12 18l-1.2-6.3L5 9l5.8-.7z"/></svg>
@@ -224,22 +255,39 @@
             <svg class="ico spark" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l1.2 6.3L19 9l-5.8 2.7L12 18l-1.2-6.3L5 9l5.8-.7z"/></svg>
             点击使用AI根据文案生成视频关键词
           </button>
-          <label>视频关键词（英文，可选） <span class="help" title="可留空，由主题或文案生成。多个关键词请使用英文逗号分隔。">?</span>
+          <label>视频关键词（英文，可选） <span class="help" title="可留空，由 AI 根据视频文案生成。多个关键词请使用英文逗号分隔。">?</span>
             <textarea name="video_terms" rows="3"></textarea>
           </label>
         </section>
 
         <section class="card">
           <h3>视频设置</h3>
-          <label>视频来源
+          <div class="field">
+            <div class="field-label-row">
+              <span>视频来源</span>
+              <button type="button" class="linkish" id="open-material">配置素材来源</button>
+            </div>
             <select name="video_source">
               <optgroup label="库存视频">
                 <option value="pexels" selected>Pexels</option>
                 <option value="pixabay">Pixabay</option>
+                <option value="coverr">Coverr</option>
               </optgroup>
-              <option value="auto">自动（Pexels + Pixabay）</option>
+              <optgroup label="AI 视频">
+                <option value="metaso_minimax">秘塔 MiniMax H3</option>
+                <option value="loomloom">胜算云 AI 视频</option>
+                <option value="volcengine_seedance">火山引擎方舟 · Seedance</option>
+                <option value="wavespeed">WaveSpeed AI 生成</option>
+                <option value="ofox">OFox AI 视频</option>
+              </optgroup>
+              <optgroup label="AI 图片">
+                <option value="openai_image">OpenAI 兼容文生图</option>
+              </optgroup>
+              <optgroup label="本地文件">
+                <option value="local">本地文件</option>
+              </optgroup>
             </select>
-          </label>
+          </div>
           <label>视频拼接模式
             <select name="concat_mode">
               <option value="random" selected>随机拼接（推荐）</option>
@@ -267,6 +315,12 @@
               <option value="16:9">横屏 16:9（西瓜视频）</option>
             </select>
           </label>
+          <label>素材画面适配 <span class="help" title="填满会占满整个输出画面并裁掉多余边缘；完整显示会保留全部素材画面，并在需要时添加黑边。">?</span>
+            <select name="fit_mode">
+              <option value="cover" selected>填满（居中裁剪）</option>
+              <option value="contain">完整显示（黑边）</option>
+            </select>
+          </label>
           <label>单个片段最大时长（秒） <span class="help" title="控制合成时使用的每个视频片段时长，不是视频总时长。">?</span>
             <select name="clip_duration">
               <option>2</option>
@@ -280,13 +334,27 @@
               <option>10</option>
             </select>
           </label>
-          <input type="hidden" name="clip_speed" value="1" />
-          <label>同时生成视频数量
-            <select name="video_count"><option selected>1</option></select>
+          <label>片段播放速度 <span class="slider-val" id="cs-val">1.00x</span> <span class="help" title="仅调整画面素材的播放速度，不影响配音、字幕和单个片段的最大输出时长。">?</span>
+            <input type="range" name="clip_speed" min="0.5" max="2" step="0.05" value="1" />
           </label>
-          <label>视频编码器 <span class="help" title="默认使用稳定的 libx264。">?</span>
+          <label>同时生成视频数量
+            <select name="video_count">
+              <option selected>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </label>
+          <label>视频编码器 <span class="help" title="高级选项。“默认”跟随项目的稳定编码策略，当前使用 libx264；选择硬件编码器时，如果当前 FFmpeg、显卡或驱动不可用，会自动回退到 libx264。">?</span>
             <select name="video_codec">
-              <option value="libx264" selected>默认（推荐）</option>
+              <option value="__default__" selected>默认（推荐）</option>
+              <option value="libx264">libx264 (CPU)</option>
+              <option value="h264_nvenc">NVIDIA NVENC (h264_nvenc)</option>
+              <option value="h264_amf">AMD AMF (h264_amf)</option>
+              <option value="h264_qsv">Intel QSV (h264_qsv)</option>
+              <option value="h264_mf">Windows MediaFoundation (h264_mf)</option>
+              <option value="h264_videotoolbox">macOS VideoToolbox (h264_videotoolbox)</option>
             </select>
           </label>
         </section>
@@ -301,8 +369,16 @@
             </div>
           </label>
           <label>配音服务
-            <select>
-              <option selected>Azure TTS V1</option>
+            <select name="tts_server">
+              <option value="azure-tts-v1" selected>Azure TTS V1</option>
+              <option value="azure-tts-v2">Azure TTS V2</option>
+              <option value="siliconflow">SiliconFlow TTS</option>
+              <option value="gemini-tts">Google Gemini TTS</option>
+              <option value="mimo-tts">Xiaomi MiMo TTS</option>
+              <option value="minimax-tts">MiniMax TTS</option>
+              <option value="elevenlabs">ElevenLabs TTS</option>
+              <option value="chatterbox">Chatterbox TTS</option>
+              <option value="fish_audio">Fish Audio TTS</option>
             </select>
           </label>
           <label>配音声音（与文案语言保持一致）
@@ -338,6 +414,9 @@
           <label>背景音乐来源
             <select name="bgm_source">
               <option value="random" selected>随机背景音乐</option>
+              <option value="custom">自定义背景音乐</option>
+              <option value="sonilo">根据画面自动配乐（Sonilo AI）</option>
+              <option value="elevenlabs">根据画面自动配乐（ElevenLabs AI）</option>
               <option value="none">无背景音乐</option>
             </select>
           </label>
