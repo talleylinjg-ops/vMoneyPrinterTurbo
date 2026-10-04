@@ -2,7 +2,7 @@
   "name": "moneyprinterturbo-worker",
   "private": true,
   "version": "1.3.7",
-  "description": "Cloudflare Worker: serves the MoneyPrinterTurbo static frontend and proxies API traffic to the self-hosted backend.",
+  "description": "Cloudflare Worker: Cache → R2 → Assets for the MoneyPrinterTurbo static WebUI. No origin API.",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",

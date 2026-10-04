@@ -4,8 +4,7 @@ main = "src/index.js"
 compatibility_date = "2026-09-01"
 workers_dev = true
 
-# HTML/CSS/JS/图片走 Cache → R2 → Assets，源站休眠时前台仍可浏览。
-# 仅 /api/* /health /docs/saas 回源（生成、预览、下载）。 /docs 走边缘 docs.html。
+# 纯静态：Cache → R2 → Assets。文案、成片、配音都在浏览器完成，无回源。
 [assets]
 directory = "../static"
 binding = "ASSETS"
@@ -14,9 +13,6 @@ run_worker_first = true
 [[r2_buckets]]
 binding = "STATIC_BUCKET"
 bucket_name = "moneyprinterturbo-static"
-
-[vars]
-BACKEND_ORIGIN = "https://8501-fe5e3452b4fb7c4e.monkeycode-ai.online"
 
 [observability]
 enabled = true

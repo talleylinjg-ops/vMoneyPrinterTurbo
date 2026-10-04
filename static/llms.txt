@@ -1,38 +1,29 @@
 # MoneyPrinterTurbo
 
-> MoneyPrinterTurbo hosted edition：免费在线短视频生成器。输入主题或文案，匹配 Pexels / Pixabay 素材、Edge TTS 配音、自动字幕，输出 9:16 / 16:9 / 1:1 MP4。不使用大语言模型，引擎直连无需 API Key。
+> MoneyPrinterTurbo static edition：免费短视频生成器。输入主题或文案，在浏览器内生成本地旁白、关键词和带字幕的 WebM 成片。Cloudflare Workers + R2 纯静态托管，无回源后端，不使用大语言模型，无需 API Key。
 
-Updated: 2026-10-02. Version 1.3.7. Script <= 1500 characters. Video <= 180 seconds. Completion state is `complete`. New generation only.
+Updated: 2026-10-04. Version 1.3.7. Script <= 1500 characters. Video <= 180 seconds. Persist: IndexedDB. New generation only.
 
 ## Core pages
 
-- [首页](__ORIGIN__/): 填写主题一键生成配音字幕成片
-- [SaaS 文档](__ORIGIN__/docs): 认证、提交、轮询、下载，完成态 complete
-- [OpenAPI](__ORIGIN__/openapi.json): 机器可读 API 规格
-- [完整说明](__ORIGIN__/llms-full.txt): 产品事实、curl、FAQ 一次摄入
+- [首页](__ORIGIN__/): 官方浅色四栏 WebUI，浏览器内生成
+- [使用说明](__ORIGIN__/docs): 步骤、能力边界、FAQ
+- [完整说明](__ORIGIN__/llms-full.txt): 产品事实一次摄入
 - [Markdown 摘要](__ORIGIN__/llms.md): 给模型的短摘要
-- [AI 爬虫策略](__ORIGIN__/ai.txt): 允许 HTML，禁止 /api/
+- [AI 爬虫策略](__ORIGIN__/ai.txt): 允许 HTML
 - [humans.txt](__ORIGIN__/humans.txt): 站点维护信息
 - [security.txt](__ORIGIN__/.well-known/security.txt): 安全联系
 - [sitemap](__ORIGIN__/sitemap.xml): 可索引页面
 
-## Optional
-
-- [试听配音](__ORIGIN__/api/v1/voices/preview?voice=zh-CN-XiaoxiaoNeural): Edge TTS 预览
-- [音色与画幅](__ORIGIN__/api/v1/options): voices / aspects
-- [SaaS JSON](__ORIGIN__/docs/saas): 内部调用摘要
-
 ## Facts
 
-- Price: 0. LLM: disabled. Auth on engine: none.
-- Sources: Pexels, Pixabay. Voice: Edge TTS, fallback gTTS.
-- Aspects: 9:16, 16:9, 1:1. Complete state: complete. Failed state: failed.
-- Edit existing video: unsupported. Refresh keeps task_id downloads.
-
-## API
-
-POST __ORIGIN__/api/v1/videos with `video_subject` or `video_script`. Poll GET __ORIGIN__/api/v1/videos/{task_id} until `state=complete`. Then `/preview` or `/download`.
+- Price: 0. LLM: disabled. Auth: none. Origin API: none.
+- Hosting: Cloudflare Cache → R2 → Assets.
+- Output: browser Canvas + MediaRecorder WebM with burned-in subtitles.
+- Voice preview: browser SpeechSynthesis. Video has no TTS track.
+- Aspects: 9:16, 16:9. Persist: IndexedDB on the same browser.
+- Edit existing video: unsupported.
 
 ## English
 
-Free short-video generator. Enter a topic; the pipeline matches Pexels/Pixabay clips, synthesizes Edge TTS, burns subtitles, and exports MP4. No LLM. Script <= 1500 characters, video <= 180 seconds. New generation only.
+Free short-video generator hosted as a static Cloudflare Worker. Enter a topic; the browser builds a local script, keywords, and a subtitled WebM. No backend, no LLM, no API key. Script <= 1500 characters, video <= 180 seconds.

@@ -1,7 +1,7 @@
 {
   "name": "MoneyPrinterTurbo 免费 AI 短视频生成器",
   "short_name": "MoneyPrinterTurbo",
-  "description": "输入主题，一键生成带配音和字幕的高清短视频。免费，无需大模型。",
+  "description": "输入主题，浏览器内生成本地文案和带字幕的成片。Cloudflare 纯静态托管。",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

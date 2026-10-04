@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MoneyPrinterTurbo 免费 AI 短视频生成器 | 主题一键生成文案配音字幕成片</title>
-  <meta name="description" content="MoneyPrinterTurbo 免费在线 AI 短视频生成器：输入一个主题或关键词，自动生成视频文案、Pexels/Pixabay 素材、Edge TTS 配音、字幕与背景音乐，输出竖屏 9:16 / 横屏 16:9 / 方形 1:1 高清成片。无需大模型、无需 API Key，成片持久保存可随时下载。" />
-  <meta name="keywords" content="MoneyPrinterTurbo,AI短视频生成,免费视频生成器,一键生成短视频,文案生成视频,自动配音,自动字幕,竖屏视频,抖音视频生成,YouTube Shorts,Pexels,Pixabay,Edge TTS,开源短视频工具" />
+  <meta name="description" content="MoneyPrinterTurbo 免费短视频生成器：输入主题即可在浏览器内生成本地文案、关键词和带字幕的成片。Cloudflare 纯静态托管，无需后端、无需 API Key。" />
+  <meta name="keywords" content="MoneyPrinterTurbo,AI短视频生成,免费视频生成器,一键生成短视频,文案生成视频,浏览器成片,自动字幕,竖屏视频,抖音视频生成,YouTube Shorts,Cloudflare,开源短视频工具" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="author" content="MoneyPrinterTurbo" />
   <link rel="canonical" href="__ORIGIN__/" />
@@ -23,7 +23,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="MoneyPrinterTurbo" />
   <meta property="og:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
-  <meta property="og:description" content="输入一个主题，自动完成文案、素材、配音、字幕、配乐和成片。免费运营，无需大模型，成片持久可下载。" />
+  <meta property="og:description" content="输入一个主题，在浏览器内生成本地文案和带字幕的成片。Cloudflare 纯静态托管，无需后端。" />
   <meta property="og:url" content="__ORIGIN__/" />
   <meta property="og:image" content="__ORIGIN__/og.png" />
   <meta property="og:image:width" content="1200" />
@@ -33,7 +33,7 @@
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
-  <meta name="twitter:description" content="输入主题，一键生成带配音和字幕的高清短视频。免费、无需大模型。" />
+  <meta name="twitter:description" content="输入主题，浏览器内生成本地文案和带字幕的成片。免费、无需后端。" />
   <meta name="twitter:image" content="__ORIGIN__/og.png" />
   <meta name="twitter:image:alt" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <link rel="preload" href="/style.css" as="style" />
@@ -50,20 +50,19 @@
         "operatingSystem": "Web",
         "url": "__ORIGIN__/",
         "inLanguage": "zh-CN",
-        "description": "输入视频主题或关键词，自动生成文案、匹配 Pexels/Pixabay 素材、Edge TTS 配音、字幕与背景音乐，并合成竖屏或横屏高清短视频。",
+        "description": "输入视频主题或关键词，在浏览器内生成本地文案、关键词和带字幕的成片。Cloudflare 纯静态托管。",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY", "availability": "https://schema.org/InStock" },
         "featureList": [
-          "主题一键生成视频文案",
-          "Pexels / Pixabay 免费高清素材",
-          "Edge TTS 免费多音色配音",
-          "自动字幕与背景音乐",
-          "竖屏 9:16 / 横屏 16:9 / 方形 1:1",
-          "成片持久保存与下载",
-          "开放 SaaS API"
+          "主题一键生成本地文案",
+          "浏览器内字幕成片",
+          "浏览器语音合成试听",
+          "任务保存在本机 IndexedDB",
+          "竖屏 9:16 / 横屏 16:9",
+          "Cloudflare 纯静态托管"
         ],
         "creator": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "__ORIGIN__/" },
         "image": "__ORIGIN__/og.png",
-        "sameAs": ["__ORIGIN__/llms.txt", "__ORIGIN__/llms-full.txt", "__ORIGIN__/docs", "__ORIGIN__/openapi.json", "https://github.com/talleylinjg-ops/vMoneyPrinterTurbo"],
+        "sameAs": ["__ORIGIN__/llms.txt", "__ORIGIN__/llms-full.txt", "__ORIGIN__/docs", "https://github.com/talleylinjg-ops/vMoneyPrinterTurbo"],
         "softwareVersion": "1.3.7",
         "isAccessibleForFree": true,
         "availableLanguage": ["zh-CN", "en"]
@@ -95,12 +94,12 @@
       {
         "@type": "HowTo",
         "name": "用 MoneyPrinterTurbo 生成短视频",
-        "description": "输入主题，自动匹配素材、配音、字幕并合成成片。",
+        "description": "输入主题，浏览器内生成本地文案并渲染带字幕的成片。",
         "totalTime": "PT3M",
         "step": [
           { "@type": "HowToStep", "name": "填写主题", "text": "在首页填写视频主题或自定义文案，选择画幅。" },
-          { "@type": "HowToStep", "name": "生成", "text": "点击生成视频，系统自动检索 Pexels/Pixabay 素材并合成 Edge TTS 配音与字幕。" },
-          { "@type": "HowToStep", "name": "下载", "text": "完成后在预览区播放，或用 task_id 下载成片。刷新页面不会丢失。" }
+          { "@type": "HowToStep", "name": "生成", "text": "点击生成视频，浏览器生成本地文案、关键词，并渲染带字幕的成片。" },
+          { "@type": "HowToStep", "name": "下载", "text": "完成后在预览区播放或下载 WebM。任务保存在本机浏览器。" }
         ]
       },
       {
@@ -109,32 +108,32 @@
           {
             "@type": "Question",
             "name": "MoneyPrinterTurbo 收费吗？",
-            "acceptedAnswer": { "@type": "Answer", "text": "完全免费。素材来自 Pexels / Pixabay，配音使用 Edge TTS，不调用大模型。" }
+            "acceptedAnswer": { "@type": "Answer", "text": "完全免费。Cloudflare 纯静态托管，文案和成片都在浏览器完成。" }
           },
           {
             "@type": "Question",
             "name": "如何生成短视频？",
-            "acceptedAnswer": { "@type": "Answer", "text": "在首页填写视频主题或文案，选择画幅后点击生成。系统会自动匹配素材、配音、字幕并合成成片。" }
+            "acceptedAnswer": { "@type": "Answer", "text": "在首页填写视频主题或文案，选择画幅后点击生成。浏览器会生成本地文案并渲染带字幕的成片。" }
           },
           {
             "@type": "Question",
-            "name": "SaaS 如何调用？",
-            "acceptedAnswer": { "@type": "Answer", "text": "POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id} 直到 state=complete，再用 /preview 或 /download 取回成片。规格见 /openapi.json。" }
+            "name": "需要后端 API 吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "打开首页填写主题后点击生成。成片在浏览器内完成，任务保存在本机 IndexedDB。说明见 /docs。" }
           },
           {
             "@type": "Question",
             "name": "有哪些限制？",
-            "acceptedAnswer": { "@type": "Answer", "text": "文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。" }
+            "acceptedAnswer": { "@type": "Answer", "text": "文案最多 1500 字，成片约 180 秒。成片是浏览器渲染的字幕画面。不支持时间轴精修已有视频。" }
           },
           {
             "@type": "Question",
             "name": "成片会丢失吗？",
-            "acceptedAnswer": { "@type": "Answer", "text": "成片落盘保存。刷新页面后仍可用 task_id 预览和下载。" }
+            "acceptedAnswer": { "@type": "Answer", "text": "成片保存在本机 IndexedDB。同一浏览器刷新后仍可预览和下载。" }
           },
           {
             "@type": "Question",
             "name": "需要配置大模型吗？",
-            "acceptedAnswer": { "@type": "Answer", "text": "不需要。托管版关闭 LLM，文案和关键词在本地生成，素材来自 Pexels / Pixabay，配音使用 Edge TTS。" }
+            "acceptedAnswer": { "@type": "Answer", "text": "不需要。静态版关闭 LLM，文案和关键词在浏览器本地生成。" }
           }
         ]
       }
@@ -169,8 +168,8 @@
   </div>
   <div class="popover" id="settings-popover" hidden>
     <h3>设置</h3>
-    <p class="hint">托管版已内置 Pexels / Pixabay 与 Edge TTS，无需填写大模型 API Key。「配置大模型」入口与原站一致，本页不启用 LLM。</p>
-    <p class="hint">SaaS 文档：<a href="/docs">/docs</a>　OpenAPI：<a href="/openapi.json">/openapi.json</a></p>
+    <p class="hint">本站是 Cloudflare 纯静态页。文案、关键词、字幕成片和试听都在浏览器完成，无需 API Key，无回源后端。</p>
+    <p class="hint">说明：<a href="/docs">/docs</a>　GEO：<a href="/llms.txt">/llms.txt</a></p>
   </div>
 
   <main>
@@ -433,65 +432,48 @@
     <section class="card seo-block" id="about">
       <h2>产品事实</h2>
       <div class="seo-facts">
-        <div><strong>0 元</strong><span>引擎直连无需 Key，不调用大模型</span></div>
+        <div><strong>0 元</strong><span>Cloudflare 纯静态，无需 Key</span></div>
         <div><strong>1500 字</strong><span>文案上限，成片约 180 秒</span></div>
-        <div><strong>9:16 / 16:9</strong><span>竖屏与横屏，另支持 1:1</span></div>
-        <div><strong>complete</strong><span>完成态，失败为 failed</span></div>
+        <div><strong>9:16 / 16:9</strong><span>竖屏与横屏</span></div>
+        <div><strong>本机保存</strong><span>IndexedDB，刷新可再预览</span></div>
       </div>
-      <p>MoneyPrinterTurbo 托管版输入主题或文案，匹配 Pexels / Pixabay 素材、Edge TTS 配音和自动字幕，输出可下载 MP4。成片落盘，刷新后仍可用 task_id 预览下载。全新生成流水线，不支持时间轴精修已有视频。</p>
+      <p>MoneyPrinterTurbo 静态版输入主题或文案，在浏览器内生成本地旁白、关键词和带字幕的 WebM 成片。无回源后端，不调用大模型。全新生成流水线，不支持时间轴精修已有视频。</p>
     </section>
 
     <section class="card seo-block" id="saas">
-      <h2>SaaS 调用</h2>
-      <p>站点只需 POST 创建任务，再轮询状态。完整说明见 <a href="/docs">/docs</a>，机器规格见 <a href="/openapi.json">/openapi.json</a>，模型导览见 <a href="/llms.txt">/llms.txt</a>。</p>
-      <pre class="code">POST /api/v1/videos
-Content-Type: application/json
-
-{
-  "video_subject": "人工智能如何改变日常生活",
-  "video_script": "",
-  "video_terms": "artificial intelligence, daily life",
-  "language": "zh-CN",
-  "video_source": "pexels",
-  "aspect": "9:16",
-  "clip_duration": 3,
-  "voice_name": "zh-CN-XiaoxiaoNeural",
-  "subtitle_enabled": true
-}
-
-GET /api/v1/videos/{task_id}
-GET /api/v1/videos/{task_id}/preview
-GET /api/v1/videos/{task_id}/download
-GET /api/v1/options
-GET /docs
-GET /openapi.json</pre>
+      <h2>如何使用</h2>
+      <p>打开首页填写主题，点击生成。成片在浏览器内完成。说明见 <a href="/docs">/docs</a>，模型导览见 <a href="/llms.txt">/llms.txt</a>。</p>
+      <pre class="code">1. 填写视频主题或自定义文案
+2. 选择画幅 9:16 或 16:9
+3. 点击「生成视频」
+4. 预览或下载 WebM
+5. 同一浏览器刷新后，任务管理可再取回</pre>
     </section>
 
     <section class="card seo-block" id="faq">
       <h2>常见问题</h2>
       <h3>MoneyPrinterTurbo 收费吗？</h3>
-      <p>完全免费。素材来自 Pexels / Pixabay，配音使用 Edge TTS，不调用大模型。</p>
+      <p>完全免费。Cloudflare 纯静态托管，文案和成片都在浏览器完成。</p>
       <h3>如何生成短视频？</h3>
-      <p>在首页填写视频主题或文案，选择画幅后点击生成。系统会自动匹配素材、配音、字幕并合成成片。</p>
-      <h3>SaaS 如何调用？</h3>
-      <p>POST /api/v1/videos 提交任务，轮询 GET /api/v1/videos/{task_id} 直到 state=complete，再用 /preview 或 /download 取回成片。规格见 /openapi.json，说明见 /docs。</p>
+      <p>在首页填写视频主题或文案，选择画幅后点击生成。浏览器会生成本地文案并渲染带字幕的成片。</p>
+      <h3>需要后端 API 吗？</h3>
+      <p>不需要。本站无回源。打开首页即可生成，任务保存在本机 IndexedDB。说明见 /docs。</p>
       <h3>有哪些限制？</h3>
-      <p>文案最多 1500 字，成片约 180 秒。这是全新生成流水线，不支持时间轴精修已有视频。</p>
+      <p>文案最多 1500 字，成片约 180 秒。成片是浏览器渲染的字幕画面。全新生成流水线，没有时间轴精修。</p>
       <h3>成片会丢失吗？</h3>
-      <p>成片落盘保存。刷新页面后仍可用 task_id 预览和下载。</p>
+      <p>成片保存在本机 IndexedDB。同一浏览器刷新后仍可预览和下载。</p>
       <h3>需要配置大模型吗？</h3>
-      <p>不需要。托管版关闭 LLM，文案和关键词在本地生成，素材来自 Pexels / Pixabay，配音使用 Edge TTS。</p>
+      <p>不需要。静态版关闭 LLM，文案和关键词在浏览器本地生成。</p>
     </section>
   </main>
   <footer>
-    <span>MoneyPrinterTurbo hosted edition v1.3.7</span>
-    <a href="/docs">SaaS 文档</a>
+    <span>MoneyPrinterTurbo static edition v1.3.7</span>
+    <a href="/docs">使用说明</a>
     <a href="/llms.txt">llms.txt</a>
-    <a href="/openapi.json">OpenAPI</a>
     <a href="https://github.com/talleylinjg-ops/vMoneyPrinterTurbo">GitHub</a>
   </footer>
   <noscript>
-    <p>MoneyPrinterTurbo 免费短视频生成器。填写主题即可匹配 Pexels / Pixabay 素材、Edge TTS 配音和字幕。文档：<a href="/docs">/docs</a>，模型阅读：<a href="/llms.txt">/llms.txt</a>。</p>
+    <p>MoneyPrinterTurbo 免费短视频生成器。填写主题即可在浏览器内生成本地文案和带字幕的成片。文档：<a href="/docs">/docs</a>，模型阅读：<a href="/llms.txt">/llms.txt</a>。</p>
   </noscript>
   <script src="/app.js"></script>
 </body>

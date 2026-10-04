@@ -5,15 +5,12 @@ Allow: /llms-full.txt
 Allow: /llms.md
 Allow: /ai.txt
 Allow: /docs
-Allow: /openapi.json
 Allow: /.well-known/llms.txt
 Allow: /.well-known/ai.txt
 Allow: /.well-known/security.txt
-Disallow: /api/
 
 User-agent: GPTBot
 Allow: /
-Disallow: /api/
 
 User-agent: OAI-SearchBot
 Allow: /

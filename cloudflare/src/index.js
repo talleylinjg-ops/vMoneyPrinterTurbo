@@ -1,5 +1,3 @@
-const PROXY_PREFIXES = ["/api/"];
-const PROXY_EXACT = ["/health", "/docs/saas"];
 const REWRITE_KEYS = new Set([
   "index.html",
   "docs.html",
@@ -23,20 +21,6 @@ const CONTENT_TYPES = {
   png: "image/png",
   webmanifest: "application/manifest+json",
 };
-
-function shouldProxy(pathname) {
-  return PROXY_PREFIXES.some((p) => pathname.startsWith(p)) || PROXY_EXACT.includes(pathname);
-}
-
-function corsHeaders() {
-  return {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Range, Authorization, x-api-key",
-    "Access-Control-Expose-Headers":
-      "Content-Range, Content-Length, Accept-Ranges, Content-Disposition",
-  };
-}
 
 function cacheControl(pathname) {
   if (
@@ -92,15 +76,12 @@ function robotsTxt(origin) {
     "Allow: /llms.md",
     "Allow: /ai.txt",
     "Allow: /docs",
-    "Allow: /openapi.json",
     "Allow: /.well-known/llms.txt",
     "Allow: /.well-known/ai.txt",
     "Allow: /.well-known/security.txt",
-    "Disallow: /api/",
     "",
     "User-agent: GPTBot",
     "Allow: /",
-    "Disallow: /api/",
     "",
     "User-agent: OAI-SearchBot",
     "Allow: /",
@@ -175,20 +156,16 @@ function engineOpenApi(origin) {
   return {
     openapi: "3.0.3",
     info: {
-      title: "MoneyPrinterTurbo Video API",
+      title: "MoneyPrinterTurbo Static WebUI",
       version: "1.3.7",
-      description: "POST 主题即可异步生成配音字幕成片。不支持时间轴精修。",
+      description: "Cloudflare 纯静态站点。文案、关键词、字幕成片和浏览器配音都在前端完成，无回源 API。",
     },
     servers: [{ url: origin }],
     paths: {
-      "/api/v1/videos": { post: { summary: "提交生成任务" } },
-      "/api/v1/videos/{task_id}": { get: { summary: "查询进度" } },
-      "/api/v1/videos/{task_id}/preview": { get: { summary: "预览 MP4" } },
-      "/api/v1/videos/{task_id}/download": { get: { summary: "下载 MP4" } },
-      "/api/v1/options": { get: { summary: "音色与画幅" } },
-      "/api/v1/voices/preview": { get: { summary: "试听配音" } },
-      "/api/v1/script": { post: { summary: "本地生成文案" } },
-      "/api/v1/terms": { post: { summary: "本地生成关键词" } },
+      "/": { get: { summary: "官方浅色四栏 WebUI，浏览器内生成" } },
+      "/docs": { get: { summary: "静态使用说明" } },
+      "/llms.txt": { get: { summary: "GEO 导览" } },
+      "/health": { get: { summary: "边缘健康检查" } },
     },
   };
 }
@@ -201,8 +178,6 @@ function sitemapXml(origin) {
     ["/llms.txt", "0.8", "weekly"],
     ["/llms-full.txt", "0.7", "weekly"],
     ["/llms.md", "0.6", "weekly"],
-    ["/docs/saas", "0.6", "weekly"],
-    ["/openapi.json", "0.7", "weekly"],
     ["/ai.txt", "0.5", "weekly"],
     ["/humans.txt", "0.3", "monthly"],
     ["/.well-known/security.txt", "0.3", "monthly"],
@@ -216,29 +191,6 @@ function sitemapXml(origin) {
     )
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
-}
-
-function originDownPage(origin) {
-  return `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>生成服务暂时不可用 | MoneyPrinterTurbo</title>
-  <style>
-    body { font-family: "Source Sans Pro", "Noto Sans CJK SC", sans-serif; background:#ffffff; color:#262730; display:grid; place-items:center; min-height:100vh; margin:0; }
-    main { max-width: 520px; padding: 32px; }
-    a { color:#0068c9; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>浏览页在边缘，生成接口需后端</h1>
-    <p>静态前台已由 Cloudflare Cache / R2 / Assets 托管，不依赖源站。视频生成、预览、下载需要后端在线。</p>
-    <p><a href="${origin}/">返回首页</a></p>
-  </main>
-</body>
-</html>`;
 }
 
 function withEdgeHeaders(headers, servedFrom, pathname) {
@@ -256,53 +208,10 @@ function finalize(body, status, headers) {
   return new Response(body, { status, headers });
 }
 
-async function proxyOrigin(request, env, url) {
-  const origin = (env.BACKEND_ORIGIN || "").replace(/\/+$/, "");
-  if (!origin) {
-    return Response.json({ error: "BACKEND_ORIGIN is not configured" }, { status: 500 });
-  }
-
-  const target = new URL(url.pathname + url.search, origin);
-  const headers = new Headers(request.headers);
-  headers.set("Host", new URL(origin).host);
-  headers.set("X-Forwarded-Host", url.host);
-  headers.set("X-Forwarded-Proto", url.protocol.replace(":", ""));
-  headers.delete("cf-connecting-ip");
-
-  const init = {
-    method: request.method,
-    headers,
-    redirect: "manual",
-  };
-  if (request.method !== "GET" && request.method !== "HEAD") {
-    init.body = request.body;
-    init.duplex = "half";
-  }
-
-  let upstream;
-  try {
-    upstream = await fetch(target.toString(), init);
-  } catch (err) {
-    const out = new Headers(corsHeaders());
-    out.set("x-served-from", "origin-down");
-    if (url.pathname.startsWith("/api/")) {
-      return Response.json(
-        { error: "backend unreachable", detail: String(err) },
-        { status: 502, headers: out }
-      );
-    }
-    out.set("content-type", "text/html; charset=utf-8");
-    return new Response(originDownPage(url.origin), { status: 503, headers: out });
-  }
-
-  const outHeaders = new Headers(upstream.headers);
-  for (const [k, v] of Object.entries(corsHeaders())) outHeaders.set(k, v);
-  outHeaders.set("x-served-from", "origin-api");
-  return new Response(upstream.body, {
-    status: upstream.status,
-    statusText: upstream.statusText,
-    headers: outHeaders,
-  });
+function jsonResponse(data, pathname, servedFrom = "edge-static") {
+  const headers = withEdgeHeaders(new Headers(), servedFrom, pathname);
+  headers.set("content-type", "application/json; charset=utf-8");
+  return finalize(JSON.stringify(data), 200, headers);
 }
 
 async function fromR2(env, key, origin) {
@@ -374,12 +283,28 @@ export default {
     const url = new URL(request.url);
     const origin = url.origin;
 
-    if (request.method === "OPTIONS" && shouldProxy(url.pathname)) {
-      return new Response(null, { status: 204, headers: corsHeaders() });
+    if (url.pathname === "/health") {
+      return jsonResponse(
+        { status: "ok", service: "MoneyPrinterTurbo", version: "1.3.7", mode: "static-edge" },
+        url.pathname
+      );
     }
 
-    if (shouldProxy(url.pathname)) {
-      return proxyOrigin(request, env, url);
+    if (url.pathname === "/docs/saas") {
+      return jsonResponse(
+        {
+          title: "静态站点说明",
+          origin,
+          mode: "browser",
+          auth: "none",
+          generate: "浏览器内文案、关键词、字幕成片与语音合成",
+          persist: "IndexedDB",
+          complete_state: "complete",
+          failed_state: "failed",
+          limits: { max_script_chars: 1500, max_video_seconds: 180, llm: false, origin_api: false },
+        },
+        url.pathname
+      );
     }
 
     if (url.pathname === "/robots.txt") {
