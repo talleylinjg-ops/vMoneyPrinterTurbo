@@ -133,6 +133,10 @@ export function saasSpec(origin) {
           properties: {
             task_id: { type: "string" },
             state: { type: "string", example: "queued" },
+            status_url: { type: "string" },
+            preview: { type: "string" },
+            download: { type: "string" },
+            poll_after_ms: { type: "integer", example: 1500 },
           },
         },
         Task: {
@@ -146,6 +150,10 @@ export function saasSpec(origin) {
             script: { type: "string" },
             duration: { type: "number" },
             file_size: { type: "number" },
+            status_url: { type: "string" },
+            preview: { type: "string" },
+            download: { type: "string" },
+            poll_after_ms: { type: "integer" },
           },
         },
       },

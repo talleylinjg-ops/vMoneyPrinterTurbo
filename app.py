@@ -47,6 +47,7 @@ app.add_middleware(
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Range", "Content-Length", "Accept-Ranges", "Content-Disposition"],
 )
 
 
@@ -97,10 +98,24 @@ class VideoParams(BaseModel):
     rounded_subtitle_bg: bool = False
 
 
-def public_task(task: dict) -> dict:
+def public_task(task: dict, origin: str = "") -> dict:
+    tid = task.get("task_id")
+    state = task.get("state")
+    pending = state not in ("complete", "failed")
+    preview = f"/api/v1/videos/{tid}/preview" if tid else None
+    download = f"/api/v1/videos/{tid}/download" if tid else None
+    video = f"/api/v1/videos/{tid}/file" if tid else None
+    status_path = f"/api/v1/videos/{tid}" if tid else None
+    if origin and tid:
+        preview = f"{origin}{preview}"
+        download = f"{origin}{download}"
+        video = f"{origin}{video}"
+        status_url = f"{origin}{status_path}"
+    else:
+        status_url = status_path
     return {
-        "task_id": task.get("task_id"),
-        "state": task.get("state"),
+        "task_id": tid,
+        "state": state,
         "progress": task.get("progress", 0),
         "stage": task.get("stage"),
         "error": task.get("error"),
@@ -111,9 +126,11 @@ def public_task(task: dict) -> dict:
         "created_at": task.get("created_at"),
         "updated_at": task.get("updated_at"),
         "params": task.get("params"),
-        "preview": task.get("preview"),
-        "download": task.get("download"),
-        "video": task.get("video"),
+        "preview": preview,
+        "download": download,
+        "video": video,
+        "status_url": status_url,
+        "poll_after_ms": 1500 if pending else 0,
     }
 
 
@@ -162,6 +179,12 @@ async def robots(request: Request):
                 "Allow: /llms.md",
                 "Allow: /ai.txt",
                 "Allow: /docs",
+                "Allow: /en",
+                "Allow: /guide",
+                "Allow: /index.md",
+                "Allow: /en.md",
+                "Allow: /guide.md",
+                "Allow: /docs.md",
                 "Allow: /openapi.json",
                 "Allow: /.well-known/llms.txt",
                 "Allow: /.well-known/ai.txt",
@@ -229,6 +252,30 @@ async def robots(request: Request):
                 "User-agent: LinkedInBot",
                 "Allow: /",
                 "",
+                "User-agent: Applebot",
+                "Allow: /",
+                "",
+                "User-agent: Perplexity-User",
+                "Allow: /",
+                "",
+                "User-agent: YouBot",
+                "Allow: /",
+                "",
+                "User-agent: cohere-ai",
+                "Allow: /",
+                "",
+                "User-agent: Diffbot",
+                "Allow: /",
+                "",
+                "User-agent: GoogleOther",
+                "Allow: /",
+                "",
+                "User-agent: Meta-ExternalFetcher",
+                "Allow: /",
+                "",
+                "User-agent: Timpibot",
+                "Allow: /",
+                "",
                 f"Sitemap: {origin}/sitemap.xml",
                 f"Host: {origin}",
                 "",
@@ -248,27 +295,42 @@ async def robots(request: Request):
 async def sitemap(request: Request):
     origin = public_origin(request)
     lastmod = time.strftime("%Y-%m-%d", time.gmtime())
-    urls = [
-        ("/", "1.0", "daily"),
-        ("/docs", "0.8", "weekly"),
-        ("/llms.txt", "0.8", "weekly"),
-        ("/llms-full.txt", "0.7", "weekly"),
-        ("/llms.md", "0.6", "weekly"),
-        ("/docs/saas", "0.6", "weekly"),
-        ("/openapi.json", "0.7", "weekly"),
-        ("/ai.txt", "0.5", "weekly"),
-        ("/humans.txt", "0.3", "monthly"),
-        ("/.well-known/security.txt", "0.3", "monthly"),
-        ("/.well-known/llms.txt", "0.6", "weekly"),
-        ("/.well-known/ai.txt", "0.5", "weekly"),
-    ]
-    items = "\n".join(
-        f"  <url><loc>{origin}{path}</loc><lastmod>{lastmod}</lastmod><changefreq>{freq}</changefreq><priority>{prio}</priority></url>"
-        for path, prio, freq in urls
+    hreflang = (
+        f'    <xhtml:link rel="alternate" hreflang="zh-CN" href="{origin}/" />\n'
+        f'    <xhtml:link rel="alternate" hreflang="en" href="{origin}/en" />\n'
+        f'    <xhtml:link rel="alternate" hreflang="x-default" href="{origin}/" />'
     )
+    urls = [
+        ("/", "1.0", "daily", hreflang),
+        ("/en", "0.9", "weekly", hreflang),
+        ("/guide", "0.85", "weekly", ""),
+        ("/docs", "0.8", "weekly", ""),
+        ("/index.md", "0.7", "weekly", ""),
+        ("/en.md", "0.65", "weekly", ""),
+        ("/guide.md", "0.6", "weekly", ""),
+        ("/docs.md", "0.6", "weekly", ""),
+        ("/llms.txt", "0.8", "weekly", ""),
+        ("/llms-full.txt", "0.7", "weekly", ""),
+        ("/llms.md", "0.6", "weekly", ""),
+        ("/docs/saas", "0.6", "weekly", ""),
+        ("/openapi.json", "0.7", "weekly", ""),
+        ("/ai.txt", "0.5", "weekly", ""),
+        ("/humans.txt", "0.3", "monthly", ""),
+        ("/.well-known/security.txt", "0.3", "monthly", ""),
+        ("/.well-known/llms.txt", "0.6", "weekly", ""),
+        ("/.well-known/ai.txt", "0.5", "weekly", ""),
+    ]
+    blocks = []
+    for path, prio, freq, extra in urls:
+        core = (
+            f"  <url>\n    <loc>{origin}{path}</loc>\n    <lastmod>{lastmod}</lastmod>\n"
+            f"    <changefreq>{freq}</changefreq>\n    <priority>{prio}</priority>"
+        )
+        blocks.append(f"{core}\n{extra}\n  </url>" if extra else f"{core}\n  </url>")
+    items = "\n".join(blocks)
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
         f"{items}\n"
         "</urlset>\n"
     )
@@ -278,8 +340,7 @@ async def sitemap(request: Request):
 def rewrite_origin(text: str, origin: str) -> str:
     return (
         text.replace("__ORIGIN__", origin)
-        .replace("https://moneyprinterturbo.talley-linjg.workers.dev", origin)
-        .replace("https://moneyprinterturbo.pages.dev", origin)
+        .replace("https://moneyprinterturbo.chacha.asia", origin)
     )
 
 
@@ -350,6 +411,20 @@ async def docs_html(request: Request):
     return HTMLResponse(html, headers={"Cache-Control": "public, max-age=300", "X-Served-From": "origin-html"})
 
 
+@app.get("/en", include_in_schema=False)
+async def en_html(request: Request):
+    origin = public_origin(request)
+    html = rewrite_origin((STATIC / "en.html").read_text(encoding="utf-8"), origin)
+    return HTMLResponse(html, headers={"Cache-Control": "public, max-age=300", "X-Served-From": "origin-html"})
+
+
+@app.get("/guide", include_in_schema=False)
+async def guide_html(request: Request):
+    origin = public_origin(request)
+    html = rewrite_origin((STATIC / "guide.html").read_text(encoding="utf-8"), origin)
+    return HTMLResponse(html, headers={"Cache-Control": "public, max-age=300", "X-Served-From": "origin-html"})
+
+
 @app.get("/api/v1/options")
 async def options():
     return {
@@ -401,7 +476,7 @@ async def voice_preview(voice: str = Query("zh-CN-XiaoxiaoNeural")):
 
 
 @app.post("/api/v1/videos")
-async def create_video(params: VideoParams):
+async def create_video(params: VideoParams, request: Request):
     subject = (params.video_subject or "").strip()
     script = (params.video_script or "").strip()
     if not subject and not script:
@@ -420,20 +495,22 @@ async def create_video(params: VideoParams):
     }
     save_task(task)
     running[task_id] = asyncio.create_task(run_job(task_id))
-    return {"task_id": task_id, "state": "queued"}
+    origin = public_origin(request)
+    return public_task(task, origin)
 
 
 @app.get("/api/v1/videos")
-async def videos():
-    return {"items": [public_task(t) for t in list_tasks()]}
+async def videos(request: Request):
+    origin = public_origin(request)
+    return {"items": [public_task(t, origin) for t in list_tasks()]}
 
 
 @app.get("/api/v1/videos/{task_id}")
-async def video_status(task_id: str):
+async def video_status(task_id: str, request: Request):
     task = load_task(task_id)
     if not task:
         raise HTTPException(404, "task not found")
-    return public_task(task)
+    return public_task(task, public_origin(request))
 
 
 def task_file(task_id: str) -> Path:
@@ -443,14 +520,30 @@ def task_file(task_id: str) -> Path:
     return path
 
 
-@app.get("/api/v1/videos/{task_id}/file")
-@app.get("/api/v1/videos/{task_id}/preview")
+def mp4_headers(extra: Optional[dict] = None) -> dict:
+    headers = {
+        "Accept-Ranges": "bytes",
+        "Cache-Control": "public, max-age=86400, immutable",
+        "X-Content-Type-Options": "nosniff",
+    }
+    if extra:
+        headers.update(extra)
+    return headers
+
+
+@app.api_route("/api/v1/videos/{task_id}/file", methods=["GET", "HEAD"])
+@app.api_route("/api/v1/videos/{task_id}/preview", methods=["GET", "HEAD"])
 async def preview(task_id: str):
     path = task_file(task_id)
-    return FileResponse(path, media_type="video/mp4", filename=f"{task_id}.mp4", headers={"Accept-Ranges": "bytes", "Cache-Control": "public, max-age=86400"})
+    return FileResponse(
+        path,
+        media_type="video/mp4",
+        filename=f"{task_id}.mp4",
+        headers=mp4_headers({"Content-Disposition": f'inline; filename="{task_id}.mp4"'}),
+    )
 
 
-@app.get("/api/v1/videos/{task_id}/download")
+@app.api_route("/api/v1/videos/{task_id}/download", methods=["GET", "HEAD"])
 async def download(task_id: str):
     path = task_file(task_id)
     task = load_task(task_id) or {}
@@ -461,11 +554,9 @@ async def download(task_id: str):
         path,
         media_type="video/mp4",
         filename=f"{ascii_name}.mp4",
-        headers={
+        headers=mp4_headers({
             "Content-Disposition": f"attachment; filename=\"{ascii_name}.mp4\"; filename*=UTF-8''{utf_name}",
-            "Cache-Control": "public, max-age=86400",
-            "Accept-Ranges": "bytes",
-        },
+        }),
     )
 
 
@@ -491,12 +582,18 @@ def engine_openapi(origin: str) -> dict:
                             }
                         },
                     },
-                    "responses": {"200": {"description": "{task_id,state}"}},
+                    "responses": {"200": {"description": "{task_id,state,status_url,preview,download,poll_after_ms}"}},
                 }
             },
-            "/api/v1/videos/{task_id}": {"get": {"summary": "查询进度", "responses": {"200": {"description": "Task"}}}},
-            "/api/v1/videos/{task_id}/preview": {"get": {"summary": "预览 MP4"}},
-            "/api/v1/videos/{task_id}/download": {"get": {"summary": "下载 MP4"}},
+            "/api/v1/videos/{task_id}": {
+                "get": {
+                    "summary": "查询进度",
+                    "description": "按 poll_after_ms 轮询。state=complete 后用 preview/download 绝对 URL 取片。",
+                    "responses": {"200": {"description": "Task"}},
+                }
+            },
+            "/api/v1/videos/{task_id}/preview": {"get": {"summary": "预览 MP4，支持 Range"}},
+            "/api/v1/videos/{task_id}/download": {"get": {"summary": "下载 MP4，支持 Range"}},
             "/api/v1/options": {"get": {"summary": "音色与画幅"}},
             "/api/v1/voices/preview": {"get": {"summary": "试听配音"}},
             "/api/v1/script": {"post": {"summary": "本地生成文案"}},
@@ -514,8 +611,20 @@ def engine_openapi(origin: str) -> dict:
                         "voice_name": {"type": "string"},
                         "subtitle_enabled": {"type": "boolean"},
                     },
-                }
-            }
+                },
+                "Task": {
+                    "type": "object",
+                    "properties": {
+                        "task_id": {"type": "string"},
+                        "state": {"type": "string", "enum": ["queued", "processing", "complete", "failed"]},
+                        "progress": {"type": "number"},
+                        "status_url": {"type": "string"},
+                        "preview": {"type": "string"},
+                        "download": {"type": "string"},
+                        "poll_after_ms": {"type": "integer"},
+                    },
+                },
+            },
         },
     }
 
@@ -537,6 +646,7 @@ async def saas_help(request: Request):
         "create": {
             "method": "POST",
             "path": "/api/v1/videos",
+            "url": f"{origin}/api/v1/videos",
             "body": {
                 "video_subject": "人工智能如何改变日常生活",
                 "video_script": "可选，不填则按主题生成默认文案",
@@ -549,11 +659,19 @@ async def saas_help(request: Request):
                 "subtitle_enabled": True,
             },
         },
-        "poll": "GET /api/v1/videos/{task_id}",
-        "preview": "GET /api/v1/videos/{task_id}/preview",
-        "download": "GET /api/v1/videos/{task_id}/download",
+        "poll": {
+            "method": "GET",
+            "path": "/api/v1/videos/{task_id}",
+            "interval_ms": 1500,
+            "complete_state": "complete",
+            "failed_state": "failed",
+            "use_urls": "complete 后直接用返回的 preview / download 绝对地址",
+        },
+        "preview": f"{origin}/api/v1/videos/{{task_id}}/preview",
+        "download": f"{origin}/api/v1/videos/{{task_id}}/download",
         "complete_state": "complete",
         "failed_state": "failed",
+        "range": "GET/HEAD 支持 Range 断点续传，二次下载走 Cloudflare R2",
         "limits": {
             "max_script_chars": MAX_CHARS,
             "max_video_seconds": MAX_SECONDS,

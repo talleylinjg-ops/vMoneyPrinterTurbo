@@ -5,12 +5,21 @@ Allow: /llms-full.txt
 Allow: /llms.md
 Allow: /ai.txt
 Allow: /docs
+Allow: /en
+Allow: /guide
+Allow: /index.md
+Allow: /en.md
+Allow: /guide.md
+Allow: /docs.md
+Allow: /openapi.json
 Allow: /.well-known/llms.txt
 Allow: /.well-known/ai.txt
 Allow: /.well-known/security.txt
+Disallow: /api/
 
 User-agent: GPTBot
 Allow: /
+Disallow: /api/
 
 User-agent: OAI-SearchBot
 Allow: /
@@ -69,11 +78,41 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-Sitemap: __ORIGIN__/sitemap.xml
-Host: __ORIGIN__
+User-agent: Applebot
+Allow: /
 
-# GEO: __ORIGIN__/llms.txt
-# GEO-full: __ORIGIN__/llms-full.txt
-# GEO-md: __ORIGIN__/llms.md
-# AI: __ORIGIN__/ai.txt
-# Humans: __ORIGIN__/humans.txt
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: Timpibot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+Sitemap: https://moneyprinterturbo.chacha.asia/sitemap.xml
+Host: https://moneyprinterturbo.chacha.asia
+
+# GEO: https://moneyprinterturbo.chacha.asia/llms.txt
+# GEO-full: https://moneyprinterturbo.chacha.asia/llms-full.txt
+# GEO-md: https://moneyprinterturbo.chacha.asia/llms.md
+# AI: https://moneyprinterturbo.chacha.asia/ai.txt
+# Humans: https://moneyprinterturbo.chacha.asia/humans.txt

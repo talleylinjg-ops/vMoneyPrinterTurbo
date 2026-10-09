@@ -76,11 +76,45 @@ async function logUsage(userId, taskId, endpoint, subject, status) {
   );
 }
 
+function portalOrigin(req) {
+  const proto = req.headers["x-forwarded-proto"] || req.protocol || "https";
+  const host = req.headers["x-forwarded-host"] || req.headers.host;
+  return `${proto}://${host}`.replace(/\/$/, "");
+}
+
+function rewriteTaskUrls(data, origin) {
+  if (!data || typeof data !== "object") return data;
+  const items = Array.isArray(data.items) ? data.items : [data];
+  for (const item of items) {
+    if (!item || !item.task_id) continue;
+    const tid = item.task_id;
+    item.status_url = `${origin}/api/proxy/v1/videos/${tid}`;
+    item.preview = `${origin}/api/proxy/v1/videos/${tid}/preview`;
+    item.download = `${origin}/api/proxy/v1/videos/${tid}/download`;
+    item.video = `${origin}/api/proxy/v1/videos/${tid}/file`;
+    if (item.poll_after_ms == null) {
+      item.poll_after_ms = item.state === "complete" || item.state === "failed" ? 0 : 1500;
+    }
+  }
+  return data;
+}
+
+function engineFetchHeaders(req, json = false) {
+  const headers = engineHeaders(json);
+  const proto = req.headers["x-forwarded-proto"] || req.protocol || "https";
+  const host = req.headers["x-forwarded-host"] || req.headers.host;
+  if (host) headers["X-Forwarded-Host"] = host;
+  if (proto) headers["X-Forwarded-Proto"] = proto;
+  const range = req.headers.range || req.headers.Range;
+  if (range) headers.Range = range;
+  return headers;
+}
+
 async function proxyJson(req, res, targetPath, { method = "GET", body } = {}) {
   try {
     const mptRes = await fetch(`${MPT_API_BASE}${targetPath}`, {
       method,
-      headers: engineHeaders(Boolean(body)),
+      headers: engineFetchHeaders(req, Boolean(body)),
       body: body ? JSON.stringify(body) : undefined,
     });
     const text = await mptRes.text();
@@ -90,7 +124,7 @@ async function proxyJson(req, res, targetPath, { method = "GET", body } = {}) {
     } catch {
       data = { message: text || "视频服务返回异常" };
     }
-    return res.status(mptRes.status).json(data);
+    return res.status(mptRes.status).json(rewriteTaskUrls(data, portalOrigin(req)));
   } catch {
     return res.status(502).json({ status: 502, message: "视频服务暂不可用，请稍后重试" });
   }
@@ -99,7 +133,8 @@ async function proxyJson(req, res, targetPath, { method = "GET", body } = {}) {
 async function proxyBinary(req, res, targetPath) {
   try {
     const mptRes = await fetch(`${MPT_API_BASE}${targetPath}`, {
-      headers: engineHeaders(),
+      method: req.method,
+      headers: engineFetchHeaders(req),
     });
     res.status(mptRes.status);
     const contentType = mptRes.headers.get("content-type") || "application/octet-stream";
@@ -108,9 +143,17 @@ async function proxyBinary(req, res, targetPath) {
     if (cd) res.setHeader("Content-Disposition", cd);
     const acceptRanges = mptRes.headers.get("accept-ranges");
     if (acceptRanges) res.setHeader("Accept-Ranges", acceptRanges);
-    if (!mptRes.body) {
-      const buf = Buffer.from(await mptRes.arrayBuffer());
-      return res.send(buf);
+    const contentRange = mptRes.headers.get("content-range");
+    if (contentRange) res.setHeader("Content-Range", contentRange);
+    const contentLength = mptRes.headers.get("content-length");
+    if (contentLength) res.setHeader("Content-Length", contentLength);
+    res.setHeader("Access-Control-Expose-Headers", "Content-Range, Content-Length, Accept-Ranges, Content-Disposition");
+    if (req.method === "HEAD" || !mptRes.body) {
+      if (!mptRes.body) {
+        const buf = Buffer.from(await mptRes.arrayBuffer());
+        return res.send(buf);
+      }
+      return res.end();
     }
     Readable.fromWeb(mptRes.body).pipe(res);
   } catch {
@@ -128,10 +171,10 @@ router.post("/v1/videos", verifyApiKey, async (req, res) => {
   try {
     const mptRes = await fetch(`${MPT_API_BASE}/api/v1/videos`, {
       method: "POST",
-      headers: engineHeaders(true),
+      headers: engineFetchHeaders(req, true),
       body: JSON.stringify(body),
     });
-    const data = await mptRes.json().catch(() => ({}));
+    const data = rewriteTaskUrls(await mptRes.json().catch(() => ({})), portalOrigin(req));
     const taskId = data.task_id || data.data?.task_id;
     if (mptRes.ok && taskId) {
       await logUsage(req.user.id, taskId, "/api/v1/videos", body.video_subject, "success");
@@ -148,10 +191,19 @@ router.post("/v1/videos", verifyApiKey, async (req, res) => {
 router.get("/v1/videos/:taskId/preview", verifyApiKey, (req, res) =>
   proxyBinary(req, res, `/api/v1/videos/${req.params.taskId}/preview`)
 );
+router.head("/v1/videos/:taskId/preview", verifyApiKey, (req, res) =>
+  proxyBinary(req, res, `/api/v1/videos/${req.params.taskId}/preview`)
+);
 router.get("/v1/videos/:taskId/download", verifyApiKey, (req, res) =>
   proxyBinary(req, res, `/api/v1/videos/${req.params.taskId}/download`)
 );
+router.head("/v1/videos/:taskId/download", verifyApiKey, (req, res) =>
+  proxyBinary(req, res, `/api/v1/videos/${req.params.taskId}/download`)
+);
 router.get("/v1/videos/:taskId/file", verifyApiKey, (req, res) =>
+  proxyBinary(req, res, `/api/v1/videos/${req.params.taskId}/file`)
+);
+router.head("/v1/videos/:taskId/file", verifyApiKey, (req, res) =>
   proxyBinary(req, res, `/api/v1/videos/${req.params.taskId}/file`)
 );
 router.get("/v1/videos/:taskId", verifyApiKey, (req, res) =>

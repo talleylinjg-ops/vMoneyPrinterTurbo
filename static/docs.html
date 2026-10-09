@@ -3,66 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>使用说明 | MoneyPrinterTurbo 免费短视频生成器</title>
-  <meta name="description" content="MoneyPrinterTurbo 静态站点说明：填写主题后在浏览器内生成本地文案、关键词和带字幕的成片。Cloudflare 纯静态托管，无需 API、无需 Key。文案 1500 字，成片约 180 秒。" />
-  <meta name="keywords" content="MoneyPrinterTurbo,免费视频生成,浏览器成片,Cloudflare Workers,静态站点,字幕视频" />
+  <title>SaaS 调用文档 | MoneyPrinterTurbo 免费短视频生成 API</title>
+  <meta name="description" content="MoneyPrinterTurbo SaaS 文档：POST /api/v1/videos 提交主题，轮询 task_id，完成后预览或下载成片。免费、无需大模型、无需 API Key。文案 1500 字，成片约 180 秒。" />
+  <meta name="keywords" content="MoneyPrinterTurbo API,短视频生成API,OpenAPI,SaaS,免费视频生成,Pexels,Pixabay,Edge TTS" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="author" content="MoneyPrinterTurbo" />
-  <link rel="canonical" href="__ORIGIN__/docs" />
+  <link rel="canonical" href="https://moneyprinterturbo.chacha.asia/docs" />
   <meta name="theme-color" content="#ffffff" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
   <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs full" />
   <link rel="alternate" type="text/markdown" href="/llms.md" title="LLMs markdown" />
+  <link rel="alternate" type="text/markdown" href="/docs.md" title="Docs markdown" />
   <link rel="alternate" type="text/plain" href="/.well-known/llms.txt" title="Well-known LLMs.txt" />
-  <link rel="alternate" hreflang="zh-CN" href="__ORIGIN__/docs" />
-  <link rel="alternate" hreflang="en" href="__ORIGIN__/docs" />
-  <link rel="alternate" hreflang="x-default" href="__ORIGIN__/docs" />
+  <link rel="alternate" hreflang="zh-CN" href="https://moneyprinterturbo.chacha.asia/docs" />
+  <link rel="alternate" hreflang="en" href="https://moneyprinterturbo.chacha.asia/en" />
+  <link rel="alternate" hreflang="x-default" href="https://moneyprinterturbo.chacha.asia/docs" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="MoneyPrinterTurbo" />
-  <meta property="og:title" content="使用说明 | MoneyPrinterTurbo" />
-  <meta property="og:description" content="浏览器内生成本地文案和带字幕的成片。Cloudflare 纯静态托管，无回源。" />
-  <meta property="og:url" content="__ORIGIN__/docs" />
-  <meta property="og:image" content="__ORIGIN__/og.png" />
+  <meta property="og:title" content="SaaS 调用文档 | MoneyPrinterTurbo" />
+  <meta property="og:description" content="POST 主题即可异步生成配音字幕成片。完成态 complete。不支持时间轴精修。" />
+  <meta property="og:url" content="https://moneyprinterturbo.chacha.asia/docs" />
+  <meta property="og:image" content="https://moneyprinterturbo.chacha.asia/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="MoneyPrinterTurbo 免费短视频生成器" />
+  <meta property="og:image:alt" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <meta property="og:locale" content="zh_CN" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="使用说明 | MoneyPrinterTurbo" />
-  <meta name="twitter:description" content="填写主题，浏览器内生成本地文案和带字幕的成片。" />
-  <meta name="twitter:image" content="__ORIGIN__/og.png" />
-  <meta name="twitter:image:alt" content="MoneyPrinterTurbo 免费短视频生成器" />
+  <meta name="twitter:title" content="SaaS 调用文档 | MoneyPrinterTurbo" />
+  <meta name="twitter:description" content="POST /api/v1/videos 提交主题，轮询 task_id，完成后下载成片。" />
+  <meta name="twitter:image" content="https://moneyprinterturbo.chacha.asia/og.png" />
+  <meta name="twitter:image:alt" content="MoneyPrinterTurbo 免费 AI 短视频生成器" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "TechArticle",
-        "headline": "MoneyPrinterTurbo 静态站点使用说明",
-        "description": "浏览器内生成本地文案和带字幕的成片。Cloudflare 纯静态托管，无回源。",
+        "headline": "MoneyPrinterTurbo SaaS 调用文档",
+        "description": "POST 主题即可异步生成配音字幕成片。完成态 complete。不支持时间轴精修。",
         "inLanguage": "zh-CN",
-        "url": "__ORIGIN__/docs",
-        "image": "__ORIGIN__/og.png",
-        "author": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "__ORIGIN__/" }
+        "url": "https://moneyprinterturbo.chacha.asia/docs",
+        "dateModified": "2026-10-09",
+        "image": "https://moneyprinterturbo.chacha.asia/og.png",
+        "author": { "@type": "Organization", "name": "MoneyPrinterTurbo", "url": "https://moneyprinterturbo.chacha.asia/" }
       },
       {
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "首页", "item": "__ORIGIN__/" },
-          { "@type": "ListItem", "position": 2, "name": "使用说明", "item": "__ORIGIN__/docs" }
+          { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://moneyprinterturbo.chacha.asia/" },
+          { "@type": "ListItem", "position": 2, "name": "SaaS 文档", "item": "https://moneyprinterturbo.chacha.asia/docs" }
         ]
       },
       {
         "@type": "HowTo",
-        "name": "用 MoneyPrinterTurbo 生成短视频",
-        "description": "填写主题，浏览器内生成带字幕成片。",
+        "name": "调用 MoneyPrinterTurbo 生成短视频",
+        "description": "提交主题，轮询任务，下载成片。",
         "totalTime": "PT3M",
         "step": [
-          { "@type": "HowToStep", "name": "填写主题", "text": "打开首页，填写 video_subject 或自定义文案。" },
-          { "@type": "HowToStep", "name": "生成", "text": "点击生成视频，浏览器渲染字幕画面并导出 WebM。" },
-          { "@type": "HowToStep", "name": "下载", "text": "预览区播放或下载。任务保存在本机 IndexedDB。" }
+          { "@type": "HowToStep", "name": "提交任务", "text": "POST /api/v1/videos，传入 video_subject 或 video_script。" },
+          { "@type": "HowToStep", "name": "轮询进度", "text": "GET /api/v1/videos/{task_id}，等待 state=complete。" },
+          { "@type": "HowToStep", "name": "下载成片", "text": "GET /api/v1/videos/{task_id}/download 取回 MP4。" }
         ]
       },
       {
@@ -70,41 +72,34 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "需要 API Key 吗？",
-            "acceptedAnswer": { "@type": "Answer", "text": "不需要。本站是 Cloudflare 纯静态页，无回源 API。" }
+            "name": "引擎直连需要 API Key 吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不需要。引擎 /api/v1/videos 开放调用。门户 /api/proxy/v1/videos 需要 x-api-key。" }
           },
           {
             "@type": "Question",
-            "name": "成片存在哪里？",
-            "acceptedAnswer": { "@type": "Answer", "text": "浏览器 IndexedDB。同一浏览器刷新后仍可预览下载。" }
+            "name": "完成态是什么？",
+            "acceptedAnswer": { "@type": "Answer", "text": "成功为 complete，失败为 failed。不要用 succeeded 判断。" }
           },
           {
             "@type": "Question",
             "name": "能精修已有视频吗？",
-            "acceptedAnswer": { "@type": "Answer", "text": "不能。这是全新生成流水线，没有时间轴精修接口。" }
+            "acceptedAnswer": { "@type": "Answer", "text": "不能。这是全新生成流水线，没有时间轴精修接口。改内容需重新 POST。" }
           },
           {
             "@type": "Question",
             "name": "需要配置大模型吗？",
-            "acceptedAnswer": { "@type": "Answer", "text": "不需要。静态版关闭 LLM，文案和关键词在浏览器本地生成。" }
+            "acceptedAnswer": { "@type": "Answer", "text": "不需要。托管版关闭 LLM，文案和关键词在本地生成。" }
           }
         ]
       }
     ]
   }
   </script>
+  <link rel="preload" href="/style.css" as="style" />
   <link rel="stylesheet" href="/style.css" />
-  <style>
-    .doc-wrap { max-width: 860px; margin: 24px auto 64px; }
-    .doc-wrap h2 { margin: 28px 0 12px; }
-    .doc-wrap p, .doc-wrap li { line-height: 1.7; color: #31333f; }
-    .doc-wrap pre { background: #f0f2f6; border: 1px solid #d5dae3; border-radius: 10px; padding: 16px; overflow-x: auto; }
-    .crumb { color: #8aa0b8; font-size: 13px; margin: 12px 0 20px; }
-    .crumb a { color: #0068c9; }
-    .doc-wrap a.ghost { display: inline-flex; align-items: center; }
-  </style>
 </head>
 <body>
+  <a class="skip" href="#auth">跳到文档</a>
   <header class="topbar">
     <h1 class="mpt-brand">
       <span>
@@ -114,50 +109,68 @@
     </h1>
     <div class="top-actions">
       <a class="ghost" href="/">返回生成</a>
-      <a class="ghost" href="/llms.txt">llms.txt</a>
-      <select class="lang" aria-label="界面语言">
-        <option selected>简体中文</option>
-      </select>
+      <a class="ghost" href="/guide">使用指南</a>
+      <a class="ghost" href="/en" hreflang="en">English</a>
+      <a class="ghost" href="/openapi.json">OpenAPI</a>
     </div>
   </header>
   <main class="doc-wrap">
-    <p class="crumb"><a href="/">首页</a> / 使用说明</p>
-    <h2>站点形态</h2>
-    <p>本站托管在 Cloudflare Workers + R2 + Assets，无回源后端。文案、关键词、字幕成片和试听都在浏览器完成。</p>
-    <h2>生成步骤</h2>
-    <pre>1. 打开 __ORIGIN__/
-2. 填写视频主题或自定义文案
-3. 选择画幅 9:16 或 16:9
-4. 点击「生成视频」
-5. 预览或下载 WebM</pre>
-    <p>任务保存在本机 IndexedDB。同一浏览器刷新后，任务管理仍可取回。</p>
-    <h2>能力边界</h2>
+    <p class="crumb"><a href="/">首页</a> / SaaS 文档</p>
+    <h2 id="auth">认证</h2>
+    <p>引擎直连无需 Key。门户调用带 <code>x-api-key</code>，浏览器预览可用 <code>?api_key=</code>。</p>
+    <h2>提交任务</h2>
+    <p><code>POST https://moneyprinterturbo.chacha.asia/api/v1/videos</code></p>
+    <pre>{
+  "video_subject": "春天适合出发",
+  "video_script": "",
+  "aspect": "9:16",
+  "video_source": "pexels"
+}</pre>
+    <p>返回 <code>task_id</code>、<code>state</code>、<code>status_url</code>、<code>preview</code>、<code>download</code>、<code>poll_after_ms</code>。主题和文案至少填一项。</p>
+    <h2>轮询</h2>
+    <p><code>GET https://moneyprinterturbo.chacha.asia/api/v1/videos/{task_id}</code></p>
+    <p>按返回的 <code>poll_after_ms</code>（默认 1500）间隔请求。<code>state=complete</code> 后直接用绝对地址 <code>preview</code> / <code>download</code>；<code>failed</code> 看 <code>error</code>。</p>
+    <h2>预览与下载</h2>
+    <pre>GET https://moneyprinterturbo.chacha.asia/api/v1/videos/{task_id}/preview
+GET https://moneyprinterturbo.chacha.asia/api/v1/videos/{task_id}/download</pre>
+    <p>支持 <code>Range</code> / <code>HEAD</code> 断点续传。首次回源引擎，二次下载走 Cloudflare R2。成片落盘，刷新后仍可用同一 task_id。</p>
+    <h2>curl</h2>
+    <pre>curl -X POST https://moneyprinterturbo.chacha.asia/api/v1/videos \
+  -H "Content-Type: application/json" \
+  -d '{"video_subject":"春天适合出发","aspect":"9:16"}'
+
+# 轮询直到 state=complete（建议间隔 poll_after_ms）
+curl https://moneyprinterturbo.chacha.asia/api/v1/videos/TASK_ID
+
+# 用返回的 download 绝对地址，支持断点续传
+curl -L -C - https://moneyprinterturbo.chacha.asia/api/v1/videos/TASK_ID/download -o video.mp4</pre>
+    <h2>限制</h2>
     <ul>
       <li>文案最多 1500 字，成片约 180 秒。</li>
-      <li>成片是浏览器 Canvas + MediaRecorder 渲染的字幕画面，格式 WebM。</li>
-      <li>试听使用浏览器 SpeechSynthesis，成片不含 TTS 音轨。</li>
-      <li>完全免费，不调用大模型，无需 API Key。</li>
+      <li>完全免费：Pexels / Pixabay + Edge TTS，不调用大模型。</li>
       <li>全新生成流水线，不支持时间轴精修已有视频。</li>
     </ul>
     <section id="faq">
       <h2>常见问题</h2>
-      <h3>需要 API Key 吗？</h3>
-      <p>不需要。本站是 Cloudflare 纯静态页，无回源 API。</p>
-      <h3>成片存在哪里？</h3>
-      <p>浏览器 IndexedDB。同一浏览器刷新后仍可预览下载。</p>
+      <h3>引擎直连需要 API Key 吗？</h3>
+      <p>不需要。引擎 /api/v1/videos 开放调用。门户 /api/proxy/v1/videos 需要 x-api-key。</p>
+      <h3>完成态是什么？</h3>
+      <p>成功为 complete，失败为 failed。不要用 succeeded 判断。</p>
       <h3>能精修已有视频吗？</h3>
-      <p>不能。这是全新生成流水线，没有时间轴精修接口。</p>
+      <p>不能。这是全新生成流水线，没有时间轴精修接口。改内容需重新 POST。</p>
       <h3>需要配置大模型吗？</h3>
-      <p>不需要。静态版关闭 LLM，文案和关键词在浏览器本地生成。</p>
+      <p>不需要。托管版关闭 LLM，文案和关键词在本地生成。</p>
     </section>
   </main>
   <footer>
     <a href="/">首页</a>
+    <a href="/guide">使用指南</a>
+    <a href="/en" hreflang="en">English</a>
     <a href="/llms.txt">llms.txt</a>
-    <a href="/ai.txt">ai.txt</a>
+    <a href="/openapi.json">OpenAPI</a>
   </footer>
   <noscript>
-    <p>MoneyPrinterTurbo 静态站点说明。填写主题后在浏览器内生成带字幕成片。模型阅读 <a href="/llms.txt">/llms.txt</a>。</p>
+    <p>MoneyPrinterTurbo SaaS 文档。POST /api/v1/videos 提交主题，轮询直到 state=complete。模型阅读 <a href="/llms.txt">/llms.txt</a>。</p>
   </noscript>
 </body>
 </html>

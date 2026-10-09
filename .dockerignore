@@ -1,0 +1,13 @@
+.git
+.github
+.monkeycode
+__pycache__
+storage
+api-portal
+MoneyPrinterTurbo
+cloudflare/node_modules
+cloudflare/.wrangler
+config.toml
+.env
+*.mp4
+portal.db

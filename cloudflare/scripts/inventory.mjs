@@ -13,7 +13,7 @@ const TEXT = new Set([".html", ".css", ".js", ".txt", ".md", ".xml", ".svg", ".w
 function walk(dir) {
   const out = [];
   for (const name of readdirSync(dir)) {
-    if (name.startsWith(".")) continue;
+    if (name.startsWith(".") || name.startsWith("_")) continue;
     const full = join(dir, name);
     const st = statSync(full);
     if (st.isDirectory()) out.push(...walk(full));
@@ -92,6 +92,10 @@ for (const ref of [...allHref, ...allCssUrl]) {
     ref.includes("${") ||
     ref.startsWith("/api/") ||
     ref.startsWith("/docs") ||
+    ref.startsWith("/en") ||
+    ref.startsWith("/guide") ||
+    ref.startsWith("/index.md") ||
+    ref.endsWith(".md") ||
     ref.startsWith("/openapi") ||
     ref.startsWith("/.well-known/")
   ) {

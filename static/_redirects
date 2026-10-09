@@ -1,0 +1,3 @@
+/.well-known/security.txt /security.txt 200
+/.well-known/llms.txt /llms.txt 200
+/.well-known/ai.txt /ai.txt 200

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>使用指南 | MoneyPrinterTurbo 免费短视频生成步骤</title>
+  <meta name="description" content="MoneyPrinterTurbo 使用指南：填写主题或文案、选择 9:16 / 16:9 / 1:1 画幅与 Edge TTS 音色，一键生成配音字幕成片。文案 1500 字，成片约 180 秒。含 SaaS 调用步骤。" />
+  <meta name="keywords" content="短视频生成教程,MoneyPrinterTurbo使用指南,一键生成抖音视频,自动配音字幕,SaaS API" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="author" content="MoneyPrinterTurbo" />
+  <link rel="canonical" href="https://moneyprinterturbo.chacha.asia/guide" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+  <link rel="alternate" type="text/markdown" href="/guide.md" title="Guide markdown" />
+  <link rel="alternate" hreflang="zh-CN" href="https://moneyprinterturbo.chacha.asia/guide" />
+  <link rel="alternate" hreflang="en" href="https://moneyprinterturbo.chacha.asia/en" />
+  <link rel="alternate" hreflang="x-default" href="https://moneyprinterturbo.chacha.asia/guide" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="MoneyPrinterTurbo" />
+  <meta property="og:title" content="使用指南 | MoneyPrinterTurbo" />
+  <meta property="og:description" content="三步生成带配音和字幕的短视频。免费，无需大模型。" />
+  <meta property="og:url" content="https://moneyprinterturbo.chacha.asia/guide" />
+  <meta property="og:image" content="https://moneyprinterturbo.chacha.asia/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MoneyPrinterTurbo 使用指南" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="使用指南 | MoneyPrinterTurbo" />
+  <meta name="twitter:description" content="填写主题，选择画幅，生成并下载 MP4。" />
+  <meta name="twitter:image" content="https://moneyprinterturbo.chacha.asia/og.png" />
+  <meta name="twitter:image:alt" content="MoneyPrinterTurbo 使用指南" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "HowTo",
+        "name": "MoneyPrinterTurbo 短视频生成步骤",
+        "description": "填写主题，选择画幅与配音，生成并下载 MP4。",
+        "totalTime": "PT3M",
+        "url": "https://moneyprinterturbo.chacha.asia/guide",
+        "image": "https://moneyprinterturbo.chacha.asia/og.png",
+        "step": [
+          { "@type": "HowToStep", "position": 1, "name": "填写主题或文案", "text": "在首页输入视频主题，或粘贴最多 1500 字旁白。可不填大模型 Key。", "url": "https://moneyprinterturbo.chacha.asia/#gen-form" },
+          { "@type": "HowToStep", "position": 2, "name": "选择画幅与音色", "text": "竖屏 9:16、横屏 16:9 或方形 1:1。默认 zh-CN-XiaoxiaoNeural，可试听。", "url": "https://moneyprinterturbo.chacha.asia/#how" },
+          { "@type": "HowToStep", "position": 3, "name": "生成并下载", "text": "点击生成视频。完成态 complete 后预览或下载 MP4。刷新后 task_id 仍有效。", "url": "https://moneyprinterturbo.chacha.asia/" }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://moneyprinterturbo.chacha.asia/" },
+          { "@type": "ListItem", "position": 2, "name": "使用指南", "item": "https://moneyprinterturbo.chacha.asia/guide" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "生成要多久？",
+            "acceptedAnswer": { "@type": "Answer", "text": "通常一两分钟，取决于素材下载和成片时长，上限约 180 秒。" }
+          },
+          {
+            "@type": "Question",
+            "name": "文案从哪里来？",
+            "acceptedAnswer": { "@type": "Answer", "text": "托管版关闭 LLM。可自备文案，或由本地模板按主题生成。" }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="preload" href="/style.css" as="style" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <a class="skip" href="#steps">跳到步骤</a>
+  <header class="topbar">
+    <h1 class="mpt-brand">
+      <span>
+        <span class="mpt-brand__name">MoneyPrinterTurbo</span>
+        <a class="mpt-brand__version" href="/" aria-label="返回首页">v1.3.7</a>
+      </span>
+    </h1>
+    <div class="top-actions">
+      <a class="ghost" href="/">返回生成</a>
+      <a class="ghost" href="/en" hreflang="en">English</a>
+      <a class="ghost" href="/docs">SaaS 文档</a>
+    </div>
+  </header>
+  <main class="doc-wrap">
+    <p class="crumb"><a href="/">首页</a> / 使用指南</p>
+    <h2 id="steps">三步出片</h2>
+    <ol>
+      <li><strong>填写主题或文案。</strong> 例如「春天适合出发」。也可粘贴旁白，最多 1500 字。不必配置大模型。</li>
+      <li><strong>选择画幅与配音。</strong> 抖音/Shorts 用 9:16，横屏用 16:9，头像或封面用 1:1。音色默认中文女声，可点试听。</li>
+      <li><strong>生成并下载。</strong> 点击「生成视频」，进度到 100% 且 state=complete 后预览或下载 MP4。刷新页面仍可用同一 task_id。</li>
+    </ol>
+    <p><a href="/">打开生成页</a> 直接填写。适合知识科普、产品介绍、口播解说。</p>
+    <h2>素材与配音从哪来</h2>
+    <p>画面检索 Pexels / Pixabay 免费素材，配音用 Edge TTS，失败回退 gTTS。不调用大模型，运营成本为零。</p>
+    <h2>给程序调用</h2>
+    <p>POST <code>/api/v1/videos</code>，按 <code>poll_after_ms</code> 轮询，complete 后 GET 返回的 <code>download</code> 绝对地址。详见 <a href="/docs">/docs</a>。</p>
+    <h2>限制</h2>
+    <ul>
+      <li>文案 1500 字，成片约 180 秒。</li>
+      <li>全新生成，没有时间轴精修。</li>
+      <li>引擎直连免 Key；门户需要 x-api-key。</li>
+    </ul>
+  </main>
+  <footer>
+    <a href="/">首页</a>
+    <a href="/en" hreflang="en">English</a>
+    <a href="/docs">SaaS 文档</a>
+    <a href="/llms.txt">llms.txt</a>
+  </footer>
+</body>
+</html>

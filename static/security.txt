@@ -1,5 +1,5 @@
 Contact: https://github.com/talleylinjg-ops/vMoneyPrinterTurbo/issues
 Preferred-Languages: zh-CN, en
-Canonical: __ORIGIN__/.well-known/security.txt
-Policy: __ORIGIN__/docs
+Canonical: https://moneyprinterturbo.chacha.asia/.well-known/security.txt
+Policy: https://moneyprinterturbo.chacha.asia/docs
 Expires: 2027-10-01T00:00:00.000Z

@@ -1,14 +1,16 @@
 /* TEAM */
-Site: MoneyPrinterTurbo static edition
+Site: MoneyPrinterTurbo hosted edition
 From: Internet
 Contact: https://github.com/talleylinjg-ops/vMoneyPrinterTurbo/issues
 
 /* SITE */
-Last update: 2026-10-04
-Language: zh-CN
+Last update: 2026-10-09
+Language: zh-CN, en
+English: https://moneyprinterturbo.chacha.asia/en
+Guide: https://moneyprinterturbo.chacha.asia/guide
 Doctype: HTML5
-Standards: HTML5, CSS3, JSON-LD
-Components: Cloudflare Workers, R2, Assets, IndexedDB, Canvas, MediaRecorder, SpeechSynthesis
+Standards: HTML5, CSS3, JSON-LD, OpenAPI 3.0
+Components: FastAPI, Cloudflare Workers, R2, Edge TTS, Pexels, Pixabay
 Software: MoneyPrinterTurbo v1.3.7
-llms.txt: __ORIGIN__/llms.txt
-Docs: __ORIGIN__/docs
+llms.txt: https://moneyprinterturbo.chacha.asia/llms.txt
+Docs: https://moneyprinterturbo.chacha.asia/docs

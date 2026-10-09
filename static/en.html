@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MoneyPrinterTurbo | Free AI Short Video Generator without LLM</title>
+  <meta name="description" content="Free online short-video generator. Enter a topic, match Pexels/Pixabay clips, Edge TTS voiceover and subtitles, export 9:16 / 16:9 / 1:1 MP4. No LLM, no API key on the engine. Script up to 1500 characters, video about 180 seconds." />
+  <meta name="keywords" content="MoneyPrinterTurbo,free AI video generator,short video API,TikTok video,YouTube Shorts,Edge TTS,Pexels,Pixabay,no LLM" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="author" content="MoneyPrinterTurbo" />
+  <link rel="canonical" href="https://moneyprinterturbo.chacha.asia/en" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+  <link rel="alternate" type="text/markdown" href="/en.md" title="English markdown" />
+  <link rel="alternate" hreflang="zh-CN" href="https://moneyprinterturbo.chacha.asia/" />
+  <link rel="alternate" hreflang="en" href="https://moneyprinterturbo.chacha.asia/en" />
+  <link rel="alternate" hreflang="x-default" href="https://moneyprinterturbo.chacha.asia/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="MoneyPrinterTurbo" />
+  <meta property="og:title" content="MoneyPrinterTurbo | Free AI Short Video Generator" />
+  <meta property="og:description" content="Enter a topic. Auto script, stock footage, Edge TTS, subtitles, MP4. Free, no LLM." />
+  <meta property="og:url" content="https://moneyprinterturbo.chacha.asia/en" />
+  <meta property="og:image" content="https://moneyprinterturbo.chacha.asia/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MoneyPrinterTurbo free AI short video generator" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_CN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MoneyPrinterTurbo | Free AI Short Video Generator" />
+  <meta name="twitter:description" content="Topic in, voiced subtitled MP4 out. Free, no LLM." />
+  <meta name="twitter:image" content="https://moneyprinterturbo.chacha.asia/og.png" />
+  <meta name="twitter:image:alt" content="MoneyPrinterTurbo free AI short video generator" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "name": "MoneyPrinterTurbo English",
+        "url": "https://moneyprinterturbo.chacha.asia/en",
+        "inLanguage": "en",
+        "dateModified": "2026-10-09",
+        "isPartOf": { "@type": "WebSite", "url": "https://moneyprinterturbo.chacha.asia/" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "MoneyPrinterTurbo",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Web",
+        "url": "https://moneyprinterturbo.chacha.asia/en",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "isAccessibleForFree": true,
+        "featureList": ["Pexels/Pixabay stock", "Edge TTS", "9:16 16:9 1:1", "open SaaS API"]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://moneyprinterturbo.chacha.asia/" },
+          { "@type": "ListItem", "position": 2, "name": "English", "item": "https://moneyprinterturbo.chacha.asia/en" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is MoneyPrinterTurbo free?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Stock footage from Pexels/Pixabay, voice from Edge TTS. No LLM, no engine API key." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I generate a video?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Open the Chinese home page, enter a topic or script, pick aspect ratio, click generate. Poll until state=complete, then download MP4." }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the SaaS API work?",
+            "acceptedAnswer": { "@type": "Answer", "text": "POST /api/v1/videos, poll GET /api/v1/videos/{task_id} using poll_after_ms until state=complete, then GET the absolute download URL. Range and HEAD are supported." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="preload" href="/style.css" as="style" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <a class="skip" href="#facts">Skip to facts</a>
+  <header class="topbar">
+    <h1 class="mpt-brand">
+      <span>
+        <span class="mpt-brand__name">MoneyPrinterTurbo</span>
+        <a class="mpt-brand__version" href="/" aria-label="Chinese home">v1.3.7</a>
+      </span>
+    </h1>
+    <div class="top-actions">
+      <nav class="lang-switch" aria-label="Language">
+        <a href="/" hreflang="zh-CN">中文</a>
+        <a href="/en" hreflang="en" aria-current="page">English</a>
+      </nav>
+      <a class="ghost" href="/">Generate</a>
+      <a class="ghost" href="/guide">Guide</a>
+      <a class="ghost" href="/docs">API docs</a>
+    </div>
+  </header>
+  <main class="doc-wrap">
+    <p class="crumb"><a href="/">Home</a> / English</p>
+    <h2 id="facts">Free short-video generator</h2>
+    <p>MoneyPrinterTurbo hosted edition turns a topic or script into a voiced, subtitled MP4. It matches Pexels / Pixabay clips, synthesizes Edge TTS, burns captions, and exports 9:16, 16:9 or 1:1. Price is zero. The engine does not call a large language model and does not require an API key.</p>
+    <div class="seo-facts">
+      <div><strong>0</strong><span>Price. No LLM. No engine API key.</span></div>
+      <div><strong>1500</strong><span>Max script characters. Video about 180 seconds.</span></div>
+      <div><strong>9:16</strong><span>Also 16:9 and 1:1. Pexels / Pixabay + Edge TTS.</span></div>
+      <div><strong>complete</strong><span>Done state. Failure is failed. New jobs only.</span></div>
+    </div>
+    <p>Limits: script &lt;= 1500 characters, video about 180 seconds. Completion state is <code>complete</code>, failure is <code>failed</code>. New generation only; there is no timeline editor for existing videos. Markdown ingest: <a href="/en.md">/en.md</a>.</p>
+    <table class="seo-table">
+      <caption>Hosted edition vs typical AI video tools</caption>
+      <thead>
+        <tr><th>Item</th><th>This site</th><th>Official Streamlit</th><th>Paid AI video</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Price</td><td>0</td><td>Bring your own LLM key</td><td>Per clip or per minute</td></tr>
+        <tr><td>LLM</td><td>Disabled</td><td>Optional providers</td><td>Required</td></tr>
+        <tr><td>Footage</td><td>Pexels / Pixabay</td><td>Pexels / Pixabay / Coverr</td><td>Model-generated frames</td></tr>
+        <tr><td>Voice</td><td>Edge TTS</td><td>Edge / Azure and others</td><td>Cloud TTS</td></tr>
+        <tr><td>API</td><td>POST /api/v1/videos</td><td>Local OpenAPI</td><td>Vendor-specific</td></tr>
+        <tr><td>Timeline edit</td><td>Unsupported</td><td>Not this hosted goal</td><td>Sometimes</td></tr>
+      </tbody>
+    </table>
+    <h2>How to generate</h2>
+    <ol>
+      <li>Open the <a href="/">home page</a> and enter a topic or paste a script.</li>
+      <li>Pick aspect ratio and an Edge TTS voice.</li>
+      <li>Click generate. Poll until <code>state=complete</code>, then preview or download.</li>
+    </ol>
+    <p>Chinese walkthrough: <a href="/guide">/guide</a>. SaaS spec: <a href="/docs">/docs</a>, <a href="/openapi.json">/openapi.json</a>.</p>
+    <h2>SaaS API</h2>
+    <pre>POST https://moneyprinterturbo.chacha.asia/api/v1/videos
+Content-Type: application/json
+
+{"video_subject":"How AI changes daily life","aspect":"9:16"}
+
+GET https://moneyprinterturbo.chacha.asia/api/v1/videos/{task_id}
+GET https://moneyprinterturbo.chacha.asia/api/v1/videos/{task_id}/download</pre>
+    <p>The create response includes <code>status_url</code>, <code>preview</code>, <code>download</code> and <code>poll_after_ms</code>. Repeat downloads are served from Cloudflare R2 with Range support.</p>
+    <section id="faq">
+      <h2>FAQ</h2>
+      <h3>Is it free?</h3>
+      <p>Yes. Pexels / Pixabay footage plus Edge TTS. No LLM.</p>
+      <h3>Do I need an API key?</h3>
+      <p>Not on the engine. The optional portal uses <code>x-api-key</code>.</p>
+      <h3>Can I edit an existing video?</h3>
+      <p>No. Post a new job if you need different content.</p>
+      <h3>What are the limits?</h3>
+      <p>Script 1500 characters. Video about 180 seconds. Stock footage is licensed by Pexels / Pixabay, not AI-native video.</p>
+      <h3>Does refresh lose the file?</h3>
+      <p>No. The MP4 stays on disk. Reuse the same <code>task_id</code>.</p>
+    </section>
+  </main>
+  <footer>
+    <a href="/">中文首页</a>
+    <a href="/guide">指南</a>
+    <a href="/docs">Docs</a>
+    <a href="/llms.txt">llms.txt</a>
+  </footer>
+</body>
+</html>

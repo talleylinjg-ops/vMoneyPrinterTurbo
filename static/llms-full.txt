@@ -1,49 +1,109 @@
 # MoneyPrinterTurbo 完整说明
 
-> 免费短视频生成器。输入主题或文案，浏览器内生成本地旁白、关键词和带字幕的 WebM。Cloudflare 纯静态托管，无回源后端，不使用大语言模型。
+> 免费在线短视频生成器与开放 API。输入主题或文案，系统匹配 Pexels / Pixabay 素材、Edge TTS 配音、自动字幕，合成 9:16 / 16:9 / 1:1 成片。不使用大语言模型。引擎直连无需 API Key。
 
-Updated: 2026-10-04. Version 1.3.7.
+Updated: 2026-10-09. Version 1.3.7.
 
-- 站点：[__ORIGIN__/](__ORIGIN__/)
-- 说明：[__ORIGIN__/docs](__ORIGIN__/docs)
-- 摘要：[__ORIGIN__/llms.txt](__ORIGIN__/llms.txt)
-- Markdown：[__ORIGIN__/llms.md](__ORIGIN__/llms.md)
-- 策略：[__ORIGIN__/ai.txt](__ORIGIN__/ai.txt)
-- humans：[__ORIGIN__/humans.txt](__ORIGIN__/humans.txt)
-- security：[__ORIGIN__/.well-known/security.txt](__ORIGIN__/.well-known/security.txt)
+- 站点：[https://moneyprinterturbo.chacha.asia/](https://moneyprinterturbo.chacha.asia/)
+- 首页 Markdown：[https://moneyprinterturbo.chacha.asia/index.md](https://moneyprinterturbo.chacha.asia/index.md)
+- English：[https://moneyprinterturbo.chacha.asia/en](https://moneyprinterturbo.chacha.asia/en)
+- English Markdown：[https://moneyprinterturbo.chacha.asia/en.md](https://moneyprinterturbo.chacha.asia/en.md)
+- 指南：[https://moneyprinterturbo.chacha.asia/guide](https://moneyprinterturbo.chacha.asia/guide)
+- 指南 Markdown：[https://moneyprinterturbo.chacha.asia/guide.md](https://moneyprinterturbo.chacha.asia/guide.md)
+- 文档：[https://moneyprinterturbo.chacha.asia/docs](https://moneyprinterturbo.chacha.asia/docs)
+- 文档 Markdown：[https://moneyprinterturbo.chacha.asia/docs.md](https://moneyprinterturbo.chacha.asia/docs.md)
+- OpenAPI：[https://moneyprinterturbo.chacha.asia/openapi.json](https://moneyprinterturbo.chacha.asia/openapi.json)
+- 摘要：[https://moneyprinterturbo.chacha.asia/llms.txt](https://moneyprinterturbo.chacha.asia/llms.txt)
+- Markdown：[https://moneyprinterturbo.chacha.asia/llms.md](https://moneyprinterturbo.chacha.asia/llms.md)
+- 策略：[https://moneyprinterturbo.chacha.asia/ai.txt](https://moneyprinterturbo.chacha.asia/ai.txt)
+- humans：[https://moneyprinterturbo.chacha.asia/humans.txt](https://moneyprinterturbo.chacha.asia/humans.txt)
+- security：[https://moneyprinterturbo.chacha.asia/.well-known/security.txt](https://moneyprinterturbo.chacha.asia/.well-known/security.txt)
 
 ## 产品事实
 
 | 项 | 值 |
 | --- | --- |
 | 价格 | 0 |
-| 托管 | Cloudflare Workers + R2 + Assets |
-| 回源 | 无 |
-| LLM | 关闭，文案/关键词在浏览器生成 |
-| 成片 | Canvas + MediaRecorder，WebM |
-| 配音试听 | 浏览器 SpeechSynthesis |
-| 保存 | IndexedDB，同一浏览器刷新可取回 |
+| 注册 | 引擎直连不需要；门户 SaaS 需要 x-api-key |
+| LLM | 关闭，文案/关键词本地生成 |
+| 素材 | Pexels、Pixabay |
+| 配音 | Edge TTS，失败回退 gTTS |
+| 成片路径 | storage/tasks/{task_id}/final-1.mp4 |
+| 完成态 | complete |
+| 失败态 | failed |
 | 文案上限 | 1500 字 |
 | 成片上限 | 约 180 秒 |
-| 画幅 | 9:16、16:9 |
-| 精修 | 不支持 |
+| 画幅 | 9:16、16:9、1:1 |
+| 精修 | 不支持，改内容必须重新 POST |
 | 版本 | 1.3.7 |
+
+## 引擎 API（免 Key）
+
+POST https://moneyprinterturbo.chacha.asia/api/v1/videos
+Content-Type: application/json
+
+```json
+{
+  "video_subject": "人工智能如何改变日常生活",
+  "video_script": "",
+  "video_terms": "artificial intelligence, daily life",
+  "language": "zh-CN",
+  "video_source": "pexels",
+  "aspect": "9:16",
+  "clip_duration": 3,
+  "voice_name": "zh-CN-XiaoxiaoNeural",
+  "subtitle_enabled": true
+}
+```
+
+- GET https://moneyprinterturbo.chacha.asia/api/v1/videos/{task_id} （按 poll_after_ms 轮询，complete 后用 preview/download 绝对 URL）
+- GET https://moneyprinterturbo.chacha.asia/api/v1/videos/{task_id}/preview （Range / HEAD）
+- GET https://moneyprinterturbo.chacha.asia/api/v1/videos/{task_id}/download （Range / HEAD，二次走 R2）
+- GET https://moneyprinterturbo.chacha.asia/api/v1/options
+- GET https://moneyprinterturbo.chacha.asia/api/v1/voices/preview?voice=zh-CN-XiaoxiaoNeural
+- POST https://moneyprinterturbo.chacha.asia/api/v1/script （本地文案，llm:false）
+- POST https://moneyprinterturbo.chacha.asia/api/v1/terms （本地关键词，llm:false）
+- GET https://moneyprinterturbo.chacha.asia/docs
+- GET https://moneyprinterturbo.chacha.asia/docs/saas
+- GET https://moneyprinterturbo.chacha.asia/openapi.json
+
+curl：
+
+```bash
+curl -X POST https://moneyprinterturbo.chacha.asia/api/v1/videos \
+  -H "Content-Type: application/json" \
+  -d '{"video_subject":"春天适合出发","aspect":"9:16"}'
+
+curl https://moneyprinterturbo.chacha.asia/api/v1/videos/TASK_ID
+curl -L -C - https://moneyprinterturbo.chacha.asia/api/v1/videos/TASK_ID/download -o video.mp4
+```
+
+## 门户 API（x-api-key）
+
+门户是独立站点。路径前缀 `/api/proxy`。认证头 `x-api-key` 或查询参数 `api_key`。
+
+- POST /api/proxy/v1/videos
+- GET /api/proxy/v1/videos/{task_id}
+- GET /api/proxy/v1/videos/{task_id}/preview
+- GET /api/proxy/v1/videos/{task_id}/download
 
 ## 使用步骤
 
 1. 打开首页，填写视频主题或自定义文案。
-2. 选择画幅 9:16 / 16:9。
-3. 点击生成，等待浏览器渲染完成。
-4. 预览或下载 WebM。刷新后同一浏览器仍可取回。
+2. 选择画幅 9:16 / 16:9 / 1:1。
+3. 点击生成，等待 state=complete。
+4. 预览或下载。刷新后仍可用同一 task_id。
 
 ## English
 
-Static MoneyPrinterTurbo on Cloudflare. The browser builds a local script and a subtitled WebM. No origin API, no LLM, no API key. Limits: 1500 characters, ~180 seconds. Tasks persist in IndexedDB.
+Hosted MoneyPrinterTurbo generates short videos from a topic. Free stock from Pexels/Pixabay, Edge TTS, burned-in subtitles. No LLM. Limits: 1500 characters, ~180 seconds. Completion state is `complete`. Engine endpoints need no key; portal SaaS uses `x-api-key`. Timeline editing of existing videos is unsupported.
 
 ## 常见问题
 
-- 收费吗？完全免费。
-- 需要后端吗？不需要。
-- 限制？文案 1500 字，成片约 180 秒。成片是浏览器渲染的字幕画面。
-- 成片会丢失吗？保存在本机 IndexedDB。
-- 需要配置大模型吗？不需要。
+- 收费吗？完全免费，不调用大模型。
+- 如何调用？POST 创建任务，轮询 task_id，再用 preview/download 取回。
+- 限制？文案 1500 字，成片约 180 秒。不支持时间轴精修已有视频。
+- 素材从哪来？Pexels / Pixabay 免费视频库拼接，非 AI 原生画面。
+- 需要 Key 吗？引擎直连不需要。给外部 SaaS 用门户 Key。
+- 成片会丢失吗？成片落盘保存，刷新后仍可用 task_id 预览和下载。
+- 需要配置大模型吗？不需要。文案和关键词在本地生成。

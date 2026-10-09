@@ -3,6 +3,7 @@
 
 User-Agent: *
 Allow: /
+Disallow: /api/
 
 Content: /llms.txt
 Content-Full: /llms-full.txt
@@ -14,20 +15,24 @@ Alternate-Language: en
 Product: free short-video generator
 Pricing: 0
 LLM: disabled
-Auth: none
-Hosting: Cloudflare Workers + R2 + Assets
-Origin-API: none
+Auth: none on engine, x-api-key on portal
 Edit: unsupported (new generation only)
+OpenAPI: /openapi.json
 Docs: /docs
+English: /en
+Guide: /guide
+Markdown-Home: /index.md
+Markdown-EN: /en.md
+Markdown-Guide: /guide.md
+Markdown-Docs: /docs.md
 Humans: /humans.txt
 Security: /.well-known/security.txt
 Well-Known-LLMs: /.well-known/llms.txt
 Well-Known-AI: /.well-known/ai.txt
-Output: browser Canvas + MediaRecorder WebM
-Voice-Preview: SpeechSynthesis
-Persist: IndexedDB
+Complete-State: complete
+Failed-State: failed
 Max-Script-Chars: 1500
 Max-Video-Seconds: 180
-Aspects: 9:16, 16:9
-Updated: 2026-10-04
+Aspects: 9:16, 16:9, 1:1
+Updated: 2026-10-09
 Version: 1.3.7

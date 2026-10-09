@@ -20,8 +20,20 @@ html, body {
   color: var(--text);
   font-family: "Source Sans Pro", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
   line-height: 1.45;
+  text-rendering: optimizeSpeed;
 }
 a { color: var(--link); text-decoration: none; }
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -40px;
+  background: #31333f;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  z-index: 50;
+}
+.skip:focus { top: 12px; }
 button, .btn, input, select, textarea { font: inherit; }
 .topbar {
   display: flex;
@@ -317,10 +329,22 @@ details.advanced[open] { background: color-mix(in srgb, currentColor 5%, transpa
 .popover h3 { margin: 0 0 12px; }
 .ghost[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-.seo-block { margin: 20px 20px 0; }
+.doc-wrap { max-width: 860px; margin: 24px auto 64px; }
+.doc-wrap h2 { margin: 28px 0 12px; }
+.doc-wrap p, .doc-wrap li { line-height: 1.7; color: #31333f; }
+.crumb { color: #8aa0b8; font-size: 13px; margin: 12px 0 20px; }
+.crumb a { color: var(--link); }
+.doc-wrap a.ghost { display: inline-flex; align-items: center; }
+.doc-wrap pre { background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 16px; overflow-x: auto; }
+.seo-block { margin: 20px 20px 0; content-visibility: auto; contain-intrinsic-size: 1px 280px; }
 .seo-block h2 { font-size: 1.15rem; margin: 0 0 12px; }
 .seo-block h3 { font-size: 1rem; margin: 16px 0 6px; }
 .seo-block p, .seo-block li { color: var(--muted); margin: 0 0 8px; line-height: 1.65; }
+.seo-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 14px; }
+.seo-table caption { text-align: left; font-weight: 600; margin: 0 0 8px; color: var(--text); }
+.seo-table th, .seo-table td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; }
+.seo-table th { background: var(--soft); }
+.seo-table td { color: var(--muted); }
 .seo-facts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -336,6 +360,24 @@ details.advanced[open] { background: color-mix(in srgb, currentColor 5%, transpa
 .seo-facts strong { display: block; font-size: 1.05rem; }
 .seo-facts span { color: var(--muted); font-size: 13px; }
 .seo-block pre.code { margin: 8px 0 0; }
+.seo-steps, .seo-cases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 12px 0 0;
+}
+.seo-steps article, .seo-cases article {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+}
+.seo-steps h3, .seo-cases h3 { margin: 0 0 8px; font-size: 1rem; }
+.seo-block ol { margin: 8px 0 0 1.2em; line-height: 1.7; }
+.lang-switch { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; }
+@media (max-width: 700px) {
+  .seo-steps, .seo-cases { grid-template-columns: 1fr; }
+}
 footer {
   display: flex;
   flex-wrap: wrap;
