@@ -5,7 +5,7 @@
 - Canonical: https://moneyprinterturbo.chacha.asia/docs
 - OpenAPI: https://moneyprinterturbo.chacha.asia/openapi.json
 - Home: https://moneyprinterturbo.chacha.asia/
-- Updated: 2026-10-09
+- Updated: 2026-10-10
 - Version: 1.3.7
 
 ## 提交

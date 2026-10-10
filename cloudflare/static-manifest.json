@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T12:30:41.734Z",
+  "generatedAt": "2026-10-10T15:43:20.864Z",
   "staticDir": "static",
   "total": 21,
   "cssUrlCount": 0,
@@ -9,7 +9,7 @@
       "key": "ai.txt",
       "path": "/ai.txt",
       "bytes": 842,
-      "sha256": "3d24d091ab9b018fad14cbb7b730a505f5adfad73831fd7cf9d8f4262f5851bd",
+      "sha256": "ebd6ebeabeb1c7096b98696b96481df4e53265d4bef81296f25b8a26e000caf8",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -28,8 +28,8 @@
     {
       "key": "docs.html",
       "path": "/docs.html",
-      "bytes": 9511,
-      "sha256": "2ab351cf76671dfe3022f445fad45e3fb52c23a630cbefe3ccc32fc38f9fac68",
+      "bytes": 9575,
+      "sha256": "36c12875dc41404083a6e8af3f2a45e73239e1a935f8e2ea9b0a58c8cfc2256d",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "https://moneyprinterturbo.chacha.asia/docs",
@@ -42,7 +42,8 @@
         "/.well-known/llms.txt",
         "https://moneyprinterturbo.chacha.asia/docs",
         "https://moneyprinterturbo.chacha.asia/en",
-        "https://moneyprinterturbo.chacha.asia/docs",
+        "https://moneyprinterturbo.chacha.asia/",
+        "/sitemap.xml",
         "/style.css",
         "/style.css",
         "#auth",
@@ -65,7 +66,7 @@
       "key": "docs.md",
       "path": "/docs.md",
       "bytes": 1143,
-      "sha256": "e073aa420ba2ac33eb2904dc0f76836cd1e487725e701ebd36a94587568456ff",
+      "sha256": "929a8f29a1b5ba20474909c90e009bcf89f1a920c290a11220c591ed18772044",
       "contentType": "text/markdown; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -73,8 +74,8 @@
     {
       "key": "en.html",
       "path": "/en.html",
-      "bytes": 9479,
-      "sha256": "5c4c32b98225bb3ba3eb1653820edb3893aa9b984899983f15288828ee798892",
+      "bytes": 9547,
+      "sha256": "03722b74cbc784b5a34515ed10652152ab3a0bb59825bcf172248f9bae447a18",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "https://moneyprinterturbo.chacha.asia/en",
@@ -85,6 +86,7 @@
         "https://moneyprinterturbo.chacha.asia/",
         "https://moneyprinterturbo.chacha.asia/en",
         "https://moneyprinterturbo.chacha.asia/",
+        "/sitemap.xml",
         "/style.css",
         "/style.css",
         "#facts",
@@ -111,7 +113,7 @@
       "key": "en.md",
       "path": "/en.md",
       "bytes": 1252,
-      "sha256": "1b84d621934f3eca3acdad5f7b2821b9fa97ca8854a3c0f30e9a5b85a7db3e25",
+      "sha256": "283ecdc7b327f4487e5039ce77fd6cd46c80b294e555924c8c805ff03631ec05",
       "contentType": "text/markdown; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -128,8 +130,8 @@
     {
       "key": "guide.html",
       "path": "/guide.html",
-      "bytes": 6814,
-      "sha256": "943b8184c6eead74f49236e82ce0333adb0ecc09de2386b0b51f8651f28c63a9",
+      "bytes": 6877,
+      "sha256": "687ba9b39c45863f269cc4c2464c382dad5c16be92f06ab4d4b8b3d30212388a",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "https://moneyprinterturbo.chacha.asia/guide",
@@ -139,7 +141,8 @@
         "/guide.md",
         "https://moneyprinterturbo.chacha.asia/guide",
         "https://moneyprinterturbo.chacha.asia/en",
-        "https://moneyprinterturbo.chacha.asia/guide",
+        "https://moneyprinterturbo.chacha.asia/",
+        "/sitemap.xml",
         "/style.css",
         "/style.css",
         "#steps",
@@ -161,7 +164,7 @@
       "key": "guide.md",
       "path": "/guide.md",
       "bytes": 1087,
-      "sha256": "b52fab4edccc44927cee4391bb292d7699284429e30be95ad41bdb6246dc993c",
+      "sha256": "cdd66923992318eb120c05068a0b6a2cf8f6f0bc2b81f007ca0b35718672fba6",
       "contentType": "text/markdown; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -170,7 +173,7 @@
       "key": "humans.txt",
       "path": "/humans.txt",
       "bytes": 564,
-      "sha256": "46f9d3a34d1a0c65159f279c2447560301a0310ddf3afbe1850f4c428294417a",
+      "sha256": "3b8596ee088ae36e3775b98db6e840498a82bdc9aea0a971d1fb52985d0e1748",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -178,8 +181,8 @@
     {
       "key": "index.html",
       "path": "/",
-      "bytes": 32775,
-      "sha256": "1d6ec089097a2c8e678cf23a477f9402a62760f75f70cdd2979c03e6c8822570",
+      "bytes": 32746,
+      "sha256": "cb9848194bd598567d0f8c952c12bfb16e1b4cd918c0f6448183276be7d88b57",
       "contentType": "text/html; charset=utf-8",
       "hrefSrc": [
         "https://moneyprinterturbo.chacha.asia/",
@@ -194,6 +197,7 @@
         "https://moneyprinterturbo.chacha.asia/",
         "https://moneyprinterturbo.chacha.asia/en",
         "https://moneyprinterturbo.chacha.asia/",
+        "/sitemap.xml",
         "/style.css",
         "/style.css",
         "#gen-form",
@@ -227,7 +231,7 @@
       "key": "index.md",
       "path": "/index.md",
       "bytes": 2322,
-      "sha256": "44cd463086f5bd098e5cef7e0a45300ae1b8483a687225be87fa04e8ca65ffd0",
+      "sha256": "8e53a06d1cff7ab9a61fe7f79d1df414c596040a79ea86bd9340bc053a44a9be",
       "contentType": "text/markdown; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -236,7 +240,7 @@
       "key": "llms-full.txt",
       "path": "/llms-full.txt",
       "bytes": 5396,
-      "sha256": "cab6b1469cbb177c476da0643251adcef4bac96b8bd92b0b3e3f8b106f3f8dee",
+      "sha256": "ad69f17340672be784f74d7d126779634377971a7978fcf6cd481d3bc7cfde74",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -245,7 +249,7 @@
       "key": "llms.md",
       "path": "/llms.md",
       "bytes": 1405,
-      "sha256": "d5f6051abb3bff1dc12133b7c6c8ca78f3d2f1eca75cd2f7f3e95e655e0c0492",
+      "sha256": "53e1ef8457bbf2cf6c33be97eb9973b531a41a1557f08e645f6528fa69059acd",
       "contentType": "text/markdown; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -254,7 +258,7 @@
       "key": "llms.txt",
       "path": "/llms.txt",
       "bytes": 2888,
-      "sha256": "5a1806033ae5a03fccdf384ce8e4c69824e4356d6bd0034c848a15cdda7d381f",
+      "sha256": "bd4195e6aafe94819dc1a18b0b73860a2deebefec07d74c35edf50614f54a8e3",
       "contentType": "text/plain; charset=utf-8",
       "hrefSrc": [],
       "cssUrls": []
@@ -299,7 +303,7 @@
       "key": "sitemap.xml",
       "path": "/sitemap.xml",
       "bytes": 3976,
-      "sha256": "dbd7cccf64ff81af0a2aab5fecb722a6d94db1927178ae3cd1a65191e8454965",
+      "sha256": "d77d33465e9d000e1b5d30681acc9895299e85831fd5a1606f8210b5108d130c",
       "contentType": "application/xml; charset=utf-8",
       "hrefSrc": [
         "https://moneyprinterturbo.chacha.asia/",

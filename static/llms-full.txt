@@ -2,7 +2,7 @@
 
 > 免费在线短视频生成器与开放 API。输入主题或文案，系统匹配 Pexels / Pixabay 素材、Edge TTS 配音、自动字幕，合成 9:16 / 16:9 / 1:1 成片。不使用大语言模型。引擎直连无需 API Key。
 
-Updated: 2026-10-09. Version 1.3.7.
+Updated: 2026-10-10. Version 1.3.7.
 
 - 站点：[https://moneyprinterturbo.chacha.asia/](https://moneyprinterturbo.chacha.asia/)
 - 首页 Markdown：[https://moneyprinterturbo.chacha.asia/index.md](https://moneyprinterturbo.chacha.asia/index.md)

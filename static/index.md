@@ -6,7 +6,7 @@ MoneyPrinterTurbo hosted edition is a free online short-video generator. Enter a
 - English: https://moneyprinterturbo.chacha.asia/en
 - Guide: https://moneyprinterturbo.chacha.asia/guide
 - Docs: https://moneyprinterturbo.chacha.asia/docs
-- Updated: 2026-10-09
+- Updated: 2026-10-10
 - Version: 1.3.7
 
 ## Facts

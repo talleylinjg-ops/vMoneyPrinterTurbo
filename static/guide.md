@@ -6,7 +6,7 @@
 - Home: https://moneyprinterturbo.chacha.asia/
 - English: https://moneyprinterturbo.chacha.asia/en
 - Docs: https://moneyprinterturbo.chacha.asia/docs
-- Updated: 2026-10-09
+- Updated: 2026-10-10
 - Version: 1.3.7
 
 ## 步骤

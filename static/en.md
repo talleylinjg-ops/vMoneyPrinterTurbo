@@ -6,7 +6,7 @@ Free short-video generator. Topic in, voiced subtitled MP4 out. No LLM. No engin
 - Chinese home: https://moneyprinterturbo.chacha.asia/
 - Guide: https://moneyprinterturbo.chacha.asia/guide
 - API docs: https://moneyprinterturbo.chacha.asia/docs
-- Updated: 2026-10-09
+- Updated: 2026-10-10
 - Version: 1.3.7
 
 ## Product facts
